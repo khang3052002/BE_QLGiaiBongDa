@@ -11,21 +11,19 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "cauthu_doibong")
-@EntityListeners(AuditingEntityListener.class)
 public class CauThuDoiBongEntity  {
     @EmbeddedId
-    private CauThuDoiBongKey key;
-
-
-    @ManyToOne
-    @MapsId("IdDoiBong")
-    @JoinColumn(name = "id_doibong")
-    private DoiBongEntity DoiBong;
+    CauThuDoiBongKey key;
 
     @ManyToOne
     @MapsId("IdCauThu")
     @JoinColumn(name = "id_cauthu")
-    private CauThuEntity CauThu;
+    private CauThuEntity CauThuDB;
+
+    @ManyToOne
+    @MapsId("IdDoiBong")
+    @JoinColumn(name = "id_doibong")
+    private DoiBongEntity DoiBongCT;
 
 
     @Column(name = "thoidiemketthuc")
@@ -43,21 +41,22 @@ public class CauThuDoiBongEntity  {
         this.key = key;
     }
 
-    public DoiBongEntity getDoiBong() {
-        return DoiBong;
+    public CauThuEntity getCauThuDB() {
+        return CauThuDB;
     }
 
-    public void setDoiBong(DoiBongEntity doiBong) {
-        DoiBong = doiBong;
+    public void setCauThuDB(CauThuEntity cauThuDB) {
+        CauThuDB = cauThuDB;
     }
 
-    public CauThuEntity getCauThu() {
-        return CauThu;
+    public DoiBongEntity getDoiBongCT() {
+        return DoiBongCT;
     }
 
-    public void setCauThu(CauThuEntity cauThu) {
-        CauThu = cauThu;
+    public void setDoiBongCT(DoiBongEntity doiBongCT) {
+        DoiBongCT = doiBongCT;
     }
+
 
     public Date getThoiDiemKetThuc() {
         return ThoiDiemKetThuc;
@@ -78,10 +77,10 @@ public class CauThuDoiBongEntity  {
     public CauThuDoiBongEntity() {
     }
 
-    public CauThuDoiBongEntity(CauThuDoiBongKey key, DoiBongEntity doiBong, CauThuEntity cauThu, Date thoiDiemKetThuc, int tongSoBanThang) {
+    public CauThuDoiBongEntity(CauThuDoiBongKey key, CauThuEntity cauThuDB, DoiBongEntity doiBongCT, Date thoiDiemBatDau, Date thoiDiemKetThuc, int tongSoBanThang) {
         this.key = key;
-        DoiBong = doiBong;
-        CauThu = cauThu;
+        CauThuDB = cauThuDB;
+        DoiBongCT = doiBongCT;
         ThoiDiemKetThuc = thoiDiemKetThuc;
         TongSoBanThang = tongSoBanThang;
     }

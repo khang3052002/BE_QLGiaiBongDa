@@ -24,7 +24,7 @@ public class DoiBongEntity extends BaseEntity{
 
 
     //CauThu_DoiBong
-    @OneToMany(mappedBy = "DoiBong")
+    @OneToMany(mappedBy = "DoiBongCT")
     private List<CauThuDoiBongEntity> CacCauThu;
 
 

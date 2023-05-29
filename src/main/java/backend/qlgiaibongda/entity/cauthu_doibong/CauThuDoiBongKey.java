@@ -22,7 +22,6 @@ public class CauThuDoiBongKey implements Serializable {
     private Long IdCauThu;
 
 
-
     @Column(name = "thoidiembatdau")
     @CreatedDate
     private Date ThoiDiemBatDau;
@@ -53,13 +52,9 @@ public class CauThuDoiBongKey implements Serializable {
     }
 
 
-//    public CauThuDoiBongKey() {
-//    }
-//
-//    public CauThuDoiBongKey(Long idCauThu, Long idDoiBong, Date thoiDiemBatDau) {
-//        IdCauThu = idCauThu;
-//        IdDoiBong = idDoiBong;
-//        ThoiDiemBatDau = thoiDiemBatDau;
-//    }
+    public CauThuDoiBongKey() {
+    }
+
+
 }
 

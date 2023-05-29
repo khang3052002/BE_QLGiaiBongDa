@@ -35,7 +35,7 @@ public class CauThuEntity extends BaseEntity{
     private List<ViTriEntity> CacViTri = new ArrayList<>();
 
     //CauThu_DoiBong
-    @OneToMany(mappedBy = "CauThu")
+    @OneToMany(mappedBy = "CauThuDB")
     private List<CauThuDoiBongEntity> CacDoiBong;
 
     public void setCacViTri(List<ViTriEntity> cacViTri) {
