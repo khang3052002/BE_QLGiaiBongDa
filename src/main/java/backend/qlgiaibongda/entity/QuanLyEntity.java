@@ -39,6 +39,8 @@ public class QuanLyEntity extends BaseEntity {
     @OneToMany(mappedBy = "QuanLyTaoLich")
     private List<LichThiDauEntity> dsLichThiDauTaoBoiQuanLi = new ArrayList();
 
+    @OneToMany(mappedBy = "quanLyDkiHoSo")
+    private List<HoSoDangKyEntity> DSHoSoDKYCuaQuanLy = new ArrayList<>();
 
 
     public VaiTroEntity getVaiTro() {

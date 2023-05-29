@@ -28,7 +28,10 @@ public class HoSoDangKyEntity extends BaseEntity {
     @ManyToMany(mappedBy = "CacHoSoDangKy")
     private List<CauThuEntity> CacCauThu = new ArrayList<>();
 
-
+    // QuanLy - HoSoDangKy
+    @ManyToOne
+    @JoinColumn(name="id_quanly")
+    private QuanLyEntity quanLyDkiHoSo;
 
     ////////////////////////////////GETTER SETTER///////////////////////////////////////////
 

@@ -5,10 +5,9 @@
 
 package backend.qlgiaibongda.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import backend.qlgiaibongda.entity.KetQuaTranDau.KetQuaTranDauEntity;
+import jakarta.persistence.*;
+
 import java.sql.Date;
 
 @Entity
@@ -28,6 +27,11 @@ public class TranDauEntity extends BaseEntity {
     @JoinColumn(name = "id_lichthidau")
     private LichThiDauEntity lichThiDau;
 
+
+
+    //Relation ship KQTranDau - Tran Dau
+    @OneToOne(mappedBy = "TranDau")
+    private KetQuaTranDauEntity KetQuaTranDau;
 
     public Date getThoiGian() {
         return ThoiGian;
@@ -56,16 +60,19 @@ public class TranDauEntity extends BaseEntity {
     public VongEntity getVong() {
         return Vong;
     }
-
     public void setVong(VongEntity vong) {
         Vong = vong;
     }
-
     public LichThiDauEntity getLichThiDau() {
         return lichThiDau;
     }
-
     public void setLichThiDau(LichThiDauEntity lichThiDau) {
         this.lichThiDau = lichThiDau;
+    }
+    public KetQuaTranDauEntity getKetQuaTranDau() {
+        return KetQuaTranDau;
+    }
+    public void setKetQuaTranDau(KetQuaTranDauEntity ketQuaTranDau) {
+        KetQuaTranDau = ketQuaTranDau;
     }
 }

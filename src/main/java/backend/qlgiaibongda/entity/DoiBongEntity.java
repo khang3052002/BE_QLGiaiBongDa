@@ -1,5 +1,6 @@
 package backend.qlgiaibongda.entity;
 
+import backend.qlgiaibongda.entity.KetQuaTranDau.KetQuaTranDauEntity;
 import backend.qlgiaibongda.entity.bxh_doibong.BXHDoiBongEntity;
 import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
 import jakarta.persistence.*;
@@ -42,7 +43,8 @@ public class DoiBongEntity extends BaseEntity{
     @OneToMany(mappedBy = "DoiKhach")
     private List<TranDauEntity> DSTranDauSanKhach = new ArrayList();
 
-
+    @OneToMany(mappedBy = "DoiBong")
+    private List<KetQuaTranDauEntity> DSBanThangDoiBong_TranDau = new ArrayList<>();
 
 
     ////////////////////////////////GETTER SETTER///////////////////////////////////////////
@@ -125,5 +127,13 @@ public class DoiBongEntity extends BaseEntity{
 
     public void setDSTranDauSanKhach(List<TranDauEntity> DSTranDauSanKhach) {
         this.DSTranDauSanKhach = DSTranDauSanKhach;
+    }
+
+    public List<KetQuaTranDauEntity> getDSBanThangDoiBong_TranDau() {
+        return DSBanThangDoiBong_TranDau;
+    }
+
+    public void setDSBanThangDoiBong_TranDau(List<KetQuaTranDauEntity> DSBanThangDoiBong_TranDau) {
+        this.DSBanThangDoiBong_TranDau = DSBanThangDoiBong_TranDau;
     }
 }

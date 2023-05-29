@@ -36,6 +36,9 @@ public class MuaGiaiEntity extends BaseEntity {
     private QuyDinhMuaGiaiEntity QuyDinhMuaGiai;
 
 
+    @OneToOne(mappedBy = "MuaGiai")
+    private LichThiDauEntity LichThiDau;
+
     public List<CauThuGhiBanEntity> getCacCauThuGhiBan() {
         return CacCauThuGhiBan;
     }
