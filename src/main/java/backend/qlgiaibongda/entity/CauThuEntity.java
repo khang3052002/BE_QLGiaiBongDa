@@ -25,6 +25,9 @@ public class CauThuEntity extends BaseEntity{
     private String HinhAnh;
     @Column(name = "quequan")
     private String QueQuan;
+
+    @Column(name = "trangthai")
+    private String TrangThai;
     @Column(name = "loaicauthu")
     private String LoaiCauThu;
 
@@ -53,8 +56,13 @@ public class CauThuEntity extends BaseEntity{
     private List<KetQuaTranDauEntity> DSBanThangCauThu_TranDau = new ArrayList<>();
 
 
+    public String getTrangThai() {
+        return TrangThai;
+    }
 
-
+    public void setTrangThai(String trangThai) {
+        TrangThai = trangThai;
+    }
 
     public List<HoSoDangKyEntity> getCacHoSoDangKy() {
         return CacHoSoDangKy;

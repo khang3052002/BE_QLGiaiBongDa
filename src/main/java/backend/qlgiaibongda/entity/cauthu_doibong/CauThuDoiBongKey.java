@@ -10,9 +10,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
+
 
 @Embeddable
-@EntityListeners(AuditingEntityListener.class)
 public class CauThuDoiBongKey implements Serializable {
 
     @Column(name = "id_doibong")
@@ -23,8 +24,7 @@ public class CauThuDoiBongKey implements Serializable {
 
 
     @Column(name = "thoidiembatdau")
-    @CreatedDate
-    private Date ThoiDiemBatDau;
+    private Date ThoiDiemBatDau = new Date(System.currentTimeMillis());
 
 
     public Date getThoiDiemBatDau() {
@@ -51,6 +51,11 @@ public class CauThuDoiBongKey implements Serializable {
         IdDoiBong = idDoiBong;
     }
 
+
+    public CauThuDoiBongKey(Long idDoiBong, Long idCauThu) {
+        IdDoiBong = idDoiBong;
+        IdCauThu = idCauThu;
+    }
 
     public CauThuDoiBongKey() {
     }
