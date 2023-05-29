@@ -33,7 +33,8 @@ public class DoiBongEntity extends BaseEntity{
     @OneToMany(mappedBy = "DoiBong")
     private List<HoSoDangKyEntity> CacHoSoDangKy = new ArrayList<>();
 
-    @OneToOne(mappedBy = "DoiBong")
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name="id_quanli", referencedColumnName = "id")
     private QuanLyEntity QuanLy;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_sannha", referencedColumnName = "id")

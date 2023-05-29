@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "vaitro")
 public class VaiTroEntity extends BaseEntity {
     @Column(name = "tenvaitro")
-    private String TenVaiTro;
+    private String tenVaiTro;
     @Column(name = "code")
     private String code;
     @OneToMany(mappedBy = "VaiTro")
@@ -28,7 +28,7 @@ public class VaiTroEntity extends BaseEntity {
     }
 
     public String getTenVaiTro() {
-        return this.TenVaiTro;
+        return this.tenVaiTro;
     }
 
     public String getCode() {
@@ -36,7 +36,7 @@ public class VaiTroEntity extends BaseEntity {
     }
 
     public void setTenVaiTro(String tenVaiTro) {
-        TenVaiTro = tenVaiTro;
+        tenVaiTro = tenVaiTro;
     }
 
     public void setCode(String code) {

@@ -23,15 +23,14 @@ import java.util.List;
 )
 public class QuanLyEntity extends BaseEntity {
     @Column(name = "hoten", columnDefinition = "nvarchar(255)")
-    private String HoTen;
+    private String hoTen;
     @Column(name = "ngaysinh")
-    private Date NgaySinh;
+    private Date ngaySinh;
     @Column(name = "taikhoan")
-    private String TaiKhoan;
+    private String taiKhoan;
     @Column(name = "matkhau")
-    private String MatKhau;
-    @OneToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "id_doibong", referencedColumnName = "id")
+    private String matKhau;
+    @OneToOne(mappedBy = "QuanLy")
     private DoiBongEntity DoiBong;
     @ManyToOne
     @JoinColumn(name = "id_vaitro")
@@ -48,35 +47,35 @@ public class QuanLyEntity extends BaseEntity {
     }
 
     public String getHoTen() {
-        return this.HoTen;
+        return this.hoTen;
     }
 
     public void setHoTen(String hoTen) {
-        this.HoTen = hoTen;
+        this.hoTen = hoTen;
     }
 
     public Date getNgaySinh() {
-        return this.NgaySinh;
+        return this.ngaySinh;
     }
 
     public void setNgaySinh(Date ngaySinh) {
-        this.NgaySinh = ngaySinh;
+        this.ngaySinh = ngaySinh;
     }
 
     public String getTaiKhoan() {
-        return this.TaiKhoan;
+        return this.taiKhoan;
     }
 
     public void setTaiKhoan(String taiKhoan) {
-        this.TaiKhoan = taiKhoan;
+        this.taiKhoan = taiKhoan;
     }
 
     public String getMatKhau() {
-        return this.MatKhau;
+        return this.matKhau;
     }
 
     public void setMatKhau(String matKhau) {
-        this.MatKhau = matKhau;
+        this.matKhau = matKhau;
     }
 
     public DoiBongEntity getDoiBong() {
