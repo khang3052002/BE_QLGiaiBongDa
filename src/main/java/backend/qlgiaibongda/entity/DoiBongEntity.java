@@ -2,10 +2,7 @@ package backend.qlgiaibongda.entity;
 
 import backend.qlgiaibongda.entity.bxh_doibong.BXHDoiBongEntity;
 import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +31,16 @@ public class DoiBongEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "DoiBong")
     private List<HoSoDangKyEntity> CacHoSoDangKy = new ArrayList<>();
+
+    @OneToOne(mappedBy = "DoiBong")
+    private QuanLyEntity QuanLy;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_sannha", referencedColumnName = "id")
+    private SanBongEntity SanBong;
+    @OneToMany(mappedBy = "DoiNha")
+    private List<TranDauEntity> DSTranDauSanNha = new ArrayList();
+    @OneToMany(mappedBy = "DoiKhach")
+    private List<TranDauEntity> DSTranDauSanKhach = new ArrayList();
 
 
 
@@ -86,5 +93,37 @@ public class DoiBongEntity extends BaseEntity{
 
     public void setNamThanhLap(int namThanhLap) {
         NamThanhLap = namThanhLap;
+    }
+
+    public QuanLyEntity getQuanLy() {
+        return QuanLy;
+    }
+
+    public void setQuanLy(QuanLyEntity quanLy) {
+        QuanLy = quanLy;
+    }
+
+    public SanBongEntity getSanBong() {
+        return SanBong;
+    }
+
+    public void setSanBong(SanBongEntity sanBong) {
+        SanBong = sanBong;
+    }
+
+    public List<TranDauEntity> getDSTranDauSanNha() {
+        return DSTranDauSanNha;
+    }
+
+    public void setDSTranDauSanNha(List<TranDauEntity> DSTranDauSanNha) {
+        this.DSTranDauSanNha = DSTranDauSanNha;
+    }
+
+    public List<TranDauEntity> getDSTranDauSanKhach() {
+        return DSTranDauSanKhach;
+    }
+
+    public void setDSTranDauSanKhach(List<TranDauEntity> DSTranDauSanKhach) {
+        this.DSTranDauSanKhach = DSTranDauSanKhach;
     }
 }
