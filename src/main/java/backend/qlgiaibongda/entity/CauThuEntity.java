@@ -36,7 +36,34 @@ public class CauThuEntity extends BaseEntity{
 
     //CauThu_DoiBong
     @OneToMany(mappedBy = "CauThuDB")
-    private List<CauThuDoiBongEntity> CacDoiBong;
+    private List<CauThuDoiBongEntity> CauThuDoiBong;
+
+    //CHITIETHOSODANGKY
+    @ManyToMany
+    @JoinTable(name = "chitiethosodangky",
+                joinColumns = @JoinColumn(name = "id_cauthu"),
+                inverseJoinColumns = @JoinColumn(name = "id_hoso"))
+    private List<HoSoDangKyEntity> CacHoSoDangKy = new ArrayList<>();
+
+    public List<HoSoDangKyEntity> getCacHoSoDangKy() {
+        return CacHoSoDangKy;
+    }
+
+    public void setCacHoSoDangKy(List<HoSoDangKyEntity> cacHoSoDangKy) {
+        CacHoSoDangKy = cacHoSoDangKy;
+    }
+
+    public List<ViTriEntity> getCacViTri() {
+        return CacViTri;
+    }
+
+    public List<CauThuDoiBongEntity> getCauThuDoiBong() {
+        return CauThuDoiBong;
+    }
+
+    public void setCauThuDoiBong(List<CauThuDoiBongEntity> cauThuDoiBong) {
+        CauThuDoiBong = cauThuDoiBong;
+    }
 
     public void setCacViTri(List<ViTriEntity> cacViTri) {
         CacViTri = cacViTri;

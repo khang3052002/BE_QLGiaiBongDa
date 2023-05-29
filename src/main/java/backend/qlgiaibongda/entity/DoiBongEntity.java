@@ -1,5 +1,6 @@
 package backend.qlgiaibongda.entity;
 
+import backend.qlgiaibongda.entity.bxh_doibong.BXHDoiBongEntity;
 import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,8 +26,43 @@ public class DoiBongEntity extends BaseEntity{
 
     //CauThu_DoiBong
     @OneToMany(mappedBy = "DoiBongCT")
-    private List<CauThuDoiBongEntity> CacCauThu;
+    private List<CauThuDoiBongEntity> DoiBongCauThu;
 
+    //BangXepHang
+    @OneToMany(mappedBy = "DoiBong")
+    private List<BXHDoiBongEntity> DoiBongBXH;
+
+    @OneToMany(mappedBy = "DoiBong")
+    private List<HoSoDangKyEntity> CacHoSoDangKy = new ArrayList<>();
+
+
+
+
+    ////////////////////////////////GETTER SETTER///////////////////////////////////////////
+
+    public List<HoSoDangKyEntity> getCacHoSoDangKy() {
+        return CacHoSoDangKy;
+    }
+
+    public void setCacHoSoDangKy(List<HoSoDangKyEntity> cacHoSoDangKy) {
+        CacHoSoDangKy = cacHoSoDangKy;
+    }
+
+    public List<BXHDoiBongEntity> getDoiBongBXH() {
+        return DoiBongBXH;
+    }
+
+    public void setDoiBongBXH(List<BXHDoiBongEntity> doiBongBXH) {
+        DoiBongBXH = doiBongBXH;
+    }
+
+    public List<CauThuDoiBongEntity> getDoiBongCauThu() {
+        return DoiBongCauThu;
+    }
+
+    public void setDoiBongCauThu(List<CauThuDoiBongEntity> doiBongCauThu) {
+        DoiBongCauThu = doiBongCauThu;
+    }
 
     public String getTen() {
         return Ten;

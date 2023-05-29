@@ -3,11 +3,14 @@ package backend.qlgiaibongda.entity.cauthu_doibong;
 import backend.qlgiaibongda.entity.BaseEntity;
 import backend.qlgiaibongda.entity.CauThuEntity;
 import backend.qlgiaibongda.entity.DoiBongEntity;
+import backend.qlgiaibongda.entity.HoSoDangKyEntity;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "cauthu_doibong")
