@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "doibong")
@@ -23,8 +24,9 @@ public class DoiBongEntity extends BaseEntity{
 
 
     //CauThu_DoiBong
-    @OneToMany(mappedBy = "DoiBongCT")
-    private List<CauThuDoiBongEntity> CacCauThu= new ArrayList<>();
+    @OneToMany(mappedBy = "DoiBong")
+    private List<CauThuDoiBongEntity> CacCauThu;
+
 
     public String getTen() {
         return Ten;

@@ -14,23 +14,19 @@ import java.sql.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class CauThuDoiBongEntity  {
     @EmbeddedId
-    CauThuDoiBongKey key;
+    private CauThuDoiBongKey key;
 
-    @ManyToOne
-    @MapsId("IdCauThu")
-    @JoinColumn(name = "id_cauthu")
-    private CauThuEntity CauThuDB;
 
     @ManyToOne
     @MapsId("IdDoiBong")
     @JoinColumn(name = "id_doibong")
-    private DoiBongEntity DoiBongCT;
+    private DoiBongEntity DoiBong;
 
+    @ManyToOne
+    @MapsId("IdCauThu")
+    @JoinColumn(name = "id_cauthu")
+    private CauThuEntity CauThu;
 
-
-    @Id
-    @CreatedDate
-    private Date ThoiDiemBatDau;
 
     @Column(name = "thoidiemketthuc")
     private Date ThoiDiemKetThuc;
@@ -47,28 +43,20 @@ public class CauThuDoiBongEntity  {
         this.key = key;
     }
 
-    public CauThuEntity getCauThuDB() {
-        return CauThuDB;
+    public DoiBongEntity getDoiBong() {
+        return DoiBong;
     }
 
-    public void setCauThuDB(CauThuEntity cauThuDB) {
-        CauThuDB = cauThuDB;
+    public void setDoiBong(DoiBongEntity doiBong) {
+        DoiBong = doiBong;
     }
 
-    public DoiBongEntity getDoiBongCT() {
-        return DoiBongCT;
+    public CauThuEntity getCauThu() {
+        return CauThu;
     }
 
-    public void setDoiBongCT(DoiBongEntity doiBongCT) {
-        DoiBongCT = doiBongCT;
-    }
-
-    public Date getThoiDiemBatDau() {
-        return ThoiDiemBatDau;
-    }
-
-    public void setThoiDiemBatDau(Date thoiDiemBatDau) {
-        ThoiDiemBatDau = thoiDiemBatDau;
+    public void setCauThu(CauThuEntity cauThu) {
+        CauThu = cauThu;
     }
 
     public Date getThoiDiemKetThuc() {
@@ -90,11 +78,10 @@ public class CauThuDoiBongEntity  {
     public CauThuDoiBongEntity() {
     }
 
-    public CauThuDoiBongEntity(CauThuDoiBongKey key, CauThuEntity cauThuDB, DoiBongEntity doiBongCT, Date thoiDiemBatDau, Date thoiDiemKetThuc, int tongSoBanThang) {
+    public CauThuDoiBongEntity(CauThuDoiBongKey key, DoiBongEntity doiBong, CauThuEntity cauThu, Date thoiDiemKetThuc, int tongSoBanThang) {
         this.key = key;
-        CauThuDB = cauThuDB;
-        DoiBongCT = doiBongCT;
-        ThoiDiemBatDau = thoiDiemBatDau;
+        DoiBong = doiBong;
+        CauThu = cauThu;
         ThoiDiemKetThuc = thoiDiemKetThuc;
         TongSoBanThang = tongSoBanThang;
     }

@@ -1,5 +1,6 @@
 package backend.qlgiaibongda.entity.cauthu_doibong;
 
+import backend.qlgiaibongda.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EntityListeners;
@@ -11,24 +12,29 @@ import java.io.Serializable;
 import java.sql.Date;
 
 @Embeddable
+@EntityListeners(AuditingEntityListener.class)
 public class CauThuDoiBongKey implements Serializable {
-    @Column(name = "id_cauthu")
-    private Long IdCauThu;
 
     @Column(name = "id_doibong")
     private Long IdDoiBong;
 
-//    @Column(name = "thoidiembatdau")
-//    private Date ThoiDiemBatDau;
+    @Column(name = "id_cauthu")
+    private Long IdCauThu;
 
 
-//    public Date getThoiDiemBatDau() {
-//        return ThoiDiemBatDau;
-//    }
-//
-//    public void setThoiDiemBatDau(Date thoiDiemBatDau) {
-//        ThoiDiemBatDau = thoiDiemBatDau;
-//    }
+
+    @Column(name = "thoidiembatdau")
+    @CreatedDate
+    private Date ThoiDiemBatDau;
+
+
+    public Date getThoiDiemBatDau() {
+        return ThoiDiemBatDau;
+    }
+
+    public void setThoiDiemBatDau(Date thoiDiemBatDau) {
+        ThoiDiemBatDau = thoiDiemBatDau;
+    }
 
     public Long getIdCauThu() {
         return IdCauThu;
@@ -47,13 +53,13 @@ public class CauThuDoiBongKey implements Serializable {
     }
 
 
-    public CauThuDoiBongKey() {
-    }
-
-    public CauThuDoiBongKey(Long idCauThu, Long idDoiBong, Date thoiDiemBatDau) {
-        IdCauThu = idCauThu;
-        IdDoiBong = idDoiBong;
+//    public CauThuDoiBongKey() {
+//    }
+//
+//    public CauThuDoiBongKey(Long idCauThu, Long idDoiBong, Date thoiDiemBatDau) {
+//        IdCauThu = idCauThu;
+//        IdDoiBong = idDoiBong;
 //        ThoiDiemBatDau = thoiDiemBatDau;
-    }
+//    }
 }
 

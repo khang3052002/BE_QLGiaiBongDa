@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -34,8 +35,8 @@ public class CauThuEntity extends BaseEntity{
     private List<ViTriEntity> CacViTri = new ArrayList<>();
 
     //CauThu_DoiBong
-    @OneToMany(mappedBy = "CauThuDB")
-    private List<CauThuDoiBongEntity> CacDoiBong= new ArrayList<>();
+    @OneToMany(mappedBy = "CauThu")
+    private List<CauThuDoiBongEntity> CacDoiBong;
 
     public void setCacViTri(List<ViTriEntity> cacViTri) {
         CacViTri = cacViTri;
