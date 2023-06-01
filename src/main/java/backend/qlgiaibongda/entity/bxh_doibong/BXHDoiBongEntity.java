@@ -23,15 +23,15 @@ public class BXHDoiBongEntity  {
     private BangXepHangEntity BXH;
 
     @Column(name = "tranthang")
-    private int TranThang;
+    private int tranThang;
     @Column(name = "tranthua")
-    private int TranThua;
+    private int tranThua;
     @Column(name = "tranhoa")
-    private int TranHoa;
+    private int tranHoa;
     @Column(name = "hieuso")
-    private int HieuSo;
+    private int hieuSo;
     @Column(name = "hang")
-    private int Hang;
+    private int hang;
 
     public BXHDoiBongKey getKey() {
         return key;
@@ -58,42 +58,42 @@ public class BXHDoiBongEntity  {
     }
 
     public int getTranThang() {
-        return TranThang;
+        return tranThang;
     }
 
     public void setTranThang(int tranThang) {
-        TranThang = tranThang;
+        this.tranThang = tranThang;
     }
 
     public int getTranThua() {
-        return TranThua;
+        return tranThua;
     }
 
     public void setTranThua(int tranThua) {
-        TranThua = tranThua;
+        this.tranThua = tranThua;
     }
 
     public int getTranHoa() {
-        return TranHoa;
+        return tranHoa;
     }
 
     public void setTranHoa(int tranHoa) {
-        TranHoa = tranHoa;
+        this.tranHoa = tranHoa;
     }
 
     public int getHieuSo() {
-        return HieuSo;
+        return hieuSo;
     }
 
     public void setHieuSo(int hieuSo) {
-        HieuSo = hieuSo;
+        this.hieuSo = hieuSo;
     }
 
     public int getHang() {
-        return Hang;
+        return hang;
     }
 
     public void setHang(int hang) {
-        Hang = hang;
+        this.hang = hang;
     }
 }

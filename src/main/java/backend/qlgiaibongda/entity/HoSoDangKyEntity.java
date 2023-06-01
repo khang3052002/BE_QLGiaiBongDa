@@ -11,10 +11,10 @@ import java.util.List;
 public class HoSoDangKyEntity extends BaseEntity {
 
     @Column(name = "thoigiantao")
-    private Date ThoiGianTao;
+    private Date thoiGianTao;
 
     @Column(name = "trangthai")
-    private String TrangThai;
+    private String trangThai;
 
     @ManyToOne
     @JoinColumn(name = "id_muagiai")
@@ -66,18 +66,26 @@ public class HoSoDangKyEntity extends BaseEntity {
     }
 
     public Date getThoiGianTao() {
-        return ThoiGianTao;
+        return thoiGianTao;
     }
 
     public void setThoiGianTao(Date thoiGianTao) {
-        ThoiGianTao = thoiGianTao;
+        this.thoiGianTao = thoiGianTao;
     }
 
     public String getTrangThai() {
-        return TrangThai;
+        return trangThai;
     }
 
     public void setTrangThai(String trangThai) {
-        TrangThai = trangThai;
+        this.trangThai = trangThai;
+    }
+
+    public QuanLyEntity getQuanLyDkiHoSo() {
+        return quanLyDkiHoSo;
+    }
+
+    public void setQuanLyDkiHoSo(QuanLyEntity quanLyDkiHoSo) {
+        this.quanLyDkiHoSo = quanLyDkiHoSo;
     }
 }

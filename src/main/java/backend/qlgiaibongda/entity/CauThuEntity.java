@@ -15,21 +15,21 @@ import java.util.Set;
 public class CauThuEntity extends BaseEntity{
 
     @Column(name = "hoten")
-    private String HoTen;
+    private String hoTen;
 
     @Column(name = "ngaysinh")
-    private Date NgaySinh;
+    private Date ngaySinh;
     @Column(name = "quoctich")
-    private String QuocTich;
+    private String quocTich;
     @Column(name = "hinhanh")
-    private String HinhAnh;
+    private String hinhAnh;
     @Column(name = "quequan")
-    private String QueQuan;
+    private String queQuan;
 
     @Column(name = "trangthai")
-    private String TrangThai;
+    private String trangThai;
     @Column(name = "loaicauthu")
-    private String LoaiCauThu;
+    private String loaiCauThu;
 
     //CauThu_ViTri
     @ManyToMany
@@ -56,13 +56,7 @@ public class CauThuEntity extends BaseEntity{
     private List<KetQuaTranDauEntity> DSBanThangCauThu_TranDau = new ArrayList<>();
 
 
-    public String getTrangThai() {
-        return TrangThai;
-    }
 
-    public void setTrangThai(String trangThai) {
-        TrangThai = trangThai;
-    }
 
     public List<HoSoDangKyEntity> getCacHoSoDangKy() {
         return CacHoSoDangKy;
@@ -89,51 +83,59 @@ public class CauThuEntity extends BaseEntity{
     }
 
     public String getHoTen() {
-        return HoTen;
+        return hoTen;
     }
 
     public void setHoTen(String hoTen) {
-        HoTen = hoTen;
+        this.hoTen = hoTen;
     }
 
     public Date getNgaySinh() {
-        return NgaySinh;
+        return ngaySinh;
     }
 
     public void setNgaySinh(Date ngaySinh) {
-        NgaySinh = ngaySinh;
+        this.ngaySinh = ngaySinh;
     }
 
     public String getQuocTich() {
-        return QuocTich;
+        return quocTich;
     }
 
     public void setQuocTich(String quocTich) {
-        QuocTich = quocTich;
+        this.quocTich = quocTich;
     }
 
     public String getHinhAnh() {
-        return HinhAnh;
+        return hinhAnh;
     }
 
     public void setHinhAnh(String hinhAnh) {
-        HinhAnh = hinhAnh;
+        this.hinhAnh = hinhAnh;
     }
 
     public String getQueQuan() {
-        return QueQuan;
+        return queQuan;
     }
 
     public void setQueQuan(String queQuan) {
-        QueQuan = queQuan;
+        this.queQuan = queQuan;
+    }
+
+    public String getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
     }
 
     public String getLoaiCauThu() {
-        return LoaiCauThu;
+        return loaiCauThu;
     }
 
     public void setLoaiCauThu(String loaiCauThu) {
-        LoaiCauThu = loaiCauThu;
+        this.loaiCauThu = loaiCauThu;
     }
 
     public List<KetQuaTranDauEntity> getDSBanThangCauThu_TranDau() {

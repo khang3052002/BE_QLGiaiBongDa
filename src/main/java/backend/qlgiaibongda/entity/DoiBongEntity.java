@@ -14,12 +14,12 @@ import java.util.Set;
 public class DoiBongEntity extends BaseEntity{
 
     @Column(name = "ten")
-    private String Ten;
+    private String ten;
     @Column(name = "hinhanh")
-    private String HinhAnh;
+    private String hinhAnh;
 
     @Column(name = "namthanhlap")
-    private int NamThanhLap;
+    private int namThanhLap;
 
 
     //CauThu_DoiBong
@@ -75,27 +75,27 @@ public class DoiBongEntity extends BaseEntity{
     }
 
     public String getTen() {
-        return Ten;
+        return ten;
     }
 
     public void setTen(String ten) {
-        Ten = ten;
+        this.ten = ten;
     }
 
     public String getHinhAnh() {
-        return HinhAnh;
+        return hinhAnh;
     }
 
     public void setHinhAnh(String hinhAnh) {
-        HinhAnh = hinhAnh;
+        this.hinhAnh = hinhAnh;
     }
 
     public int getNamThanhLap() {
-        return NamThanhLap;
+        return namThanhLap;
     }
 
     public void setNamThanhLap(int namThanhLap) {
-        NamThanhLap = namThanhLap;
+        this.namThanhLap = namThanhLap;
     }
 
     public QuanLyEntity getQuanLy() {

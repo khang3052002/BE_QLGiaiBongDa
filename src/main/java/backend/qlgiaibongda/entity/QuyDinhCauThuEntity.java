@@ -9,60 +9,60 @@ import jakarta.persistence.Table;
 public class QuyDinhCauThuEntity extends  BaseEntity{
 
     @Column(name = "soluongcauthutoida")
-    private int SoLuongCauThuToiDa;
+    private int soLuongCauThuToiDa;
 
     @Column(name = "soluongcauthutoithieu")
-    private int SoLuongCauThuToiThieu;
+    private int soLuongCauThuToiThieu;
 
     @Column(name = "soluongcauthunuocngoaitoida")
-    private int SoLuongCauThuNuocNgoaiToiDa;
+    private int soLuongCauThuNuocNgoaiToiDa;
 
     @Column(name = "tuoitoithieu")
-    private int TuoiToiThieu;
+    private int tuoiToiThieu;
 
     @Column(name = "tuoitoida")
-    private int TuoiToiDa;
+    private int tuoiToiDa;
 
     public QuyDinhCauThuEntity() {
     }
 
     public int getSoLuongCauThuToiDa() {
-        return SoLuongCauThuToiDa;
+        return soLuongCauThuToiDa;
     }
 
     public void setSoLuongCauThuToiDa(int soLuongCauThuToiDa) {
-        SoLuongCauThuToiDa = soLuongCauThuToiDa;
+        this.soLuongCauThuToiDa = soLuongCauThuToiDa;
     }
 
     public int getSoLuongCauThuToiThieu() {
-        return SoLuongCauThuToiThieu;
+        return soLuongCauThuToiThieu;
     }
 
     public void setSoLuongCauThuToiThieu(int soLuongCauThuToiThieu) {
-        SoLuongCauThuToiThieu = soLuongCauThuToiThieu;
+        this.soLuongCauThuToiThieu = soLuongCauThuToiThieu;
     }
 
     public int getSoLuongCauThuNuocNgoaiToiDa() {
-        return SoLuongCauThuNuocNgoaiToiDa;
+        return soLuongCauThuNuocNgoaiToiDa;
     }
 
     public void setSoLuongCauThuNuocNgoaiToiDa(int soLuongCauThuNuocNgoaiToiDa) {
-        SoLuongCauThuNuocNgoaiToiDa = soLuongCauThuNuocNgoaiToiDa;
+        this.soLuongCauThuNuocNgoaiToiDa = soLuongCauThuNuocNgoaiToiDa;
     }
 
     public int getTuoiToiThieu() {
-        return TuoiToiThieu;
+        return tuoiToiThieu;
     }
 
     public void setTuoiToiThieu(int tuoiToiThieu) {
-        TuoiToiThieu = tuoiToiThieu;
+        this.tuoiToiThieu = tuoiToiThieu;
     }
 
     public int getTuoiToiDa() {
-        return TuoiToiDa;
+        return tuoiToiDa;
     }
 
     public void setTuoiToiDa(int tuoiToiDa) {
-        TuoiToiDa = tuoiToiDa;
+        this.tuoiToiDa = tuoiToiDa;
     }
 }

@@ -9,16 +9,16 @@ import java.util.List;
 @Table(name = "vitri")
 public class ViTriEntity extends BaseEntity{
     @Column(name = "vitri")
-    private String ViTri;
+    private String viTri;
 
     @ManyToMany(mappedBy = "CacViTri")
     private List<CauThuEntity> CacCauThu = new ArrayList<>();
 
     public String getViTri() {
-        return ViTri;
+        return viTri;
     }
 
     public void setViTri(String viTri) {
-        ViTri = viTri;
+        this.viTri = viTri;
     }
 }

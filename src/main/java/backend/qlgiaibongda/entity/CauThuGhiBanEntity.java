@@ -14,7 +14,7 @@ public class CauThuGhiBanEntity extends BaseEntity{
     private DoiBongEntity DoiBong;
 
     @Column(name = "sobanthang")
-    private int SoBanThang;
+    private int soBanThang;
 
     @ManyToOne
     @JoinColumn(name = "id_muagiai")
@@ -48,10 +48,10 @@ public class CauThuGhiBanEntity extends BaseEntity{
     }
 
     public int getSoBanThang() {
-        return SoBanThang;
+        return soBanThang;
     }
 
     public void setSoBanThang(int soBanThang) {
-        SoBanThang = soBanThang;
+        this.soBanThang = soBanThang;
     }
 }

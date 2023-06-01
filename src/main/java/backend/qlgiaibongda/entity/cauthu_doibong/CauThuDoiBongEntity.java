@@ -30,10 +30,10 @@ public class CauThuDoiBongEntity  {
 
 
     @Column(name = "thoidiemketthuc")
-    private Date ThoiDiemKetThuc;
+    private Date thoiDiemKetThuc;
 
     @Column(name = "tongsobanthang")
-    private int TongSoBanThang;
+    private int tongSoBanThang;
 
 
     public CauThuDoiBongKey getKey() {
@@ -62,19 +62,19 @@ public class CauThuDoiBongEntity  {
 
 
     public Date getThoiDiemKetThuc() {
-        return ThoiDiemKetThuc;
+        return thoiDiemKetThuc;
     }
 
     public void setThoiDiemKetThuc(Date thoiDiemKetThuc) {
-        ThoiDiemKetThuc = thoiDiemKetThuc;
+        this.thoiDiemKetThuc = thoiDiemKetThuc;
     }
 
     public int getTongSoBanThang() {
-        return TongSoBanThang;
+        return tongSoBanThang;
     }
 
     public void setTongSoBanThang(int tongSoBanThang) {
-        TongSoBanThang = tongSoBanThang;
+        this.tongSoBanThang = tongSoBanThang;
     }
 
     public CauThuDoiBongEntity() {
@@ -84,7 +84,7 @@ public class CauThuDoiBongEntity  {
         this.key = key;
         CauThuDB = cauThuDB;
         DoiBongCT = doiBongCT;
-        ThoiDiemKetThuc = thoiDiemKetThuc;
-        TongSoBanThang = tongSoBanThang;
+        this.thoiDiemKetThuc = thoiDiemKetThuc;
+        this.tongSoBanThang = tongSoBanThang;
     }
 }

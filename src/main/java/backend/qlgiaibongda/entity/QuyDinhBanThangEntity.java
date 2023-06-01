@@ -13,7 +13,7 @@ import java.util.List;
 public class QuyDinhBanThangEntity extends BaseEntity{
 
     @Column(name = "thoidiemghibantoida")
-    private int ThoiDiemGhiBanToiDa;
+    private int thoiDiemGhiBanToiDa;
 
     @ManyToMany(mappedBy = "CacQuyDinhBanThang")
     private List<LoaiBanThangEntity> CacLoaiBanThang = new ArrayList<>();
@@ -30,10 +30,10 @@ public class QuyDinhBanThangEntity extends BaseEntity{
     }
 
     public int getThoiDiemGhiBanToiDa() {
-        return ThoiDiemGhiBanToiDa;
+        return thoiDiemGhiBanToiDa;
     }
 
     public void setThoiDiemGhiBanToiDa(int thoiDiemGhiBanToiDa) {
-        ThoiDiemGhiBanToiDa = thoiDiemGhiBanToiDa;
+        this.thoiDiemGhiBanToiDa = thoiDiemGhiBanToiDa;
     }
 }

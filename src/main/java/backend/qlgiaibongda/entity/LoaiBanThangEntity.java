@@ -11,9 +11,9 @@ import java.util.List;
 public class LoaiBanThangEntity extends BaseEntity {
 
     @Column(name = "ten")
-    private String Ten;
+    private String ten;
     @Column(name = "mota")
-    private String MoTa;
+    private String moTa;
 
     //ChiTietQuyDinhBanThang
     @ManyToMany
@@ -39,19 +39,19 @@ public class LoaiBanThangEntity extends BaseEntity {
     }
 
     public String getTen() {
-        return Ten;
+        return ten;
     }
 
     public void setTen(String ten) {
-        Ten = ten;
+        this.ten = ten;
     }
 
     public String getMoTa() {
-        return MoTa;
+        return moTa;
     }
 
     public void setMoTa(String moTa) {
-        MoTa = moTa;
+        this.moTa = moTa;
     }
 
     public List<KetQuaTranDauEntity> getDSKetQuaTranDau_LoaiBanThang() {

@@ -16,38 +16,28 @@ import java.util.List;
 @Table(name = "vongdau")
 public class VongEntity extends BaseEntity {
     @Column(name = "tenvong", columnDefinition = "nvarchar(100)")
-    private String TenVong;
+    private String tenVong;
     @Column(name = "thethuc", columnDefinition = "nvarchar(255)")
-    private String TheThuc;
+    private String theThuc;
     @OneToMany(mappedBy = "Vong")
     private List<TranDauEntity> listTranDauCuaVong = new ArrayList();
 
 
-
-
-
-
-
-
-
-
-
     public String getTenVong() {
-        return this.TenVong;
+        return tenVong;
     }
 
     public void setTenVong(String tenVong) {
-        this.TenVong = tenVong;
+        this.tenVong = tenVong;
     }
 
     public String getTheThuc() {
-        return this.TheThuc;
+        return theThuc;
     }
 
     public void setTheThuc(String theThuc) {
-        this.TheThuc = theThuc;
+        this.theThuc = theThuc;
     }
-
 
     public List<TranDauEntity> getListTranDauCuaVong() {
         return listTranDauCuaVong;

@@ -11,12 +11,12 @@ import java.util.List;
 public class MuaGiaiEntity extends BaseEntity {
 
     @Column(name = "ten")
-    private String Ten;
+    private String ten;
 
     @Column(name = "thoidiembatdau")
-    private Date ThoiDiemBatDau;
+    private Date thoiDiemBatDau;
     @Column(name = "thoidiemketthuc")
-    private Date ThoiDiemKetThuc;
+    private Date thoiDiemKetThuc;
 
 
     @OneToOne
@@ -72,27 +72,35 @@ public class MuaGiaiEntity extends BaseEntity {
     }
 
     public String getTen() {
-        return Ten;
+        return ten;
     }
 
     public void setTen(String ten) {
-        Ten = ten;
+        this.ten = ten;
     }
 
     public Date getThoiDiemBatDau() {
-        return ThoiDiemBatDau;
+        return thoiDiemBatDau;
     }
 
     public void setThoiDiemBatDau(Date thoiDiemBatDau) {
-        ThoiDiemBatDau = thoiDiemBatDau;
+        this.thoiDiemBatDau = thoiDiemBatDau;
     }
 
     public Date getThoiDiemKetThuc() {
-        return ThoiDiemKetThuc;
+        return thoiDiemKetThuc;
     }
 
     public void setThoiDiemKetThuc(Date thoiDiemKetThuc) {
-        ThoiDiemKetThuc = thoiDiemKetThuc;
+        this.thoiDiemKetThuc = thoiDiemKetThuc;
+    }
+
+    public LichThiDauEntity getLichThiDau() {
+        return LichThiDau;
+    }
+
+    public void setLichThiDau(LichThiDauEntity lichThiDau) {
+        LichThiDau = lichThiDau;
     }
 
     public MuaGiaiEntity() {

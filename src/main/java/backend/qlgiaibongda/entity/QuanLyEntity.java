@@ -13,15 +13,20 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(
         name = "quanly"
 )
-public class QuanLyEntity extends BaseEntity {
+public class QuanLyEntity extends BaseEntity implements UserDetails {
     @Column(name = "hoten", columnDefinition = "nvarchar(255)")
     private String hoTen;
     @Column(name = "ngaysinh")
@@ -96,5 +101,42 @@ public class QuanLyEntity extends BaseEntity {
 
     public void setDsLichThiDauTaoBoiQuanLi(List<LichThiDauEntity> dsLichThiDauTaoBoiQuanLi) {
         this.dsLichThiDauTaoBoiQuanLi = dsLichThiDauTaoBoiQuanLi;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(VaiTro.getCode()));
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return matKhau;
+    }
+
+    @Override
+    public String getUsername() {
+        return taiKhoan;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

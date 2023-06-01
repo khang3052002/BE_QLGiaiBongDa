@@ -19,7 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class LichThiDauEntity extends BaseEntity {
     @Column(name = "thoigiantao")
     @CreatedDate
-    private Date ThoiGianTao;
+    private Date thoiGianTao;
     @OneToMany(mappedBy = "lichThiDau")
     private List<TranDauEntity> listTranDauCuaLichThiDau = new ArrayList();
     @ManyToOne
@@ -32,11 +32,19 @@ public class LichThiDauEntity extends BaseEntity {
     private MuaGiaiEntity MuaGiai;
 
     public Date getThoiGianTao() {
-        return ThoiGianTao;
+        return thoiGianTao;
     }
 
     public void setThoiGianTao(Date thoiGianTao) {
-        ThoiGianTao = thoiGianTao;
+        this.thoiGianTao = thoiGianTao;
+    }
+
+    public MuaGiaiEntity getMuaGiai() {
+        return MuaGiai;
+    }
+
+    public void setMuaGiai(MuaGiaiEntity muaGiai) {
+        MuaGiai = muaGiai;
     }
 
     public List<TranDauEntity> getListTranDauCuaLichThiDau() {

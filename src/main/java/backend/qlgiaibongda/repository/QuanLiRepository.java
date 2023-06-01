@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface QuanLiRepository extends JpaRepository<QuanLyEntity,Long> {
 //    Optional<QuanLyEntity> findByTaiKhoan(String taikhoan);
     Boolean existsByTaiKhoan(String taikhoan);
+    Optional<QuanLyEntity> findByTaiKhoan(String taikhoan);
 }

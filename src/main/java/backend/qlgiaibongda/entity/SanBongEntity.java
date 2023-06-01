@@ -14,36 +14,34 @@ import jakarta.persistence.Table;
 @Table(name = "sanbong")
 public class SanBongEntity extends BaseEntity {
     @Column(name = "tensan", columnDefinition = "nvarchar(255)")
-    private String TenSan;
+    private String tenSan;
     @Column(name = "diadiem", columnDefinition = "nvarchar(255)")
-    private String DiaDiem;
+    private String diaDiem;
     @OneToOne(mappedBy = "SanBong")
-    private DoiBongEntity DoiBong;
-
+    private DoiBongEntity doiBong;
 
 
     public String getTenSan() {
-        return this.TenSan;
+        return tenSan;
+    }
+
+    public void setTenSan(String tenSan) {
+        this.tenSan = tenSan;
     }
 
     public String getDiaDiem() {
-        return this.DiaDiem;
-    }
-
-
-    public void setTenSan(String tenSan) {
-        TenSan = tenSan;
+        return diaDiem;
     }
 
     public void setDiaDiem(String diaDiem) {
-        DiaDiem = diaDiem;
+        this.diaDiem = diaDiem;
     }
 
     public DoiBongEntity getDoiBong() {
-        return DoiBong;
+        return doiBong;
     }
 
     public void setDoiBong(DoiBongEntity doiBong) {
-        DoiBong = doiBong;
+        this.doiBong = doiBong;
     }
 }

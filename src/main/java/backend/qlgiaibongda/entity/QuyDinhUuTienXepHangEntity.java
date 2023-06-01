@@ -8,36 +8,36 @@ import jakarta.persistence.Table;
 @Table(name = "quydinhuutienxephang")
 public class QuyDinhUuTienXepHangEntity extends BaseEntity{
     @Column(name = "sotranthang")
-    private int SoTranThang;
+    private int soTranThang;
     @Column(name = "sotranthua")
-    private int SoTranThua;
+    private int soTranThua;
     @Column(name = "sotranhoa")
-    private int SoTranHoa;
+    private int soTranHoa;
 
     public QuyDinhUuTienXepHangEntity() {
     }
 
     public int getSoTranThang() {
-        return SoTranThang;
+        return soTranThang;
     }
 
     public void setSoTranThang(int soTranThang) {
-        SoTranThang = soTranThang;
+        this.soTranThang = soTranThang;
     }
 
     public int getSoTranThua() {
-        return SoTranThua;
+        return soTranThua;
     }
 
     public void setSoTranThua(int soTranThua) {
-        SoTranThua = soTranThua;
+        this.soTranThua = soTranThua;
     }
 
     public int getSoTranHoa() {
-        return SoTranHoa;
+        return soTranHoa;
     }
 
     public void setSoTranHoa(int soTranHoa) {
-        SoTranHoa = soTranHoa;
+        this.soTranHoa = soTranHoa;
     }
 }

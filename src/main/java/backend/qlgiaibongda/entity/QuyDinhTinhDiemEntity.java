@@ -9,36 +9,36 @@ import jakarta.persistence.Table;
 public class QuyDinhTinhDiemEntity extends BaseEntity{
 
     @Column(name = "thang")
-    private int Thang;
+    private int thang;
     @Column(name = "thua")
-    private int Thua;
+    private int thua;
     @Column(name = "hoa")
-    private int Hoa;
+    private int hoa;
 
     public QuyDinhTinhDiemEntity() {
     }
 
     public int getThang() {
-        return Thang;
+        return thang;
     }
 
     public void setThang(int thang) {
-        Thang = thang;
+        this.thang = thang;
     }
 
     public int getThua() {
-        return Thua;
+        return thua;
     }
 
     public void setThua(int thua) {
-        Thua = thua;
+        this.thua = thua;
     }
 
     public int getHoa() {
-        return Hoa;
+        return hoa;
     }
 
     public void setHoa(int hoa) {
-        Hoa = hoa;
+        this.hoa = hoa;
     }
 }
