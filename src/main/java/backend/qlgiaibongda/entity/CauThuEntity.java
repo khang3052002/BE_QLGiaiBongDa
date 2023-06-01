@@ -14,6 +14,7 @@ import java.util.Set;
 @Table(name = "cauthu")
 public class CauThuEntity extends BaseEntity{
 
+
     @Column(name = "hoten")
     private String hoTen;
 

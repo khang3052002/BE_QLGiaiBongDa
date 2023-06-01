@@ -5,18 +5,47 @@ import jakarta.persistence.Column;
 import java.sql.Date;
 
 public class CauThuDTO  {
-    private String HoTen;
-    private Date NgaySinh;
-    private String QuocTich;
-    private String HinhAnh;
-    private String QueQuan;
-    private String TrangThai;
-    private String LoaiCauThu;
-
-    private Long idDoi;
-
     private Long id;
+    private Long idDoi;
+    private String hoTen;
+    private Date ngaySinh;
+    private String quocTich;
+    private String hinhAnh;
+    private String queQuan;
+    private String trangThai;
+    private String loaiCauThu;
 
+
+
+    private Date thoiDiemBatDau;
+    private Date thoiDiemKetThuc;
+    private int tongSoBanThang;
+
+
+
+    public Date getThoiDiemBatDau() {
+        return thoiDiemBatDau;
+    }
+
+    public void setThoiDiemBatDau(Date thoiDiemBatDau) {
+        this.thoiDiemBatDau = thoiDiemBatDau;
+    }
+
+    public Date getThoiDiemKetThuc() {
+        return thoiDiemKetThuc;
+    }
+
+    public void setThoiDiemKetThuc(Date thoiDiemKetThuc) {
+        this.thoiDiemKetThuc = thoiDiemKetThuc;
+    }
+
+    public int getTongSoBanThang() {
+        return tongSoBanThang;
+    }
+
+    public void setTongSoBanThang(int tongSoBanThang) {
+        this.tongSoBanThang = tongSoBanThang;
+    }
 
     public Long getId() {
         return id;
@@ -35,58 +64,58 @@ public class CauThuDTO  {
     }
 
     public String getHoTen() {
-        return HoTen;
+        return hoTen;
     }
 
     public void setHoTen(String hoTen) {
-        HoTen = hoTen;
+        this.hoTen = hoTen;
     }
 
     public Date getNgaySinh() {
-        return NgaySinh;
+        return ngaySinh;
     }
 
     public void setNgaySinh(Date ngaySinh) {
-        NgaySinh = ngaySinh;
+        this.ngaySinh = ngaySinh;
     }
 
     public String getQuocTich() {
-        return QuocTich;
+        return quocTich;
     }
 
     public void setQuocTich(String quocTich) {
-        QuocTich = quocTich;
+        this.quocTich = quocTich;
     }
 
     public String getHinhAnh() {
-        return HinhAnh;
+        return hinhAnh;
     }
 
     public void setHinhAnh(String hinhAnh) {
-        HinhAnh = hinhAnh;
+        this.hinhAnh = hinhAnh;
     }
 
     public String getQueQuan() {
-        return QueQuan;
+        return queQuan;
     }
 
     public void setQueQuan(String queQuan) {
-        QueQuan = queQuan;
+        this.queQuan = queQuan;
     }
 
     public String getTrangThai() {
-        return TrangThai;
+        return trangThai;
     }
 
     public void setTrangThai(String trangThai) {
-        TrangThai = trangThai;
+        this.trangThai = trangThai;
     }
 
     public String getLoaiCauThu() {
-        return LoaiCauThu;
+        return loaiCauThu;
     }
 
     public void setLoaiCauThu(String loaiCauThu) {
-        LoaiCauThu = loaiCauThu;
+        this.loaiCauThu = loaiCauThu;
     }
 }

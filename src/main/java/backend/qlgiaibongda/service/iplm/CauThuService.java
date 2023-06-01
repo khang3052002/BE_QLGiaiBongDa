@@ -52,13 +52,20 @@ public class CauThuService implements ICauThuService {
         cauThuDoiBongEntity.setKey(cauThuDoiBongKey);
         cauThuDoiBongEntity.setCauThuDB(cauThuEntity);
         cauThuDoiBongEntity.setDoiBongCT(doiBongEntity);
+        cauThuDoiBongEntity.setThoiDiemKetThuc(cauThuDTO.getThoiDiemKetThuc());
+        cauThuDoiBongEntity.setTongSoBanThang(0);
+
 
         cauThuDoiBongRepository.save(cauThuDoiBongEntity);
 
-        cauThuDTO = cauThuConverter.toDTO(cauThuEntity);
 
-        cauThuDTO.setIdDoi(idDoi);
 
-        return cauThuDTO;
+        CauThuDTO  cauThuDTORS = cauThuConverter.toDTO(cauThuEntity);
+
+        cauThuDTORS.setThoiDiemBatDau(cauThuDoiBongEntity.getKey().getThoiDiemBatDau());
+        cauThuDTORS.setThoiDiemKetThuc(cauThuDTO.getThoiDiemKetThuc());
+        cauThuDTORS.setIdDoi(idDoi);
+
+        return cauThuDTORS;
     }
 }
