@@ -10,7 +10,8 @@ import java.util.List;
 public class ViTriEntity extends BaseEntity{
     @Column(name = "vitri")
     private String viTri;
-
+    @Column(name="code")
+    private String code;
     @ManyToMany(mappedBy = "CacViTri")
     private List<CauThuEntity> CacCauThu = new ArrayList<>();
 
@@ -20,5 +21,13 @@ public class ViTriEntity extends BaseEntity{
 
     public void setViTri(String viTri) {
         this.viTri = viTri;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

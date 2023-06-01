@@ -25,7 +25,6 @@ public class DoiBongAPI {
     @GetMapping
     public AllTeamOuput getAllTeam(@RequestParam("page") int page,
                            @RequestParam("limit") int limit){
-
         AllTeamOuput result = new AllTeamOuput();
         result.setPage(page);
         page--;
@@ -42,7 +41,6 @@ public class DoiBongAPI {
 
     @PostMapping
     public Object addNewTeam(@RequestBody NewTeamInput teamInput){
-
         Object result =  teamService.save(teamInput);
         return result;
     }

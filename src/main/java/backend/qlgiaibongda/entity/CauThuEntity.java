@@ -146,4 +146,5 @@ public class CauThuEntity extends BaseEntity{
     public void setDSBanThangCauThu_TranDau(List<KetQuaTranDauEntity> DSBanThangCauThu_TranDau) {
         this.DSBanThangCauThu_TranDau = DSBanThangCauThu_TranDau;
     }
+
 }

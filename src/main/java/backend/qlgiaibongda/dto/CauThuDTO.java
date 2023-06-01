@@ -3,6 +3,7 @@ package backend.qlgiaibongda.dto;
 import jakarta.persistence.Column;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class CauThuDTO  {
     private Long id;
@@ -20,6 +21,8 @@ public class CauThuDTO  {
     private Date thoiDiemBatDau;
     private Date thoiDiemKetThuc;
     private int tongSoBanThang;
+
+    private String[] viTri;
 
 
 
@@ -117,5 +120,13 @@ public class CauThuDTO  {
 
     public void setLoaiCauThu(String loaiCauThu) {
         this.loaiCauThu = loaiCauThu;
+    }
+
+    public String[] getViTri() {
+        return viTri;
+    }
+
+    public void setViTri(String[] viTri) {
+        this.viTri = viTri;
     }
 }
