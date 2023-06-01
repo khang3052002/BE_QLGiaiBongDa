@@ -18,9 +18,6 @@ public class CauThuDTO  {
     private Long id;
 
 
-    public CauThuDTO() {
-    }
-
     public Long getId() {
         return id;
     }

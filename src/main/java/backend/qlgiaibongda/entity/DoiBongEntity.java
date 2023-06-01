@@ -38,7 +38,7 @@ public class DoiBongEntity extends BaseEntity{
     private QuanLyEntity QuanLy;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_sannha", referencedColumnName = "id")
-    private SanBongEntity SanBong;
+    private SanBongEntity sanBong;
     @OneToMany(mappedBy = "DoiNha")
     private List<TranDauEntity> DSTranDauSanNha = new ArrayList();
     @OneToMany(mappedBy = "DoiKhach")
@@ -107,11 +107,11 @@ public class DoiBongEntity extends BaseEntity{
     }
 
     public SanBongEntity getSanBong() {
-        return SanBong;
+        return sanBong;
     }
 
     public void setSanBong(SanBongEntity sanBong) {
-        SanBong = sanBong;
+        this.sanBong = sanBong;
     }
 
     public List<TranDauEntity> getDSTranDauSanNha() {

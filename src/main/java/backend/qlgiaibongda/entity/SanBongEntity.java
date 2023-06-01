@@ -17,7 +17,7 @@ public class SanBongEntity extends BaseEntity {
     private String tenSan;
     @Column(name = "diadiem", columnDefinition = "nvarchar(255)")
     private String diaDiem;
-    @OneToOne(mappedBy = "SanBong")
+    @OneToOne(mappedBy = "sanBong")
     private DoiBongEntity doiBong;
 
 
