@@ -1,19 +1,21 @@
 package backend.qlgiaibongda.dto;
 
 import backend.qlgiaibongda.dto.QuyDinhDTO.QuyDinhCauThuDTO;
+import backend.qlgiaibongda.dto.QuyDinhDTO.QuyDinhSoLuongDoiDTO;
 import backend.qlgiaibongda.dto.QuyDinhDTO.QuyDinhTinhDiemDTO;
 import jakarta.persistence.Column;
 
 import java.sql.Date;
 
 public class MuaGiaiDTO {
+    private Long id;
     private String ten;
     private Long id_nguoitao;
     private Date thoiDiemBatDau;
     private Date thoiDiemKetThuc;
     private QuyDinhCauThuDTO quyDinhCauThu;
     private QuyDinhTinhDiemDTO quyDinhTinhDiem;
-
+    private QuyDinhSoLuongDoiDTO quyDinhSoLuongDoi;
     public String getTen() {
         return ten;
     }
@@ -60,5 +62,21 @@ public class MuaGiaiDTO {
 
     public void setQuyDinhTinhDiem(QuyDinhTinhDiemDTO quyDinhTinhDiem) {
         this.quyDinhTinhDiem = quyDinhTinhDiem;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public QuyDinhSoLuongDoiDTO getQuyDinhSoLuongDoi() {
+        return quyDinhSoLuongDoi;
+    }
+
+    public void setQuyDinhSoLuongDoi(QuyDinhSoLuongDoiDTO quyDinhSoLuongDoi) {
+        this.quyDinhSoLuongDoi = quyDinhSoLuongDoi;
     }
 }

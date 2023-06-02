@@ -20,6 +20,9 @@ public class QuyDinhMuaGiaiEntity extends BaseEntity {
     @JoinColumn(name = "id_quydinhcauthu")
     private QuyDinhCauThuEntity QuyDinhCauThu;
 
+    @OneToOne
+    @JoinColumn(name = "id_quydinhsoluongdoi")
+    private QuyDinhSoLuongDoiEntity QuyDinhSoLuongDoi;
 
     @OneToOne
     @JoinColumn(name = "id_quydinhbanthang")
@@ -70,5 +73,13 @@ public class QuyDinhMuaGiaiEntity extends BaseEntity {
 
     public void setQuyDinhBanThang(QuyDinhBanThangEntity quyDinhBanThang) {
         QuyDinhBanThang = quyDinhBanThang;
+    }
+
+    public QuyDinhSoLuongDoiEntity getQuyDinhSoLuongDoi() {
+        return QuyDinhSoLuongDoi;
+    }
+
+    public void setQuyDinhSoLuongDoi(QuyDinhSoLuongDoiEntity quyDinhSoLuongDoi) {
+        QuyDinhSoLuongDoi = quyDinhSoLuongDoi;
     }
 }

@@ -5,10 +5,7 @@ import backend.qlgiaibongda.dto.ResponeObject;
 import backend.qlgiaibongda.service.iplm.MuaGiaiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/muagiai")
@@ -20,5 +17,20 @@ public class MuaGiaiAPI {
     public ResponseEntity<ResponeObject> createLeague(@RequestBody MuaGiaiDTO muaGiaiDTO)
     {
         return muaGiaiService.createLeague(muaGiaiDTO);
+    }
+    @GetMapping("")
+    public ResponseEntity<ResponeObject> getAllLeague()
+    {
+        return muaGiaiService.getAllLeague();
+    }
+    @GetMapping("/chitiet")
+    public ResponseEntity<ResponeObject> getLeagueById(@RequestParam("id") Long id)
+    {
+        return muaGiaiService.getLeagueById(id);
+    }
+    @PutMapping("/capnhat")
+    public ResponseEntity<ResponeObject> updateLeague(@RequestBody MuaGiaiDTO muaGiaiDTO)
+    {
+        return muaGiaiService.updateLeague(muaGiaiDTO);
     }
 }

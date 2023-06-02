@@ -6,4 +6,10 @@ import org.springframework.http.ResponseEntity;
 
 public interface IMuaGiaiService {
     ResponseEntity<ResponeObject> createLeague(MuaGiaiDTO muaGiaiDTO);
+
+    ResponseEntity<ResponeObject> getAllLeague();
+
+    ResponseEntity<ResponeObject> getLeagueById(Long id);
+
+    ResponseEntity<ResponeObject> updateLeague(MuaGiaiDTO muaGiaiDTO);
 }
