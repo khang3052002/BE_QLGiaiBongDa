@@ -1,12 +1,10 @@
 package backend.qlgiaibongda.service.iplm;
 
 import backend.qlgiaibongda.api.input.NewTeamInput;
+import backend.qlgiaibongda.api.input.UpdateTeamInput;
 import backend.qlgiaibongda.api.output.ErrorOutput;
 import backend.qlgiaibongda.converter.GenericConverter;
-import backend.qlgiaibongda.dto.CauThuDTO;
-import backend.qlgiaibongda.dto.FieldDTO;
-import backend.qlgiaibongda.dto.ManagerDTO;
-import backend.qlgiaibongda.dto.TeamDTO;
+import backend.qlgiaibongda.dto.*;
 import backend.qlgiaibongda.entity.DoiBongEntity;
 import backend.qlgiaibongda.entity.QuanLyEntity;
 import backend.qlgiaibongda.entity.SanBongEntity;
@@ -18,6 +16,8 @@ import backend.qlgiaibongda.service.ITeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -57,40 +57,47 @@ public class TeamService implements ITeamService {
     }
 
     @Override
-    public TeamDTO findById(Long id) {
+    public ResponseEntity<ResponeObject> findById(Long id) {
         TeamDTO result = null;
         DoiBongEntity entity = doiBongRepository.findById(id).orElse(null);
         if(entity!=null){
             result = convertToTeamDTO(entity);
         }
-        return result;
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK", "Get team succeed!", result));
     }
 
     @Override
-    public Object save(NewTeamInput newTeamInput) {
+    public ResponseEntity<ResponeObject> save(NewTeamInput newTeamInput) {
         Long idQuanLy = newTeamInput.getIdQuanLy();
         Long idSanNha = newTeamInput.getIdSanNha();
 
         QuanLyEntity quanLyEntity = quanLiRepository.findById(idQuanLy).orElse(null);
         if(quanLyEntity == null){
-            return new ErrorOutput("error", "No QuanLy has this id!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("FAIL", "No Manager has this id!", ""));
+
         }else{
             if(quanLyEntity.getDoiBong() != null){
-                return new ErrorOutput("error", "This Manager are managing another team!");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponeObject("FAIL", "This Manager is managing another team!", ""));
+
             }else{
                 if(quanLyEntity.getVaiTro().getCode().equals("QLGD")){
-                    return new ErrorOutput("error", "This Manager is not allowed to manage football team!");
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponeObject("FAIL", "This Manager is not allowed to manage football team!", ""));
+
                 }
             }
         }
 
         SanBongEntity sanBongEntity = sanBongRepository.findById(idSanNha).orElse(null);
         if(sanBongEntity == null){
-            return new ErrorOutput("error", "No SanBong has this id!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponeObject("FAIL", "No SanBong has this id!", ""));
+
         }else{
             DoiBongEntity entity = doiBongRepository.findBySanBongId(idSanNha).orElse(null);
             if(entity != null){
-                return new ErrorOutput("error", "SanBong has been owned by another team!");
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ResponeObject("FAIL", "SanBong has been owned by another team!", ""));
+
             }
         }
 
@@ -102,13 +109,87 @@ public class TeamService implements ITeamService {
             entity.setQuanLy(quanLyEntity);
             doiBongRepository.save(entity);
         } catch (Exception e) {
-            return new ErrorOutput("error", "Invalid Info!");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ResponeObject("FAIL", "Invalid Info!", ""));
         }
 
 
         TeamDTO  teamDTO = convertToTeamDTO(entity);
 
-        return teamDTO;
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponeObject("OK", "Add new Team succeed", teamDTO));
+    }
+
+    @Override
+    public ResponseEntity<ResponeObject> updateTeam(UpdateTeamInput updateTeamInput) {
+
+        DoiBongEntity doiBongEntity = doiBongRepository.findById(updateTeamInput.getId()).orElse(null);
+        if(doiBongEntity == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponeObject("FAIL", "Team not found!", ""));
+        }
+
+        try {
+            doiBongEntity = GenericConverter.convert(updateTeamInput,doiBongEntity);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponeObject("FAIL", "Invalid Info", ""));
+        }
+
+        QuanLyEntity oldQuanLy = doiBongEntity.getQuanLy();
+
+        if(oldQuanLy.getId() != updateTeamInput.getIdQuanLy()){
+
+            Long idQuanLyNew = updateTeamInput.getIdQuanLy();
+            QuanLyEntity quanLyEntity = quanLiRepository.findById(idQuanLyNew).orElse(null);
+
+            if(quanLyEntity == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("FAIL", "No Manager has this id!", ""));
+            }else{
+                if(quanLyEntity.getDoiBong() !=null){
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponeObject("FAIL", "This Manager is managing another team!", ""));
+
+                }else{
+                    oldQuanLy.setDoiBong(null);
+                    quanLiRepository.save(oldQuanLy);
+
+                    doiBongEntity.setQuanLy(quanLyEntity);
+                    quanLyEntity.setDoiBong(doiBongEntity);
+                    quanLiRepository.save(quanLyEntity);
+                }
+            }
+        }
+
+
+        SanBongEntity oldSanBong = doiBongEntity.getSanBong();
+        if(oldSanBong.getId() != updateTeamInput.getIdSanNha()){
+
+            Long idSanBongNew = updateTeamInput.getId();
+            SanBongEntity sanBongEntity = sanBongRepository.findById(idSanBongNew).orElse(null);
+
+
+            if(sanBongEntity == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponeObject("FAIL", "No SanBong has this id!", ""));
+
+            }else{
+                if(sanBongEntity.getDoiBong() !=null){
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponeObject("FAIL", "SanBong has been owned by another team!", ""));
+
+                }else{
+                    oldSanBong.setDoiBong(null);
+                    sanBongRepository.save(oldSanBong);
+
+                    doiBongEntity.setSanBong(sanBongEntity);
+                    sanBongEntity.setDoiBong(doiBongEntity);
+                    sanBongRepository.save(sanBongEntity);
+                }
+
+            }
+        }
+        doiBongRepository.save(doiBongEntity);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK", "Update team succeed", updateTeamInput));
+
     }
 
     public TeamDTO convertToTeamDTO(DoiBongEntity entity){

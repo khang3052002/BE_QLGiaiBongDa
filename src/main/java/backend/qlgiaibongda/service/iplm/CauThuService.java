@@ -1,5 +1,6 @@
 package backend.qlgiaibongda.service.iplm;
 
+import backend.qlgiaibongda.api.input.NewTeamPlayerInput;
 import backend.qlgiaibongda.converter.CauThuConverter;
 import backend.qlgiaibongda.converter.GenericConverter;
 import backend.qlgiaibongda.dto.CauThuDTO;
@@ -79,6 +80,25 @@ public class CauThuService implements ICauThuService {
         cauThuDTORS.setIdDoi(idDoi);
 
         return cauThuDTORS;
+    }
+
+    @Override
+    public ResponseEntity<ResponeObject> addNewListTeamPlayer(NewTeamPlayerInput teamPlayerInput) {
+        Long idDoi = teamPlayerInput.getIdDoi();
+        List<CauThuDTO> players = teamPlayerInput.getDsCauThuMoi();
+        List<CauThuDTO> result = new ArrayList<>();
+
+        for(CauThuDTO player:players){
+            player.setIdDoi(idDoi);
+            CauThuDTO temp = save(player);
+            if(temp == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("FAIL", "idDoi not found!", "") );
+            }else{
+                result.add(temp);
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK", "Add all new players succeed", result));
     }
 
     @Override
