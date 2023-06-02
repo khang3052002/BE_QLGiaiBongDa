@@ -2,6 +2,7 @@ package backend.qlgiaibongda.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -13,6 +14,8 @@ public class QuyDinhUuTienXepHangEntity extends BaseEntity{
     private int soTranThua;
     @Column(name = "sotranhoa")
     private int soTranHoa;
+    @OneToOne(mappedBy = "QuyDinhUuTienXepHang")
+    private QuyDinhMuaGiaiEntity quyDinhMuaGiai;
 
     public QuyDinhUuTienXepHangEntity() {
     }

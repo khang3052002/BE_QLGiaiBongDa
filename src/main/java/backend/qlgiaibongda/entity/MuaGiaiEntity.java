@@ -29,7 +29,9 @@ public class MuaGiaiEntity extends BaseEntity {
     @OneToMany(mappedBy = "MuaGiai")
     private List<CauThuGhiBanEntity> CacCauThuGhiBan = new ArrayList<>();
 
-
+    @ManyToOne
+    @JoinColumn(name="id_nguoitao")
+    private QuanLyEntity quanLyMuaGiai;
 
     @ManyToOne
     @JoinColumn(name = "id_quydinh")
@@ -101,6 +103,14 @@ public class MuaGiaiEntity extends BaseEntity {
 
     public void setLichThiDau(LichThiDauEntity lichThiDau) {
         LichThiDau = lichThiDau;
+    }
+
+    public QuanLyEntity getQuanLyMuaGiai() {
+        return quanLyMuaGiai;
+    }
+
+    public void setQuanLyMuaGiai(QuanLyEntity quanLyMuaGiai) {
+        this.quanLyMuaGiai = quanLyMuaGiai;
     }
 
     public MuaGiaiEntity() {

@@ -42,7 +42,8 @@ public class QuanLyEntity extends BaseEntity implements UserDetails {
     private VaiTroEntity VaiTro;
     @OneToMany(mappedBy = "QuanLyTaoLich")
     private List<LichThiDauEntity> dsLichThiDauTaoBoiQuanLi = new ArrayList();
-
+    @OneToMany(mappedBy = "quanLyMuaGiai")
+    private List<MuaGiaiEntity> dsMuaGiaiTaoBoiQuanLi = new ArrayList<>();
     @OneToMany(mappedBy = "quanLyDkiHoSo")
     private List<HoSoDangKyEntity> DSHoSoDKYCuaQuanLy = new ArrayList<>();
 
