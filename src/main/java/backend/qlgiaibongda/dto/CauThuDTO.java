@@ -16,15 +16,21 @@ public class CauThuDTO  {
     private String trangThai;
     private String loaiCauThu;
 
-
-
     private Date thoiDiemBatDau;
     private Date thoiDiemKetThuc;
     private int tongSoBanThang;
 
     private String[] viTri;
 
+    public Boolean checkValidInfo(){
+        Boolean check = true;
+        if(hoTen == null || ngaySinh == null || quocTich == null || hinhAnh == null || queQuan==null
+                || loaiCauThu==null || thoiDiemKetThuc==null || viTri == null ){
+            check = false;
+        }
 
+        return check;
+    }
 
     public Date getThoiDiemBatDau() {
         return thoiDiemBatDau;

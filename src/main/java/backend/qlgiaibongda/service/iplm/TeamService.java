@@ -62,6 +62,8 @@ public class TeamService implements ITeamService {
         DoiBongEntity entity = doiBongRepository.findById(id).orElse(null);
         if(entity!=null){
             result = convertToTeamDTO(entity);
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("FAIL", "Team not found", ""));
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK", "Get team succeed!", result));
     }
@@ -123,6 +125,8 @@ public class TeamService implements ITeamService {
     @Override
     public ResponseEntity<ResponeObject> updateTeam(UpdateTeamInput updateTeamInput) {
 
+
+
         DoiBongEntity doiBongEntity = doiBongRepository.findById(updateTeamInput.getId()).orElse(null);
         if(doiBongEntity == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -150,6 +154,12 @@ public class TeamService implements ITeamService {
                     return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponeObject("FAIL", "This Manager is managing another team!", ""));
 
                 }else{
+
+                    if(quanLyEntity.getVaiTro().getCode().equals("QLGD")){
+                        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponeObject("FAIL", "This Manager is not allowed to manage football team!", ""));
+
+                    }
+
                     oldQuanLy.setDoiBong(null);
                     quanLiRepository.save(oldQuanLy);
 

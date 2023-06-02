@@ -46,17 +46,29 @@ public class DoiBongAPI {
 
     @PostMapping
     public ResponseEntity<ResponeObject> addNewTeam(@RequestBody NewTeamInput teamInput){
+        if(!teamInput.checkValidInfo()){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ResponeObject("FAIL", "Invalid Info", ""));
+        }
         return teamService.save(teamInput);
     }
 
     //did not exist
     @PostMapping("/cauthu")
     public ResponseEntity<ResponeObject> addNewPlayer(@RequestBody NewTeamPlayerInput newTeamPlayerInput){
+        if(!newTeamPlayerInput.checkValidInfo()){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ResponeObject("FAIL", "Invalid Info", ""));
+        }
         return cauThuService.addNewListTeamPlayer(newTeamPlayerInput);
     }
 
     @PutMapping
     public ResponseEntity<ResponeObject> updateTeam(@RequestBody UpdateTeamInput updateTeamInput) {
+        if(!updateTeamInput.checkValidInfo()){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ResponeObject("FAIL", "Invalid Info", ""));
+        }
         return teamService.updateTeam(updateTeamInput);
     }
 

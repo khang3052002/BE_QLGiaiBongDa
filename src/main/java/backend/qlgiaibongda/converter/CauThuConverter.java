@@ -2,7 +2,11 @@ package backend.qlgiaibongda.converter;
 
 import backend.qlgiaibongda.dto.CauThuDTO;
 import backend.qlgiaibongda.entity.CauThuEntity;
+import backend.qlgiaibongda.entity.ViTriEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CauThuConverter {
@@ -36,6 +40,14 @@ public class CauThuConverter {
         CauThuDTO dto = new CauThuDTO();
         if(entity.getId() != null){
             dto.setId(entity.getId());
+        }
+
+        if(entity.getCacViTri() != null){
+            List<String> codeViTri =  new ArrayList<>();
+            for(ViTriEntity vitri: entity.getCacViTri()){
+                codeViTri.add(vitri.getCode());
+            }
+            dto.setViTri(codeViTri.toArray(String[]::new));
         }
         dto.setHoTen(entity.getHoTen());
         dto.setNgaySinh(entity.getNgaySinh());

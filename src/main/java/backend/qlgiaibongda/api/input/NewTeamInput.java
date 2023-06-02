@@ -10,6 +10,15 @@ public class NewTeamInput {
     private int namThanhLap;
 
 
+    public Boolean checkValidInfo(){
+        Boolean check = true;
+        if(idQuanLy == null || idSanNha == null || ten == null || hinhAnh == null || namThanhLap==0  ){
+            check = false;
+        }
+
+        return check;
+    }
+
     public Long getIdQuanLy() {
         return idQuanLy;
     }

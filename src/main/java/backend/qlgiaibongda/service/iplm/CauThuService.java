@@ -57,6 +57,25 @@ public class CauThuService implements ICauThuService {
             return null;
         }
 
+
+        if(cauThuDTO.getViTri() != null)
+        {
+            String[] listVitri = cauThuDTO.getViTri();
+            if(listVitri.length>0)
+            {
+                List<ViTriEntity> listVitriEntity = new ArrayList<>();
+                Arrays.asList(listVitri).forEach(vitri->{
+                    ViTriEntity viTri = viTriRepository.findByCode(vitri).get();
+                    if(viTri != null)
+                    {
+                        listVitriEntity.add(viTri);
+                    }
+                });
+                cauThuEntity.setCacViTri(listVitriEntity);
+            }
+        }
+
+
         cauThuEntity = cauThuRepository.save(cauThuEntity);
 
         CauThuDoiBongKey cauThuDoiBongKey = new CauThuDoiBongKey( doiBongEntity.getId(), cauThuEntity.getId());
@@ -69,8 +88,9 @@ public class CauThuService implements ICauThuService {
         cauThuDoiBongEntity.setTongSoBanThang(0);
 
 
-        cauThuDoiBongRepository.save(cauThuDoiBongEntity);
 
+
+        cauThuDoiBongRepository.save(cauThuDoiBongEntity);
 
 
         CauThuDTO  cauThuDTORS = cauThuConverter.toDTO(cauThuEntity);

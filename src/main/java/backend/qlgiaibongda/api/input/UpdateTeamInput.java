@@ -8,6 +8,15 @@ public class UpdateTeamInput {
     private String hinhAnh;
     private int namThanhLap;
 
+    public Boolean checkValidInfo(){
+        Boolean check = true;
+        if( id ==null || idQuanLy == null || idSanNha == null || ten == null || hinhAnh == null || namThanhLap==0  ){
+            check = false;
+        }
+
+        return check;
+    }
+
     public Long getId() {
         return id;
     }

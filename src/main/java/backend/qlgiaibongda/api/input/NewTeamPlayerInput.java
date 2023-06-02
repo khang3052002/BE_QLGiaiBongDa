@@ -8,6 +8,21 @@ public class NewTeamPlayerInput {
     private Long idDoi;
     private List<CauThuDTO> dsCauThuMoi;
 
+    public Boolean checkValidInfo(){
+        Boolean check = true;
+        if(idDoi == null){
+            return false;
+        }
+        for(CauThuDTO player : dsCauThuMoi){
+            if(!player.checkValidInfo()){
+                check = false;
+                break;
+            }
+        }
+
+        return check;
+    }
+
     public Long getIdDoi() {
         return idDoi;
     }
