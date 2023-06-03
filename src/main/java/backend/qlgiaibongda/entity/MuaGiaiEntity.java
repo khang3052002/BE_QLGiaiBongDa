@@ -23,7 +23,7 @@ public class MuaGiaiEntity extends BaseEntity {
     @JoinColumn(name="id_bangxephang")
     private BangXepHangEntity bxh;
 
-    @OneToMany(mappedBy = "MuaGiai")
+    @OneToMany(mappedBy = "muaGiai")
     private List<HoSoDangKyEntity> CacHoSoDangKy = new ArrayList<>();
 
     @OneToMany(mappedBy = "MuaGiai")

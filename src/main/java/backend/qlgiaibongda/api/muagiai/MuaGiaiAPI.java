@@ -1,5 +1,6 @@
 package backend.qlgiaibongda.api.muagiai;
 
+import backend.qlgiaibongda.dto.DangKyThamGiaGiaiDTO;
 import backend.qlgiaibongda.dto.MuaGiaiDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
 import backend.qlgiaibongda.service.iplm.MuaGiaiService;
@@ -32,5 +33,10 @@ public class MuaGiaiAPI {
     public ResponseEntity<ResponeObject> updateLeague(@RequestBody MuaGiaiDTO muaGiaiDTO)
     {
         return muaGiaiService.updateLeague(muaGiaiDTO);
+    }
+    @PostMapping("/thamgiagiai")
+    public ResponseEntity<ResponeObject> resgisterJoinLeague(@RequestBody DangKyThamGiaGiaiDTO dangKyThamGiaGiaiDTO)
+    {
+        return muaGiaiService.registerJoinLeague(dangKyThamGiaGiaiDTO);
     }
 }

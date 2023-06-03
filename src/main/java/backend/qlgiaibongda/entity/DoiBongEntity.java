@@ -30,7 +30,7 @@ public class DoiBongEntity extends BaseEntity{
     @OneToMany(mappedBy = "DoiBong")
     private List<BXHDoiBongEntity> DoiBongBXH;
 
-    @OneToMany(mappedBy = "DoiBong")
+    @OneToMany(mappedBy = "doiBong")
     private List<HoSoDangKyEntity> CacHoSoDangKy = new ArrayList<>();
 
     @OneToOne(cascade = {CascadeType.ALL})

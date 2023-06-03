@@ -1,16 +1,20 @@
 package backend.qlgiaibongda.entity;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "hosodangky")
+@EntityListeners(AuditingEntityListener.class)
 public class HoSoDangKyEntity extends BaseEntity {
 
     @Column(name = "thoigiantao")
+    @CreatedDate
     private Date thoiGianTao;
 
     @Column(name = "trangthai")
@@ -18,11 +22,11 @@ public class HoSoDangKyEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "id_muagiai")
-    private MuaGiaiEntity MuaGiai;
+    private MuaGiaiEntity muaGiai;
 
     @ManyToOne
     @JoinColumn(name = "id_doibong")
-    private DoiBongEntity DoiBong;
+    private DoiBongEntity doiBong;
 
     //ChiTietHoSoDangKy
     @ManyToMany(mappedBy = "CacHoSoDangKy")
@@ -45,21 +49,21 @@ public class HoSoDangKyEntity extends BaseEntity {
     }
 
     public DoiBongEntity getDoiBong() {
-        return DoiBong;
+        return doiBong;
     }
 
     public void setDoiBong(DoiBongEntity doiBong) {
 
-        DoiBong = doiBong;
+        this.doiBong = doiBong;
     }
 
 
     public MuaGiaiEntity getMuaGiai() {
-        return MuaGiai;
+        return muaGiai;
     }
 
     public void setMuaGiai(MuaGiaiEntity muaGiai) {
-        MuaGiai = muaGiai;
+        this.muaGiai = muaGiai;
     }
 
     public HoSoDangKyEntity() {

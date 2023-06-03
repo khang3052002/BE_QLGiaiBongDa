@@ -1,6 +1,7 @@
 package backend.qlgiaibongda.service.iplm;
 
 import backend.qlgiaibongda.converter.GenericConverter;
+import backend.qlgiaibongda.dto.DangKyThamGiaGiaiDTO;
 import backend.qlgiaibongda.dto.MuaGiaiDTO;
 import backend.qlgiaibongda.dto.QuyDinhDTO.QuyDinhCauThuDTO;
 import backend.qlgiaibongda.dto.QuyDinhDTO.QuyDinhSoLuongDoiDTO;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -31,7 +33,12 @@ public class MuaGiaiService implements IMuaGiaiService {
     private QuyDinhTinhDiemRepository quyDinhTinhDiemRepository;
     @Autowired
     private QuyDinhSoLuongDoiRepository quyDinhSoLuongDoiRepository;
-
+    @Autowired
+    private HoSoDangKyRepository hoSoDangKyRepository;
+    @Autowired
+    private DoiBongRepository doiBongRepository;
+    @Autowired
+    private CauThuRepository cauThuRepository;
     @Override
     public ResponseEntity<ResponeObject> createLeague(MuaGiaiDTO muaGiaiDTO) {
         try
@@ -181,6 +188,64 @@ public class MuaGiaiService implements IMuaGiaiService {
             }
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("FAIL","Update league fail",""));
+
+    }
+
+    @Override
+    public ResponseEntity<ResponeObject> registerJoinLeague(DangKyThamGiaGiaiDTO dangKyThamGiaGiaiDTO) {
+        try
+        {
+            Long id_muagiai = dangKyThamGiaGiaiDTO.getId_giai();
+            Long id_doibong = dangKyThamGiaGiaiDTO.getId_doibong();
+
+            MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(id_muagiai).get();
+            DoiBongEntity doiBongEntity = doiBongRepository.findById(dangKyThamGiaGiaiDTO.getId_doibong()).get();
+
+            Long soLuongDoiHienTai = hoSoDangKyRepository.countByTrangThaiAndMuaGiai("Đã duyệt", muaGiaiEntity);
+            int soLuongDoiQuyDinh = muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhSoLuongDoi().getSoLuongDoi();
+            boolean isHaveSlot = false;
+            if(soLuongDoiHienTai < soLuongDoiQuyDinh) // số lượng đội đã duyệt hiện tại so với số luowjgn đội quy định của giải
+            {
+                // Cho đăng kí
+                isHaveSlot = true;
+            }
+            boolean isTeamExistsInHSoDangKy_MuaGiai = hoSoDangKyRepository.existsByDoiBongAndMuaGiai(doiBongEntity,muaGiaiEntity);
+
+            if(isHaveSlot == true && isTeamExistsInHSoDangKy_MuaGiai == false)
+            {
+                // cho Đăng ký
+                HoSoDangKyEntity hoSoDangKyEntity = new HoSoDangKyEntity();
+                hoSoDangKyEntity.setTrangThai("Chờ duyệt");
+                hoSoDangKyEntity.setDoiBong(doiBongEntity);
+                hoSoDangKyEntity.setMuaGiai(muaGiaiEntity);
+                hoSoDangKyEntity.setQuanLyDkiHoSo(doiBongEntity.getQuanLy());
+
+                Long[] list_id_cauThu = dangKyThamGiaGiaiDTO.getDs_id_cauthu_thamgia();
+                List<CauThuEntity> listCauThuThamGia = new ArrayList<>();
+                Arrays.asList(list_id_cauThu).forEach(idCauThu ->{
+                    CauThuEntity cauThu = cauThuRepository.findById(idCauThu).get();
+                    if(cauThu!=null)
+                    {
+                        listCauThuThamGia.add(cauThu);
+                    }
+                });
+
+                hoSoDangKyEntity.setCacCauThu(listCauThuThamGia);
+
+                hoSoDangKyRepository.save(hoSoDangKyEntity);
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK","Update league succesful",dangKyThamGiaGiaiDTO));
+
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ResponeObject("FAIL","Đã đủ đội đăng ký hoặc đã đăng ký giải này rồi",""));
+
+            }
+        }catch (Exception ex)
+        {
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ResponeObject("FAIL",ex.getMessage(),""));
+
+        }
 
     }
 }
