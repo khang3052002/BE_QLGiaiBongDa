@@ -20,6 +20,18 @@ public class CauThuDTO  {
     private Date thoiDiemKetThuc;
     private int tongSoBanThang;
 
+    public Boolean checkValidInfo_EditPlayer(){
+        Boolean check = true;
+        if( id ==null || hoTen == null || ngaySinh == null || quocTich == null ||
+                hinhAnh == null || queQuan==null || trangThai == null ||
+                loaiCauThu == null || viTri == null)
+        {
+            check = false;
+        }
+
+        return check;
+    }
+
     private String[] viTri;
 
     public Boolean checkValidInfo(){

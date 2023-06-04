@@ -18,6 +18,12 @@ public class MuaGiaiEntity extends BaseEntity {
     @Column(name = "thoidiemketthuc")
     private Date thoiDiemKetThuc;
 
+    @Column(name="trangthai")
+    private Integer trangThai;
+    // Co 3 loai:
+    // 0: Đang đăng ký
+    // 1: Hoạt động
+    // 2: Kết thúc
 
     @OneToOne
     @JoinColumn(name="id_bangxephang")
@@ -111,6 +117,14 @@ public class MuaGiaiEntity extends BaseEntity {
 
     public void setQuanLyMuaGiai(QuanLyEntity quanLyMuaGiai) {
         this.quanLyMuaGiai = quanLyMuaGiai;
+    }
+
+    public Integer getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(Integer trangThai) {
+        this.trangThai = trangThai;
     }
 
     public MuaGiaiEntity() {

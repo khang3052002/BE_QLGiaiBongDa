@@ -27,6 +27,11 @@ public class CauThuAPI {
     @PostMapping("/")
     public ResponseEntity<ResponeObject> editPlayer(@RequestBody CauThuDTO cauThuDTO)
     {
+        if(cauThuDTO.checkValidInfo_EditPlayer() == false)
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ResponeObject("FAIL", "Invalid Info", ""));
+        }
         return cauThuService.editPlayer(cauThuDTO);
     }
 

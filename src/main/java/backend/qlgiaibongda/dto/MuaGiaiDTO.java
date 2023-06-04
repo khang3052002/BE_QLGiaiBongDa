@@ -16,6 +16,24 @@ public class MuaGiaiDTO {
     private QuyDinhCauThuDTO quyDinhCauThu;
     private QuyDinhTinhDiemDTO quyDinhTinhDiem;
     private QuyDinhSoLuongDoiDTO quyDinhSoLuongDoi;
+
+
+    public Boolean checkValidInfo_CreateLeague(){
+        Boolean check = true;
+        if(id_nguoitao == null || ten == null || quyDinhCauThu == null || quyDinhTinhDiem == null || quyDinhSoLuongDoi==null)
+        {
+            check = false;
+        }
+        return check;
+    }
+    public Boolean checkValidInfo_UpdateLeague(){
+        Boolean check = true;
+        if(id == null || ten == null || quyDinhCauThu == null || quyDinhTinhDiem == null || quyDinhSoLuongDoi==null)
+        {
+            check = false;
+        }
+        return check;
+    }
     public String getTen() {
         return ten;
     }

@@ -5,6 +5,15 @@ public class DangKyThamGiaGiaiDTO {
     private Long id_giai;
     private Long[] ds_id_cauthu_thamgia;
 
+    public Boolean checkValidInfo(){
+        Boolean check = true;
+        if(id_doibong == null || id_giai == null || ds_id_cauthu_thamgia == null)
+        {
+            check = false;
+        }
+        return check;
+    }
+
     public Long getId_doibong() {
         return id_doibong;
     }

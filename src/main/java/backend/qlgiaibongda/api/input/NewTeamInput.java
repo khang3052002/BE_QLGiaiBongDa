@@ -15,7 +15,6 @@ public class NewTeamInput {
         if(idQuanLy == null || idSanNha == null || ten == null || hinhAnh == null || namThanhLap==0  ){
             check = false;
         }
-
         return check;
     }
 

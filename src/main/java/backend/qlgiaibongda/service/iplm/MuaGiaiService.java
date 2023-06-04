@@ -9,7 +9,14 @@ import backend.qlgiaibongda.dto.QuyDinhDTO.QuyDinhTinhDiemDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
 import backend.qlgiaibongda.entity.*;
 import backend.qlgiaibongda.repository.*;
+import backend.qlgiaibongda.repository.MuaGiaiRepository.MuaGiaiRepository;
 import backend.qlgiaibongda.service.IMuaGiaiService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +46,8 @@ public class MuaGiaiService implements IMuaGiaiService {
     private DoiBongRepository doiBongRepository;
     @Autowired
     private CauThuRepository cauThuRepository;
+    @Autowired
+    private EntityManager entityManager;
     @Override
     public ResponseEntity<ResponeObject> createLeague(MuaGiaiDTO muaGiaiDTO) {
         try
@@ -99,7 +108,9 @@ public class MuaGiaiService implements IMuaGiaiService {
                     muaGiaiDTO.setId_nguoitao(muaGiai.getQuanLyMuaGiai().getId());
                     QuyDinhCauThuDTO quyDinhCauThuDTO = GenericConverter.convert(muaGiai.getQuyDinhMuaGiai().getQuyDinhCauThu(),QuyDinhCauThuDTO.class);
                     QuyDinhTinhDiemDTO quyDinhTinhDiemDTO = GenericConverter.convert(muaGiai.getQuyDinhMuaGiai().getQuyDinhTinhDiem(),QuyDinhTinhDiemDTO.class);
+                    QuyDinhSoLuongDoiDTO quyDinhSoLuongDoiDTO = GenericConverter.convert(muaGiai.getQuyDinhMuaGiai().getQuyDinhSoLuongDoi(),QuyDinhSoLuongDoiDTO.class);
 
+                    muaGiaiDTO.setQuyDinhSoLuongDoi(quyDinhSoLuongDoiDTO);
                     muaGiaiDTO.setQuyDinhCauThu(quyDinhCauThuDTO);
                     muaGiaiDTO.setQuyDinhTinhDiem(quyDinhTinhDiemDTO);
 
@@ -247,5 +258,70 @@ public class MuaGiaiService implements IMuaGiaiService {
 
         }
 
+    }
+    public List<MuaGiaiEntity> findLeaguesWithFiltered(String keyword, Integer trangthai) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<MuaGiaiEntity> cq = cb.createQuery(MuaGiaiEntity.class);
+        Root<MuaGiaiEntity> root = cq.from(MuaGiaiEntity.class);
+
+
+        // Create a list to store the predicates
+        List<Predicate> predicates = new ArrayList<>();
+
+
+        if(keyword !=null)
+        {
+            Predicate keywordPredicate = cb.like(root.get("ten"),"%"+keyword+"%");
+            predicates.add(keywordPredicate);
+        }
+        if(trangthai != null)
+        {
+            Predicate trangThaiPredicate = cb.equal(root.get("trangThai"),trangthai);
+            predicates.add(trangThaiPredicate);
+        }
+
+        cq.where(cb.and(predicates.toArray(new Predicate[0])));
+        TypedQuery<MuaGiaiEntity> query=entityManager.createQuery(cq);
+
+        return query.getResultList();
+
+    }
+
+    @Override
+    public ResponseEntity<ResponeObject> getLeagueOnRequest(String keyword, Integer trangThai) {
+//        List<MuaGiaiEntity> listMuaGiai = muaGiaiRepository.findByTenContainsIgnoreCase(keyword,trangThai);
+        List<MuaGiaiEntity> listMuaGiai = findLeaguesWithFiltered(keyword,trangThai);
+
+        if(listMuaGiai.size()>0)
+        {
+            List<MuaGiaiDTO> listLeagueDTO = new ArrayList<>();
+            for(MuaGiaiEntity muaGiai : listMuaGiai)
+            {
+                try
+                {
+                    MuaGiaiDTO muaGiaiDTO = GenericConverter.convert(muaGiai, MuaGiaiDTO.class);
+                    muaGiaiDTO.setId_nguoitao(muaGiai.getQuanLyMuaGiai().getId());
+                    QuyDinhCauThuDTO quyDinhCauThuDTO = GenericConverter.convert(muaGiai.getQuyDinhMuaGiai().getQuyDinhCauThu(),QuyDinhCauThuDTO.class);
+                    QuyDinhTinhDiemDTO quyDinhTinhDiemDTO = GenericConverter.convert(muaGiai.getQuyDinhMuaGiai().getQuyDinhTinhDiem(),QuyDinhTinhDiemDTO.class);
+                    QuyDinhSoLuongDoiDTO quyDinhSoLuongDoiDTO = GenericConverter.convert(muaGiai.getQuyDinhMuaGiai().getQuyDinhSoLuongDoi(),QuyDinhSoLuongDoiDTO.class);
+
+                    muaGiaiDTO.setQuyDinhSoLuongDoi(quyDinhSoLuongDoiDTO);
+                    muaGiaiDTO.setQuyDinhCauThu(quyDinhCauThuDTO);
+                    muaGiaiDTO.setQuyDinhTinhDiem(quyDinhTinhDiemDTO);
+
+                    listLeagueDTO.add(muaGiaiDTO);
+                }
+                catch (Exception ex)
+                {
+                    System.out.println(ex.getMessage());
+                }
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponeObject("OK","Get all league succesful",listLeagueDTO)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponeObject("OK","Not exsists league with key "+ keyword,"")
+        );
     }
 }
