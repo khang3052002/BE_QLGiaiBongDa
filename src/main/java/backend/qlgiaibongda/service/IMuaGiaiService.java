@@ -6,10 +6,12 @@ import backend.qlgiaibongda.dto.ResponeObject;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.data.domain.Pageable;
+
 public interface IMuaGiaiService {
     ResponseEntity<ResponeObject> createLeague(MuaGiaiDTO muaGiaiDTO);
 
-    ResponseEntity<ResponeObject> getAllLeague();
+    ResponseEntity<ResponeObject> getAllLeague(Pageable pageable);
 
     ResponseEntity<ResponeObject> getLeagueById(Long id);
 
@@ -17,5 +19,6 @@ public interface IMuaGiaiService {
 
     ResponseEntity<ResponeObject> registerJoinLeague(DangKyThamGiaGiaiDTO dangKyThamGiaGiaiDTO);
 
-    ResponseEntity<ResponeObject> getLeagueOnRequest(String keyword, Integer trangThai);
+    ResponseEntity<ResponeObject> getLeagueOnRequest(Pageable pageable, String keyword, Integer trangThai);
+    int totalItem() ;
 }

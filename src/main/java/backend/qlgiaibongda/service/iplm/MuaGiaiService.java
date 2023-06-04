@@ -3,6 +3,7 @@ package backend.qlgiaibongda.service.iplm;
 import backend.qlgiaibongda.converter.GenericConverter;
 import backend.qlgiaibongda.dto.DangKyThamGiaGiaiDTO;
 import backend.qlgiaibongda.dto.MuaGiaiDTO;
+import backend.qlgiaibongda.dto.Output.DSMuaGiaiOutput;
 import backend.qlgiaibongda.dto.QuyDinhDTO.QuyDinhCauThuDTO;
 import backend.qlgiaibongda.dto.QuyDinhDTO.QuyDinhSoLuongDoiDTO;
 import backend.qlgiaibongda.dto.QuyDinhDTO.QuyDinhTinhDiemDTO;
@@ -18,6 +19,9 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -94,9 +98,17 @@ public class MuaGiaiService implements IMuaGiaiService {
 
     }
 
-    @Override
-    public ResponseEntity<ResponeObject> getAllLeague() {
-        List<MuaGiaiEntity> listLeague = muaGiaiRepository.findAll();
+
+
+
+    public ResponseEntity<ResponeObject> getAllLeague(Pageable pageable) {
+        List<MuaGiaiEntity> listLeague = muaGiaiRepository.findAll(pageable).getContent();
+        Integer totalItem = totalItem();
+        DSMuaGiaiOutput dsMuaGiaiOutput = new DSMuaGiaiOutput();
+        dsMuaGiaiOutput.setPage(pageable.getPageNumber()+1);
+        dsMuaGiaiOutput.setTotalPage((Integer)(totalItem / pageable.getPageSize()) +
+                (totalItem % pageable.getPageSize() > 0 ? 1 : 0));
+
         if(listLeague!=null)
         {
             List<MuaGiaiDTO> listLeagueDTO = new ArrayList<>();
@@ -122,9 +134,9 @@ public class MuaGiaiService implements IMuaGiaiService {
                 }
 
             }
-
+            dsMuaGiaiOutput.setListResult(listLeagueDTO);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponeObject("OK","Get all league succesful",listLeagueDTO)
+                    new ResponeObject("OK","Get all league succesful",dsMuaGiaiOutput)
             );
         }
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -259,7 +271,9 @@ public class MuaGiaiService implements IMuaGiaiService {
         }
 
     }
-    public List<MuaGiaiEntity> findLeaguesWithFiltered(String keyword, Integer trangthai) {
+
+
+    public Page<MuaGiaiEntity> findLeaguesWithFiltered(Pageable pageable, String keyword, Integer trangthai) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<MuaGiaiEntity> cq = cb.createQuery(MuaGiaiEntity.class);
         Root<MuaGiaiEntity> root = cq.from(MuaGiaiEntity.class);
@@ -282,15 +296,31 @@ public class MuaGiaiService implements IMuaGiaiService {
 
         cq.where(cb.and(predicates.toArray(new Predicate[0])));
         TypedQuery<MuaGiaiEntity> query=entityManager.createQuery(cq);
+        query.setFirstResult((int)pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
 
-        return query.getResultList();
+        List<MuaGiaiEntity> resultList = query.getResultList();
+
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        countQuery.select(cb.count(countQuery.from(MuaGiaiEntity.class)));
+        Long totalCount = entityManager.createQuery(countQuery).getSingleResult();
+
+        return new PageImpl<>(resultList, pageable, totalCount);
 
     }
 
-    @Override
-    public ResponseEntity<ResponeObject> getLeagueOnRequest(String keyword, Integer trangThai) {
+    public int totalItem() {
+        return (int) muaGiaiRepository.count();
+    }
+
+    public ResponseEntity<ResponeObject> getLeagueOnRequest(Pageable pageable,String keyword, Integer trangThai) {
 //        List<MuaGiaiEntity> listMuaGiai = muaGiaiRepository.findByTenContainsIgnoreCase(keyword,trangThai);
-        List<MuaGiaiEntity> listMuaGiai = findLeaguesWithFiltered(keyword,trangThai);
+        Page<MuaGiaiEntity> pageListMuaGiai = findLeaguesWithFiltered(pageable,keyword,trangThai);
+        List<MuaGiaiEntity> listMuaGiai = pageListMuaGiai.getContent();
+//        Integer totalItem = pageListMuaGiai.;
+        DSMuaGiaiOutput dsMuaGiaiOutput = new DSMuaGiaiOutput();
+        dsMuaGiaiOutput.setPage(pageable.getPageNumber()+1);
+        dsMuaGiaiOutput.setTotalPage(pageListMuaGiai.getTotalPages());
 
         if(listMuaGiai.size()>0)
         {
@@ -316,8 +346,9 @@ public class MuaGiaiService implements IMuaGiaiService {
                     System.out.println(ex.getMessage());
                 }
             }
+            dsMuaGiaiOutput.setListResult(listLeagueDTO);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponeObject("OK","Get all league succesful",listLeagueDTO)
+                    new ResponeObject("OK","Get all league succesful",dsMuaGiaiOutput)
             );
         }
         return ResponseEntity.status(HttpStatus.OK).body(

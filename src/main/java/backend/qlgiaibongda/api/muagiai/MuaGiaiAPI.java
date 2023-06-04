@@ -5,6 +5,8 @@ import backend.qlgiaibongda.dto.MuaGiaiDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
 import backend.qlgiaibongda.service.iplm.MuaGiaiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,17 +29,20 @@ public class MuaGiaiAPI {
     }
     @GetMapping("")
     public ResponseEntity<ResponeObject> getAllLeague(
+            @RequestParam(value = "page")  Integer page,
+            @RequestParam(value = "limit") Integer limit,
             @RequestParam(value = "keyword",required = false) String keyword,
             @RequestParam(value = "trangthai", required = false) Integer trangThai
     )
     {
         // nếu các param là null all thì get all
+        Pageable pageable = PageRequest.of(page - 1, limit);
         if(keyword == null && trangThai == null)
         {
-            return muaGiaiService.getAllLeague();
+            return muaGiaiService.getAllLeague(pageable);
         }
         else{
-            return muaGiaiService.getLeagueOnRequest(keyword,trangThai);
+            return muaGiaiService.getLeagueOnRequest(pageable,keyword,trangThai);
         }
     }
 //    @GetMapping("")
