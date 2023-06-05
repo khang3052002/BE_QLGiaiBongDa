@@ -7,10 +7,10 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
+import java.sql.Date;
 
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
     @Id
@@ -22,7 +22,7 @@ public abstract class BaseEntity {
     private String createdBy;
 
     @Column
-    @CreatedDate
+//    @CreatedDate
     private Date createdDate;
 
     @Column
@@ -30,7 +30,7 @@ public abstract class BaseEntity {
     private String lastModifiedBy;
 
     @Column
-    @LastModifiedDate
+//    @LastModifiedDate
     private Date lastModifiedDate;
 
     public Long getId() {

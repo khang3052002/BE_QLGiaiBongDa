@@ -15,10 +15,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "lichthidau")
-@EntityListeners({AuditingEntityListener.class})
+//@EntityListeners(AuditingEntityListener.class)
 public class LichThiDauEntity extends BaseEntity {
     @Column(name = "thoigiantao")
-    @CreatedDate
+//    @CreatedDate
     private Date thoiGianTao;
     @OneToMany(mappedBy = "lichThiDau")
     private List<TranDauEntity> listTranDauCuaLichThiDau = new ArrayList();

@@ -1,6 +1,5 @@
 package backend.qlgiaibongda.dto;
 
-import java.util.Date;
 
 public class BaseDTO {
     private Long id;
