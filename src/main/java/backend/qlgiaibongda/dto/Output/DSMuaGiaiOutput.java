@@ -8,7 +8,7 @@ import java.util.List;
 public class DSMuaGiaiOutput {
     private int page;
     private int totalPage;
-    private List<MuaGiaiDTO> listResult = new ArrayList<>();
+    private Object listResult;
 
     public int getPage() {
         return page;
@@ -26,11 +26,11 @@ public class DSMuaGiaiOutput {
         this.totalPage = totalPage;
     }
 
-    public List<MuaGiaiDTO> getListResult() {
+    public Object getListResult() {
         return listResult;
     }
 
-    public void setListResult(List<MuaGiaiDTO> listResult) {
+    public void setListResult(Object listResult) {
         this.listResult = listResult;
     }
 }

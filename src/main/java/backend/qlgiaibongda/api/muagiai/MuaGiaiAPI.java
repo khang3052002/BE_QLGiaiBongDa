@@ -3,6 +3,7 @@ package backend.qlgiaibongda.api.muagiai;
 import backend.qlgiaibongda.dto.DangKyThamGiaGiaiDTO;
 import backend.qlgiaibongda.dto.MuaGiaiDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
+import backend.qlgiaibongda.service.IMuaGiaiService;
 import backend.qlgiaibongda.service.iplm.MuaGiaiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/muagiai")
 public class MuaGiaiAPI {
     @Autowired
-    private MuaGiaiService muaGiaiService;
+    private IMuaGiaiService muaGiaiService;
 
     @PostMapping("/taogiaidau")
     public ResponseEntity<ResponeObject> createLeague(@RequestBody MuaGiaiDTO muaGiaiDTO)

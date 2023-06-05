@@ -40,8 +40,15 @@ public class DoiBongAPI {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponeObject> getTeam(@PathVariable("id") Long id){
+    public  ResponseEntity<ResponeObject> getTeam(@PathVariable("id") Long id){
         return teamService.findById(id);
+    }
+    @GetMapping("/{id}/cauthu")
+    public String getPlayerOfTeam(@PathVariable("id") Long idTeam, @RequestParam("role") String[] roles)
+    {
+        System.out.println(roles);
+        return "hahaha";
+//        return teamService.getPlayerOfTeam(idTeam);
     }
 
     @PostMapping

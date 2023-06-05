@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/cauthu")
 public class CauThuAPI {
     @Autowired
-    private CauThuService cauThuService;
+    private ICauThuService cauThuService;
     @GetMapping("")
     public ResponseEntity<ResponeObject> getPlayerByID(@RequestParam("id") Long id)
     {

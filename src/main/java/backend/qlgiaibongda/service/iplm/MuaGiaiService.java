@@ -282,7 +282,6 @@ public class MuaGiaiService implements IMuaGiaiService {
         // Create a list to store the predicates
         List<Predicate> predicates = new ArrayList<>();
 
-
         if(keyword !=null)
         {
             Predicate keywordPredicate = cb.like(root.get("ten"),"%"+keyword+"%");

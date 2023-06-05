@@ -19,4 +19,6 @@ public interface ITeamService {
     ResponseEntity<ResponeObject> save(NewTeamInput newTeamInput);
 
     ResponseEntity<ResponeObject> updateTeam(UpdateTeamInput updateTeamInput);
+
+//    ResponseEntity<ResponeObject> getPlayerOfTeam(Long idTeam);
 }
