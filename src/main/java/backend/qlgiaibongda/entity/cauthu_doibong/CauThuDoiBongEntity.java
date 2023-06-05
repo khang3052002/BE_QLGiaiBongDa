@@ -87,4 +87,6 @@ public class CauThuDoiBongEntity  {
         this.thoiDiemKetThuc = thoiDiemKetThuc;
         this.tongSoBanThang = tongSoBanThang;
     }
+
+
 }

@@ -20,5 +20,7 @@ public interface ITeamService {
 
     ResponseEntity<ResponeObject> updateTeam(UpdateTeamInput updateTeamInput);
 
-//    ResponseEntity<ResponeObject> getPlayerOfTeam(Long idTeam);
+    ResponseEntity<ResponeObject> getPlayerOfTeamWithRoles(Long idTeam, String roles);
+
+    ResponseEntity<ResponeObject> getPlayerOfTeam(Long idTeam);
 }

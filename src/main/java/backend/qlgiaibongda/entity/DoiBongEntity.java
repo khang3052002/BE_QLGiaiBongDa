@@ -11,6 +11,17 @@ import java.util.Set;
 
 @Entity
 @Table(name = "doibong")
+@NamedStoredProcedureQueries(
+        @NamedStoredProcedureQuery(
+                name = "getPlayerInTeamWithPosition",
+                procedureName = "new_procedure",
+                resultClasses = {CauThuEntity.class},
+                parameters = {
+                        @StoredProcedureParameter(name="id_team",type = Long.class, mode=ParameterMode.IN),
+                        @StoredProcedureParameter(name="roles",type = String.class,mode = ParameterMode.IN)
+                }
+        )
+)
 public class DoiBongEntity extends BaseEntity{
 
     @Column(name = "ten")

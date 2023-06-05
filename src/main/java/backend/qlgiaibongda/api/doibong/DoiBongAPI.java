@@ -44,11 +44,15 @@ public class DoiBongAPI {
         return teamService.findById(id);
     }
     @GetMapping("/{id}/cauthu")
-    public String getPlayerOfTeam(@PathVariable("id") Long idTeam, @RequestParam("role") String[] roles)
+    public ResponseEntity<ResponeObject> getPlayerOfTeam(@PathVariable("id") Long idTeam, @RequestParam(value="role", required = false) String roles)
     {
-        System.out.println(roles);
-        return "hahaha";
-//        return teamService.getPlayerOfTeam(idTeam);
+        if(roles == null || roles =="")
+        {
+            return teamService.getPlayerOfTeam(idTeam);
+        }
+        else{
+            return teamService.getPlayerOfTeamWithRoles(idTeam,roles);
+        }
     }
 
     @PostMapping
