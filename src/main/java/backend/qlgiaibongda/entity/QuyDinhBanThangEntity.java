@@ -10,7 +10,7 @@ import java.util.List;
 public class QuyDinhBanThangEntity extends BaseEntity{
 
     @Column(name = "thoidiemghibantoida")
-    private int thoiDiemGhiBanToiDa;
+    private Long thoiDiemGhiBanToiDa;
 
     @ManyToMany(mappedBy = "CacQuyDinhBanThang")
     private List<LoaiBanThangEntity> CacLoaiBanThang = new ArrayList<>();
@@ -28,11 +28,19 @@ public class QuyDinhBanThangEntity extends BaseEntity{
     public QuyDinhBanThangEntity() {
     }
 
-    public int getThoiDiemGhiBanToiDa() {
+    public Long getThoiDiemGhiBanToiDa() {
         return thoiDiemGhiBanToiDa;
     }
 
-    public void setThoiDiemGhiBanToiDa(int thoiDiemGhiBanToiDa) {
+    public void setThoiDiemGhiBanToiDa(Long thoiDiemGhiBanToiDa) {
         this.thoiDiemGhiBanToiDa = thoiDiemGhiBanToiDa;
+    }
+
+    public QuyDinhMuaGiaiEntity getQuyDinhMuaGiai() {
+        return quyDinhMuaGiai;
+    }
+
+    public void setQuyDinhMuaGiai(QuyDinhMuaGiaiEntity quyDinhMuaGiai) {
+        this.quyDinhMuaGiai = quyDinhMuaGiai;
     }
 }

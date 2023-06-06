@@ -5,7 +5,6 @@
 
 package backend.qlgiaibongda.entity;
 
-import backend.qlgiaibongda.entity.KetQuaTranDau.KetQuaTranDauEntity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -30,7 +29,7 @@ public class TranDauEntity extends BaseEntity {
 
 
     //Relation ship KQTranDau - Tran Dau
-    @OneToOne(mappedBy = "TranDau")
+    @OneToOne(mappedBy = "tranDau")
     private KetQuaTranDauEntity KetQuaTranDau;
 
     public Date getThoiGian() {
@@ -69,9 +68,11 @@ public class TranDauEntity extends BaseEntity {
     public void setLichThiDau(LichThiDauEntity lichThiDau) {
         this.lichThiDau = lichThiDau;
     }
+
     public KetQuaTranDauEntity getKetQuaTranDau() {
         return KetQuaTranDau;
     }
+
     public void setKetQuaTranDau(KetQuaTranDauEntity ketQuaTranDau) {
         KetQuaTranDau = ketQuaTranDau;
     }

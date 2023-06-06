@@ -14,8 +14,17 @@ public class TranĐauDTO {
     private TeamDTO DoiNha;
     private TeamDTO DoiKhach;
     private Long idVong;
+    private String tenVong;
     private Long idLichThiDau;
     private KetQuaTranDauDTO ketQuaTranDau;
+
+    public String getTenVong() {
+        return tenVong;
+    }
+
+    public void setTenVong(String tenVong) {
+        this.tenVong = tenVong;
+    }
 
     public Long getId() {
         return id;

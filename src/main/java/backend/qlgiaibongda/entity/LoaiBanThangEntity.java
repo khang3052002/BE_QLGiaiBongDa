@@ -1,6 +1,5 @@
 package backend.qlgiaibongda.entity;
 
-import backend.qlgiaibongda.entity.KetQuaTranDau.KetQuaTranDauEntity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class LoaiBanThangEntity extends BaseEntity {
 
 
     @OneToMany(mappedBy = "LoaiBanThang")
-    private List<KetQuaTranDauEntity> DSKetQuaTranDau_LoaiBanThang = new ArrayList<>();
+    private List<GhiNhanBanThangEntity> DSKetQuaTranDau_LoaiBanThang = new ArrayList<>();
 
     public List<QuyDinhBanThangEntity> getCacQuyDinhBanThang() {
         return CacQuyDinhBanThang;
@@ -54,11 +53,11 @@ public class LoaiBanThangEntity extends BaseEntity {
         this.moTa = moTa;
     }
 
-    public List<KetQuaTranDauEntity> getDSKetQuaTranDau_LoaiBanThang() {
+    public List<GhiNhanBanThangEntity> getDSKetQuaTranDau_LoaiBanThang() {
         return DSKetQuaTranDau_LoaiBanThang;
     }
 
-    public void setDSKetQuaTranDau_LoaiBanThang(List<KetQuaTranDauEntity> DSKetQuaTranDau_LoaiBanThang) {
+    public void setDSKetQuaTranDau_LoaiBanThang(List<GhiNhanBanThangEntity> DSKetQuaTranDau_LoaiBanThang) {
         this.DSKetQuaTranDau_LoaiBanThang = DSKetQuaTranDau_LoaiBanThang;
     }
 }

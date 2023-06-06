@@ -41,13 +41,13 @@ public class ScheduleService implements IScheduleService {
     @Autowired
     private VongRepository vongRepository;
 
+    @Autowired
+    private KetQuaTranDauRepository ketQuaTranDauRepository;
 
 
     @Override
-    @Transactional
+//    @Transactional
     public ResponseEntity<ResponeObject> createNewSchedule(NewSchedule newSchedule) {
-
-
 
 
 
@@ -140,11 +140,28 @@ public class ScheduleService implements IScheduleService {
                 int team1 = j;
                 int team2 = numberOfTeams - 1 - j;
 
+                DoiBongEntity doiNhaTD = dsDoiThamGia.get(team1);
+                DoiBongEntity doiKhachTD = dsDoiThamGia.get(team2);
+
                 TranDauEntity tranDauEntity = new TranDauEntity();
-                tranDauEntity.setDoiNha(dsDoiThamGia.get(team1));
-                tranDauEntity.setDoiKhach(dsDoiThamGia.get(team2));
+                tranDauEntity.setDoiNha(doiNhaTD);
+                tranDauEntity.setDoiKhach(doiKhachTD);
                 tranDauEntity.setVong(vongEntity);
+
+                KetQuaTranDauEntity ketQuaTranDauEntity = new KetQuaTranDauEntity();
+                ketQuaTranDauEntity.setDoiNha(doiNhaTD);
+                ketQuaTranDauEntity.setDoiKhach(doiKhachTD);
+                ketQuaTranDauEntity.setTrangThai("Chưa thi đấu");
+
+                ketQuaTranDauEntity=ketQuaTranDauRepository.save(ketQuaTranDauEntity);
+
+                tranDauEntity.setKetQuaTranDau(ketQuaTranDauEntity);
                 tranDauEntity = tranDauRepository.save(tranDauEntity);
+
+                ketQuaTranDauEntity.setTranDau(tranDauEntity);
+                ketQuaTranDauEntity=ketQuaTranDauRepository.save(ketQuaTranDauEntity);
+
+
                 dsTranDau.add(tranDauEntity);
                 tranDauCuaVong.add(tranDauEntity);
 
@@ -169,10 +186,21 @@ public class ScheduleService implements IScheduleService {
                 int team1 = numberOfTeams - 1 - j;
                 int team2 = j;
 
+                DoiBongEntity doiNhaTD = dsDoiThamGia.get(team1);
+                DoiBongEntity doiKhachTD = dsDoiThamGia.get(team2);
+
                 TranDauEntity tranDauEntity = new TranDauEntity();
-                tranDauEntity.setDoiNha(dsDoiThamGia.get(team1));
-                tranDauEntity.setDoiKhach(dsDoiThamGia.get(team2));
+                tranDauEntity.setDoiNha(doiNhaTD);
+                tranDauEntity.setDoiKhach(doiKhachTD);
                 tranDauEntity.setVong(vongEntity);
+
+                KetQuaTranDauEntity ketQuaTranDauEntity = new KetQuaTranDauEntity();
+                ketQuaTranDauEntity.setDoiNha(doiNhaTD);
+                ketQuaTranDauEntity.setDoiKhach(doiKhachTD);
+                ketQuaTranDauEntity.setTrangThai("Chưa thi đấu");
+                ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
+
+                tranDauEntity.setKetQuaTranDau(ketQuaTranDauEntity);
                 tranDauEntity = tranDauRepository.save(tranDauEntity);
                 dsTranDau.add(tranDauEntity);
                 tranDauCuaVong.add(tranDauEntity);
@@ -183,8 +211,10 @@ public class ScheduleService implements IScheduleService {
             dsVong.add(vongEntity);
 
 
-            DoiBongEntity firstTeam = dsDoiThamGia.remove(0);
-            dsDoiThamGia.add(firstTeam);
+            DoiBongEntity lastTeam = dsDoiThamGia.remove(numberOfTeams - 1);
+            dsDoiThamGia.add(1, lastTeam);
+//            DoiBongEntity firstTeam = dsDoiThamGia.remove(0);
+//            dsDoiThamGia.add(firstTeam);
         }
 
         lichThiDauEntity.setListTranDauCuaLichThiDau(dsTranDau);
@@ -198,15 +228,52 @@ public class ScheduleService implements IScheduleService {
         muaGiaiEntity.setLichThiDau(lichThiDauEntity);
         muaGiaiRepository.save(muaGiaiEntity);
 
+        LichThiDauDTO lichThiDauDTO = convertToLichThiDauDTO(lichThiDauEntity);
+
+        return GenResponse.gen(HttpStatus.OK, "OK", "Create schedule succeed", lichThiDauDTO);
+    }
+
+
+    @Override
+    public ResponseEntity<ResponeObject> getSchedule(Long id) {
+        LichThiDauEntity lichThiDauEntity = lichThiDauRepository.findById(id).orElse(null);
+        if(lichThiDauEntity == null){
+            return  GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL","Schedule not found","");
+        }
+
+        LichThiDauDTO lichThiDauDTO = convertToLichThiDauDTO(lichThiDauEntity);
+        return  GenResponse.gen(HttpStatus.OK, "OK","Get schedule succeed",lichThiDauDTO);
+
+    }
+
+    public LichThiDauDTO convertToLichThiDauDTO(LichThiDauEntity lichThiDauEntity) {
         LichThiDauDTO lichThiDauDTO = new LichThiDauDTO();
         List<VongDauDTO> dsVongDauDTO = new ArrayList<>();
 
-        for(VongEntity vongDau : dsVong){
+
+        Map<String, VongEntity> mapVong = Collections.synchronizedMap(new HashMap<>());
+        for(TranDauEntity trandau: lichThiDauEntity.getListTranDauCuaLichThiDau()){
+            mapVong.put(trandau.getVong().getTenVong(), trandau.getVong());
+        }
+
+        //try again:
+        List<VongEntity> dsVong = new ArrayList<>(mapVong.values());
+        dsVong.sort((v1,v2)->{
+            String tenVong1 =  v1.getTenVong();
+            String tenVong2 = v2.getTenVong();
+
+            int num1 = Integer.parseInt(tenVong1.split("Vòng ")[1]);
+            int num2 = Integer.parseInt(tenVong2.split("Vòng ")[1]);
+
+            return num1 - num2;
+        });
+
+        for (VongEntity vongDau : dsVong) {
             VongDauDTO vongDauDTO = new VongDauDTO();
             vongDauDTO.setId(vongDau.getId());
             vongDauDTO.setTenVong(vongDau.getTenVong());
             List<TranĐauDTO> dsTranDauDTO = new ArrayList<>();
-            for(TranDauEntity tranDau: vongDau.getListTranDauCuaVong()){
+            for (TranDauEntity tranDau : vongDau.getListTranDauCuaVong()) {
                 TranĐauDTO tranDauDTO = new TranĐauDTO();
                 tranDauDTO.setId(tranDau.getId());
                 try {
@@ -226,11 +293,40 @@ public class ScheduleService implements IScheduleService {
 
                     tranDauDTO.setDoiNha(doiNha);
                     tranDauDTO.setDoiKhach(doiKhach);
-                    tranDauDTO.setKetQuaTranDau(null);
+                    tranDauDTO.setThoiGian(tranDau.getThoiGian());
+
+
+                    KetQuaTranDauDTO ketQuaTranDauDTO = GenericConverter.convert(tranDau.getKetQuaTranDau(), KetQuaTranDauDTO.class);
+                    ketQuaTranDauDTO.setIdDoiNha(doiNha.getId());
+                    ketQuaTranDauDTO.setIdDoiKhach(doiKhach.getId());
+
+                    KetQuaTranDauEntity ketQuaTranDauEntity = tranDau.getKetQuaTranDau();
+
+
+                    List<GhiNhanBanThangEntity> dsBanThangEtt = ketQuaTranDauEntity.getDsBanThang();
+                    if(dsBanThangEtt != null){
+                        List<GhiNhanBanThangDTO> dsBanThangDTO = new ArrayList<>();
+                        for(GhiNhanBanThangEntity banThang: dsBanThangEtt){
+                            GhiNhanBanThangDTO banThangDTO = GenericConverter.convert(banThang, GhiNhanBanThangDTO.class);
+                            banThangDTO.setLoaiBanThang(GenericConverter.convert(banThang.getLoaiBanThang(), LoaiBanThangDTO.class));
+                            banThangDTO.setIdCauThu(banThang.getCauThu().getId());
+                            banThangDTO.setTenCauThu(banThang.getCauThu().getHoTen());
+                            banThangDTO.setIdDoi(banThang.getDoiBong().getId());
+                            banThangDTO.setTenDoi(banThang.getDoiBong().getTen());
+                            banThangDTO.setThoiDiemGhiBan(banThang.getThoiDiemGhiBan());
+                            dsBanThangDTO.add(banThangDTO);
+                        }
+                        ketQuaTranDauDTO.setDsBanThang(dsBanThangDTO);
+                    }
+
+
+                    tranDauDTO.setKetQuaTranDau(ketQuaTranDauDTO);
+
                 } catch (Exception e) {
                     System.out.println("convert tran dau khong thanh cong");
                 }
                 tranDauDTO.setIdVong(vongDau.getId());
+                tranDauDTO.setTenVong(vongDau.getTenVong());
                 tranDauDTO.setIdLichThiDau(lichThiDauEntity.getId());
                 dsTranDauDTO.add(tranDauDTO);
             }
@@ -238,9 +334,9 @@ public class ScheduleService implements IScheduleService {
             dsVongDauDTO.add(vongDauDTO);
         }
 
-        lichThiDauDTO.setIdMuaGiaID(idMuaGiaId);
+        lichThiDauDTO.setIdMuaGiaID(lichThiDauEntity.getMuaGiai().getId());
         lichThiDauDTO.setCacVongDau(dsVongDauDTO);
 
-        return GenResponse.gen(HttpStatus.OK, "OK", "Create schedule succeed", lichThiDauDTO);
+        return lichThiDauDTO;
     }
 }

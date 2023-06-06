@@ -6,4 +6,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface IScheduleService {
     public ResponseEntity<ResponeObject> createNewSchedule(NewSchedule newSchedule);
+
+    public ResponseEntity<ResponeObject> getSchedule(Long id);
 }

@@ -43,9 +43,10 @@ public class test2 {
                 System.out.println(teams.get(team1) + " vs " + teams.get(team2));
             }
 
-            // Di chuyển đội đầu xuống dưới
-            String firstTeam = teams.remove(0);
-            teams.add(firstTeam);
+            // Di chuyển đội cuối lên trên
+            String lastTeam = teams.remove(numberOfTeams - 1);
+            teams.add(1, lastTeam);
+
         }
     }
 }

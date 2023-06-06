@@ -1,13 +1,11 @@
 package backend.qlgiaibongda.entity;
 
-import backend.qlgiaibongda.entity.KetQuaTranDau.KetQuaTranDauEntity;
 import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity
@@ -54,7 +52,7 @@ public class CauThuEntity extends BaseEntity{
     // Relationship CauThu - KetQuaTranDau
     // Cau thu ghi ban o nhieu thoi diem trong tran dau
     @OneToMany(mappedBy = "CauThu")
-    private List<KetQuaTranDauEntity> DSBanThangCauThu_TranDau = new ArrayList<>();
+    private List<GhiNhanBanThangEntity> DSBanThangCauThu_TranDau = new ArrayList<>();
 
 
 
@@ -139,11 +137,11 @@ public class CauThuEntity extends BaseEntity{
         this.loaiCauThu = loaiCauThu;
     }
 
-    public List<KetQuaTranDauEntity> getDSBanThangCauThu_TranDau() {
+    public List<GhiNhanBanThangEntity> getDSBanThangCauThu_TranDau() {
         return DSBanThangCauThu_TranDau;
     }
 
-    public void setDSBanThangCauThu_TranDau(List<KetQuaTranDauEntity> DSBanThangCauThu_TranDau) {
+    public void setDSBanThangCauThu_TranDau(List<GhiNhanBanThangEntity> DSBanThangCauThu_TranDau) {
         this.DSBanThangCauThu_TranDau = DSBanThangCauThu_TranDau;
     }
 

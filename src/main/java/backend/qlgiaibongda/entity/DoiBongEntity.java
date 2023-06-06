@@ -1,13 +1,11 @@
 package backend.qlgiaibongda.entity;
 
-import backend.qlgiaibongda.entity.KetQuaTranDau.KetQuaTranDauEntity;
 import backend.qlgiaibongda.entity.bxh_doibong.BXHDoiBongEntity;
 import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "doibong")
@@ -56,10 +54,32 @@ public class DoiBongEntity extends BaseEntity{
     private List<TranDauEntity> DSTranDauSanKhach = new ArrayList();
 
     @OneToMany(mappedBy = "DoiBong")
-    private List<KetQuaTranDauEntity> DSBanThangDoiBong_TranDau = new ArrayList<>();
+    private List<GhiNhanBanThangEntity> DSBanThangDoiBong_TranDau = new ArrayList<>();
+
+    @OneToMany(mappedBy = "doiNha")
+    private List<KetQuaTranDauEntity> dsKetQuaDoiNha = new ArrayList<>();
+    @OneToMany(mappedBy = "doiKhach")
+    private List<KetQuaTranDauEntity> dsKetQuaDoiKhach = new ArrayList<>();
 
 
     ////////////////////////////////GETTER SETTER///////////////////////////////////////////
+
+
+    public List<KetQuaTranDauEntity> getDsKetQuaDoiNha() {
+        return dsKetQuaDoiNha;
+    }
+
+    public void setDsKetQuaDoiNha(List<KetQuaTranDauEntity> dsKetQuaDoiNha) {
+        this.dsKetQuaDoiNha = dsKetQuaDoiNha;
+    }
+
+    public List<KetQuaTranDauEntity> getDsKetQuaDoiKhach() {
+        return dsKetQuaDoiKhach;
+    }
+
+    public void setDsKetQuaDoiKhach(List<KetQuaTranDauEntity> dsKetQuaDoiKhach) {
+        this.dsKetQuaDoiKhach = dsKetQuaDoiKhach;
+    }
 
     public List<HoSoDangKyEntity> getCacHoSoDangKy() {
         return CacHoSoDangKy;
@@ -141,11 +161,11 @@ public class DoiBongEntity extends BaseEntity{
         this.DSTranDauSanKhach = DSTranDauSanKhach;
     }
 
-    public List<KetQuaTranDauEntity> getDSBanThangDoiBong_TranDau() {
+    public List<GhiNhanBanThangEntity> getDSBanThangDoiBong_TranDau() {
         return DSBanThangDoiBong_TranDau;
     }
 
-    public void setDSBanThangDoiBong_TranDau(List<KetQuaTranDauEntity> DSBanThangDoiBong_TranDau) {
+    public void setDSBanThangDoiBong_TranDau(List<GhiNhanBanThangEntity> DSBanThangDoiBong_TranDau) {
         this.DSBanThangDoiBong_TranDau = DSBanThangDoiBong_TranDau;
     }
 }
