@@ -1,5 +1,7 @@
 package backend.qlgiaibongda.service.iplm;
 
+import backend.qlgiaibongda.api.input.ListIdMatchResult;
+import backend.qlgiaibongda.api.input.ListMatchResultInput;
 import backend.qlgiaibongda.api.input.MatchResultInput;
 import backend.qlgiaibongda.converter.GenResponse;
 import backend.qlgiaibongda.converter.GenericConverter;
@@ -41,113 +43,118 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
     private KetQuaTranDauRepository ketQuaTranDauRepository;
 
     @Override
-    public ResponseEntity<ResponeObject> updateMatchResult(MatchResultInput matchResultInput) {
+    public ResponseEntity<ResponeObject> updateMatchResult(ListMatchResultInput listMatchResultInput) {
 
-        Long idTranDau = matchResultInput.getIdTranDau();
-        Long idDoiGhiBan = matchResultInput.getIdDoiGhiBan();
-        Long idCauThuGhiBan = matchResultInput.getIdCauThuGhiBan();
-        Long thoiDiemGhiBan = matchResultInput.getThoiDiemGhiBan();
-        Long idLoaiBanThanGhiBan = matchResultInput.getIdLoaiBanThang();
+        List<KetQuaTranDauDTO> dsKetQuaTranDauDTO = new ArrayList<>();
 
-        KetQuaTranDauEntity ketQuaTranDauEntity;
-        TranDauEntity tranDauEntity = tranDauRepository.findById(idTranDau).orElse(null);
-        if (tranDauEntity == null) {
-            return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Match not found!", "");
-        } else {
-            ketQuaTranDauEntity = tranDauEntity.getKetQuaTranDau();
-            if (!ketQuaTranDauEntity.getTrangThai().equals("Đang thi đấu")) {
-                return GenResponse.gen(HttpStatus.CONFLICT, "FAIL", "Match is not start or ended!", "");
-            }
-        }
+        for(MatchResultInput matchResultInput : listMatchResultInput.getDsBanThang()){
 
-        DoiBongEntity doiGhiBan = null;
+            Long idTranDau = matchResultInput.getIdTranDau();
+            Long idDoiGhiBan = matchResultInput.getIdDoiGhiBan();
+            Long idCauThuGhiBan = matchResultInput.getIdCauThuGhiBan();
+            Long thoiDiemGhiBan = matchResultInput.getThoiDiemGhiBan();
+            Long idLoaiBanThanGhiBan = matchResultInput.getIdLoaiBanThang();
 
-        if (ketQuaTranDauEntity.getDoiNha().getId() == idDoiGhiBan) {
-            doiGhiBan = ketQuaTranDauEntity.getDoiNha();
-            Integer sbtDoiNha = ketQuaTranDauEntity.getSbtDoiNha();
-            ketQuaTranDauEntity.setSbtDoiNha(sbtDoiNha + 1);
-        }
-
-        if (ketQuaTranDauEntity.getDoiKhach().getId() == idDoiGhiBan) {
-            doiGhiBan = ketQuaTranDauEntity.getDoiKhach();
-            Integer sbtDoiKhach = ketQuaTranDauEntity.getSbtDoiKhach();
-            ketQuaTranDauEntity.setSbtDoiKhach(sbtDoiKhach + 1);
-        }
-
-        CauThuEntity cauThuEntity = null;
-        MuaGiaiEntity muaGiaiEntity = null;
-        if (doiGhiBan == null) {
-            return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Team not found!", "");
-        } else {
-            muaGiaiEntity = tranDauEntity.getLichThiDau().getMuaGiai();
-            Long idMuaGiai = muaGiaiEntity.getId();
-            HoSoDangKyEntity hosoEntity = null;
-            for (HoSoDangKyEntity hoso : doiGhiBan.getCacHoSoDangKy()) {
-                if (hoso.getMuaGiai().getId() == idMuaGiai) {
-                    hosoEntity = hoso;
-                    break;
-                }
-
-            }
-
-
-            for (CauThuEntity cauThu : hosoEntity.getCacCauThu()) {
-                if (cauThu.getId() == idCauThuGhiBan) {
-                    cauThuEntity = cauThu;
-                    break;
+            KetQuaTranDauEntity ketQuaTranDauEntity;
+            TranDauEntity tranDauEntity = tranDauRepository.findById(idTranDau).orElse(null);
+            if (tranDauEntity == null) {
+                return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Match"+ idTranDau+ " not found!", "");
+            } else {
+                ketQuaTranDauEntity = tranDauEntity.getKetQuaTranDau();
+                if (!ketQuaTranDauEntity.getTrangThai().equals("Đang thi đấu")) {
+                    return GenResponse.gen(HttpStatus.CONFLICT, "FAIL", "Match"+idTranDau+" is not start or ended!", "");
                 }
             }
 
-            if (cauThuEntity == null) {
-                return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "This player is not found in the lineup!", "");
+            DoiBongEntity doiGhiBan = null;
+
+            if (ketQuaTranDauEntity.getDoiNha().getId() == idDoiGhiBan) {
+                doiGhiBan = ketQuaTranDauEntity.getDoiNha();
+                Integer sbtDoiNha = ketQuaTranDauEntity.getSbtDoiNha();
+                ketQuaTranDauEntity.setSbtDoiNha(sbtDoiNha + 1);
             }
-        }
 
-        GhiNhanBanThangEntity ghiNhanThangEntity = new GhiNhanBanThangEntity();
-        //check thoi diem ghi ban:
+            if (ketQuaTranDauEntity.getDoiKhach().getId() == idDoiGhiBan) {
+                doiGhiBan = ketQuaTranDauEntity.getDoiKhach();
+                Integer sbtDoiKhach = ketQuaTranDauEntity.getSbtDoiKhach();
+                ketQuaTranDauEntity.setSbtDoiKhach(sbtDoiKhach + 1);
+            }
 
-        if (muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhBanThang() != null) {
-            Long thoiDiemGhiBanToiDa = muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhBanThang().getThoiDiemGhiBanToiDa();
-            if (thoiDiemGhiBan > thoiDiemGhiBanToiDa) {
-                {
-                    return GenResponse.gen(HttpStatus.CONFLICT, "FAIL", "Time is invalid!", "");
+            CauThuEntity cauThuEntity = null;
+            MuaGiaiEntity muaGiaiEntity = null;
+            if (doiGhiBan == null) {
+                return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Team"+idDoiGhiBan+" not found!", "");
+            } else {
+                muaGiaiEntity = tranDauEntity.getLichThiDau().getMuaGiai();
+                Long idMuaGiai = muaGiaiEntity.getId();
+                HoSoDangKyEntity hosoEntity = null;
+                for (HoSoDangKyEntity hoso : doiGhiBan.getCacHoSoDangKy()) {
+                    if (hoso.getMuaGiai().getId() == idMuaGiai) {
+                        hosoEntity = hoso;
+                        break;
+                    }
+
+                }
+
+
+                for (CauThuEntity cauThu : hosoEntity.getCacCauThu()) {
+                    if (cauThu.getId() == idCauThuGhiBan) {
+                        cauThuEntity = cauThu;
+                        break;
+                    }
+                }
+
+                if (cauThuEntity == null) {
+                    return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Player"+ idCauThuGhiBan +" is not found in the lineup!", "");
                 }
             }
+
+            GhiNhanBanThangEntity ghiNhanThangEntity = new GhiNhanBanThangEntity();
+            //check thoi diem ghi ban:
+
+            if (muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhBanThang() != null) {
+                Long thoiDiemGhiBanToiDa = muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhBanThang().getThoiDiemGhiBanToiDa();
+                if (thoiDiemGhiBan > thoiDiemGhiBanToiDa) {
+                    {
+                        return GenResponse.gen(HttpStatus.CONFLICT, "FAIL", "Match "+idTranDau+" Time is invalid!", "");
+                    }
+                }
+            }
+
+            LoaiBanThangEntity loaiBanThangEntity = loaiBanThangRepository.findById(idLoaiBanThanGhiBan).orElse(null);
+            if(loaiBanThangEntity == null){
+                return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Match"+idTranDau+": Type of goal not found", "");
+            }
+
+            ghiNhanThangEntity.setThoiDiemGhiBan(thoiDiemGhiBan);
+            ghiNhanThangEntity.setCauThu(cauThuEntity);
+            ghiNhanThangEntity.setDoiBong(doiGhiBan);
+            ghiNhanThangEntity.setLoaiBanThang(loaiBanThangEntity);
+            ghiNhanThangEntity = ghiNhanThangRepository.save(ghiNhanThangEntity);
+
+            List<GhiNhanBanThangEntity> listGhiNhanBanThang = ketQuaTranDauEntity.getDsBanThang();
+            if (listGhiNhanBanThang == null) {
+                listGhiNhanBanThang = new ArrayList<>();
+            }
+            listGhiNhanBanThang.add(ghiNhanThangEntity);
+            ketQuaTranDauEntity.setDsBanThang(listGhiNhanBanThang);
+
+            ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
+            ghiNhanThangEntity.setKetQuaTranDau(ketQuaTranDauEntity);
+            ghiNhanThangEntity = ghiNhanThangRepository.save(ghiNhanThangEntity);
+
+            List<GhiNhanBanThangEntity> listTranDau_LoaiBanThang = loaiBanThangEntity.getDSKetQuaTranDau_LoaiBanThang();
+            if (listTranDau_LoaiBanThang == null) {
+                listTranDau_LoaiBanThang = new ArrayList<>();
+            }
+            listTranDau_LoaiBanThang.add(ghiNhanThangEntity);
+            loaiBanThangEntity.setDSKetQuaTranDau_LoaiBanThang(listTranDau_LoaiBanThang);
+            loaiBanThangEntity = loaiBanThangRepository.save(loaiBanThangEntity);
+
+            KetQuaTranDauDTO ketQuaTranDauDTO = convertToKetQuaTranDau(ketQuaTranDauEntity);
+            dsKetQuaTranDauDTO.add(ketQuaTranDauDTO);
         }
-
-        LoaiBanThangEntity loaiBanThangEntity = loaiBanThangRepository.findById(idLoaiBanThanGhiBan).orElse(null);
-        if(loaiBanThangEntity == null){
-            return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Type of goal not found", "");
-        }
-
-        ghiNhanThangEntity.setThoiDiemGhiBan(thoiDiemGhiBan);
-        ghiNhanThangEntity.setCauThu(cauThuEntity);
-        ghiNhanThangEntity.setDoiBong(doiGhiBan);
-        ghiNhanThangEntity.setLoaiBanThang(loaiBanThangEntity);
-        ghiNhanThangEntity = ghiNhanThangRepository.save(ghiNhanThangEntity);
-
-        List<GhiNhanBanThangEntity> listGhiNhanBanThang = ketQuaTranDauEntity.getDsBanThang();
-        if (listGhiNhanBanThang == null) {
-            listGhiNhanBanThang = new ArrayList<>();
-        }
-        listGhiNhanBanThang.add(ghiNhanThangEntity);
-        ketQuaTranDauEntity.setDsBanThang(listGhiNhanBanThang);
-
-        ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
-        ghiNhanThangEntity.setKetQuaTranDau(ketQuaTranDauEntity);
-        ghiNhanThangEntity = ghiNhanThangRepository.save(ghiNhanThangEntity);
-
-        List<GhiNhanBanThangEntity> listTranDau_LoaiBanThang = loaiBanThangEntity.getDSKetQuaTranDau_LoaiBanThang();
-        if (listTranDau_LoaiBanThang == null) {
-            listTranDau_LoaiBanThang = new ArrayList<>();
-        }
-        listTranDau_LoaiBanThang.add(ghiNhanThangEntity);
-        loaiBanThangEntity.setDSKetQuaTranDau_LoaiBanThang(listTranDau_LoaiBanThang);
-        loaiBanThangEntity = loaiBanThangRepository.save(loaiBanThangEntity);
-
-        KetQuaTranDauDTO ketQuaTranDauDTO = convertToKetQuaTranDau(ketQuaTranDauEntity);
-
-        return GenResponse.gen(HttpStatus.OK, "OK", "Update MatchResult succeed!", ketQuaTranDauDTO);
+        return GenResponse.gen(HttpStatus.OK, "OK", "Update MatchResults succeed!", dsKetQuaTranDauDTO);
     }
 
     @Override
@@ -161,28 +168,43 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
     }
 
     @Override
-    public ResponseEntity<ResponeObject> startMatch(Long id) {
-        KetQuaTranDauEntity ketQuaTranDauEntity = ketQuaTranDauRepository.findById(id).orElse(null);
-        if(ketQuaTranDauEntity == null){
-            return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "MatchResult not found", "");
+    public ResponseEntity<ResponeObject> startMatch(ListIdMatchResult listIdMatchResult) {
+
+        List<KetQuaTranDauDTO> dsKetQuaTranDauDTO = new ArrayList<>();
+        for(Long id: listIdMatchResult.getDsIDKetQuaTranDau()){
+
+            KetQuaTranDauEntity ketQuaTranDauEntity = ketQuaTranDauRepository.findById(id).orElse(null);
+            if(ketQuaTranDauEntity == null){
+                return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "MatchResult "+id+ " not found", "");
+            }
+            ketQuaTranDauEntity.setTrangThai("Đang thi đấu");
+            ketQuaTranDauEntity.setSbtDoiNha(0);
+            ketQuaTranDauEntity.setSbtDoiKhach(0);
+            ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
+
+            dsKetQuaTranDauDTO.add(convertToKetQuaTranDau(ketQuaTranDauEntity));
         }
-        ketQuaTranDauEntity.setTrangThai("Đang thi đấu");
-        ketQuaTranDauEntity.setSbtDoiNha(0);
-        ketQuaTranDauEntity.setSbtDoiKhach(0);
-        ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
-        return GenResponse.gen(HttpStatus.OK, "OK", "Start MatchResult succeed!", convertToKetQuaTranDau(ketQuaTranDauEntity));
+
+        return GenResponse.gen(HttpStatus.OK, "OK", "Start MatchResults succeed!",dsKetQuaTranDauDTO );
 
     }
 
     @Override
-    public ResponseEntity<ResponeObject> endMatch(Long id) {
-        KetQuaTranDauEntity ketQuaTranDauEntity = ketQuaTranDauRepository.findById(id).orElse(null);
-        if(ketQuaTranDauEntity == null){
-            return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "MatchResult not found", "");
+    public ResponseEntity<ResponeObject> endMatch(ListIdMatchResult listIdMatchResult) {
+
+        List<KetQuaTranDauDTO> dsKetQuaTranDauDTO = new ArrayList<>();
+        for(Long id: listIdMatchResult.getDsIDKetQuaTranDau()) {
+
+            KetQuaTranDauEntity ketQuaTranDauEntity = ketQuaTranDauRepository.findById(id).orElse(null);
+            if(ketQuaTranDauEntity == null){
+                return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "MatchResult "+id+" not found", "");
+            }
+            ketQuaTranDauEntity.setTrangThai("Đã kết thúc");
+            ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
+            dsKetQuaTranDauDTO.add(convertToKetQuaTranDau(ketQuaTranDauEntity));
         }
-        ketQuaTranDauEntity.setTrangThai("Đã kết thúc");
-        ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
-        return GenResponse.gen(HttpStatus.OK, "OK", "End MatchResult succeed!", convertToKetQuaTranDau(ketQuaTranDauEntity));
+
+        return GenResponse.gen(HttpStatus.OK, "OK", "End MatchResult succeed!", dsKetQuaTranDauDTO);
     }
 
 
