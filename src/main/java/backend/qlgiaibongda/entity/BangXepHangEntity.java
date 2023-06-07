@@ -15,7 +15,7 @@ import java.util.List;
 public class BangXepHangEntity extends BaseEntity {
 
     //BXH_DOIBONG
-    @OneToMany(mappedBy = "BXH")
+    @OneToMany(mappedBy = "bxh")
     private List<BXHDoiBongEntity> BXHDoiBong;
 
     public List<BXHDoiBongEntity> getBXHDoiBong() {

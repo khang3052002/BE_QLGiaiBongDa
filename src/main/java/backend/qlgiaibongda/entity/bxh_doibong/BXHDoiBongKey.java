@@ -24,6 +24,11 @@ public class BXHDoiBongKey implements Serializable {
         this.idDoiBong = idDoiBong;
     }
 
+    public BXHDoiBongKey(Long idDoiBong, Long idBXH) {
+        this.idDoiBong = idDoiBong;
+        this.idBXH = idBXH;
+    }
+
     public Long getIdBXH() {
         return idBXH;
     }

@@ -21,4 +21,6 @@ public interface IMuaGiaiService {
 
     ResponseEntity<ResponeObject> getLeagueOnRequest(Pageable pageable, String keyword, Integer trangThai);
     int totalItem() ;
+
+    ResponseEntity<ResponeObject> getRankingOfLeague(Long idMuagiai);
 }

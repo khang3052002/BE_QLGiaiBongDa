@@ -4,6 +4,7 @@ import backend.qlgiaibongda.entity.BangXepHangEntity;
 import backend.qlgiaibongda.entity.CauThuEntity;
 import backend.qlgiaibongda.entity.DoiBongEntity;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.Transient;
 
 @Entity
 @Table(name = "bxh_doibong")
@@ -15,23 +16,43 @@ public class BXHDoiBongEntity  {
     @ManyToOne
     @MapsId("idDoiBong")
     @JoinColumn(name = "id_doibong")
-    private DoiBongEntity DoiBong;
+    private DoiBongEntity doiBong;
 
     @ManyToOne
     @MapsId("idBXH")
     @JoinColumn(name = "id_bxh")
-    private BangXepHangEntity BXH;
+    private BangXepHangEntity bxh;
 
     @Column(name = "tranthang")
-    private int tranThang;
+    private Integer tranThang;
     @Column(name = "tranthua")
-    private int tranThua;
+    private Integer tranThua;
     @Column(name = "tranhoa")
-    private int tranHoa;
+    private Integer tranHoa;
+    @Transient
+    private Integer vong;
+
+    public Integer getVong() {
+        return tranHoa+tranThang+tranThua;
+    }
+
+    @Column(name="phaluoi")
+    private Integer phaLuoi;
+    @Column(name="thungluoi")
+    private Integer thungLuoi;
+
+    @Transient
+    private Integer hieuso_test;
+    public Integer getHieuso_test() {
+        return phaLuoi-thungLuoi;
+    }
+
     @Column(name = "hieuso")
-    private int hieuSo;
+    private Integer hieuSo;
     @Column(name = "hang")
-    private int hang;
+    private Integer hang;
+
+
 
     public BXHDoiBongKey getKey() {
         return key;
@@ -42,58 +63,75 @@ public class BXHDoiBongEntity  {
     }
 
     public DoiBongEntity getDoiBong() {
-        return DoiBong;
+        return doiBong;
     }
 
     public void setDoiBong(DoiBongEntity doiBong) {
-        DoiBong = doiBong;
+        this.doiBong = doiBong;
     }
 
     public BangXepHangEntity getBXH() {
-        return BXH;
+        return bxh;
     }
 
     public void setBXH(BangXepHangEntity BXH) {
-        this.BXH = BXH;
+        this.bxh = BXH;
     }
 
-    public int getTranThang() {
+    public Integer getTranThang() {
         return tranThang;
     }
 
-    public void setTranThang(int tranThang) {
+    public void setTranThang(Integer tranThang) {
         this.tranThang = tranThang;
     }
 
-    public int getTranThua() {
+    public Integer getTranThua() {
         return tranThua;
     }
 
-    public void setTranThua(int tranThua) {
+    public void setTranThua(Integer tranThua) {
         this.tranThua = tranThua;
     }
 
-    public int getTranHoa() {
+    public Integer getTranHoa() {
         return tranHoa;
     }
 
-    public void setTranHoa(int tranHoa) {
+    public void setTranHoa(Integer tranHoa) {
         this.tranHoa = tranHoa;
     }
 
-    public int getHieuSo() {
+    public Integer getHieuSo() {
         return hieuSo;
     }
 
-    public void setHieuSo(int hieuSo) {
+    public void setHieuSo(Integer hieuSo) {
         this.hieuSo = hieuSo;
     }
 
-    public int getHang() {
+    public Integer getHang() {
         return hang;
     }
 
-    public void setHang(int hang) {
+    public void setHang(Integer hang) {
         this.hang = hang;
     }
+
+    public Integer getPhaLuoi() {
+        return phaLuoi;
+    }
+
+    public void setPhaLuoi(Integer phaLuoi) {
+        this.phaLuoi = phaLuoi;
+    }
+
+    public Integer getThungLuoi() {
+        return thungLuoi;
+    }
+
+    public void setThungLuoi(Integer thungLuoi) {
+        this.thungLuoi = thungLuoi;
+    }
+
 }

@@ -10,10 +10,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/muagiai")
+@EnableTransactionManagement
 public class MuaGiaiAPI {
     @Autowired
     private IMuaGiaiService muaGiaiService;
@@ -77,5 +79,10 @@ public class MuaGiaiAPI {
         return muaGiaiService.registerJoinLeague(dangKyThamGiaGiaiDTO);
     }
 
+    @GetMapping("/{id_muagiai}/ranking")
+    public ResponseEntity<ResponeObject> getRankingOfLeague(@PathVariable("id_muagiai") Long id_muagiai)
+    {
+        return muaGiaiService.getRankingOfLeague(id_muagiai);
+    }
 
 }

@@ -36,7 +36,7 @@ public class DoiBongEntity extends BaseEntity{
     private List<CauThuDoiBongEntity> DoiBongCauThu;
 
     //BangXepHang
-    @OneToMany(mappedBy = "DoiBong")
+    @OneToMany(mappedBy = "doiBong")
     private List<BXHDoiBongEntity> DoiBongBXH;
 
     @OneToMany(mappedBy = "doiBong")

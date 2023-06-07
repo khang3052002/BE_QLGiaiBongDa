@@ -7,6 +7,7 @@ import backend.qlgiaibongda.service.iplm.MuaGiaiService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,5 +17,6 @@ public interface HoSoDangKyRepository extends JpaRepository<HoSoDangKyEntity, Lo
     Boolean existsByDoiBongAndMuaGiai(DoiBongEntity doiBong, MuaGiaiEntity muaGiai);
 //    Integer countByMuaGiaiOrderByTrangThai(MuaGiaiEntity muaGiai,String trangThai);
     Long countByTrangThaiAndMuaGiai(String trangThai, MuaGiaiEntity muaGiai);
+    List<HoSoDangKyEntity> findByTrangThaiAndMuaGiai(String trangThai, MuaGiaiEntity muaGiai);
 
 }

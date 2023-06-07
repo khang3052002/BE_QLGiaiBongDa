@@ -11,6 +11,7 @@ import backend.qlgiaibongda.dto.ResponeObject;
 import backend.qlgiaibongda.entity.*;
 import backend.qlgiaibongda.repository.*;
 import backend.qlgiaibongda.repository.MuaGiaiRepository.MuaGiaiRepository;
+import backend.qlgiaibongda.service.IBangXepHangService;
 import backend.qlgiaibongda.service.IMuaGiaiService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +54,8 @@ public class MuaGiaiService implements IMuaGiaiService {
     private CauThuRepository cauThuRepository;
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private IBangXepHangService bangXepHangService;
     @Override
     public ResponseEntity<ResponeObject> createLeague(MuaGiaiDTO muaGiaiDTO) {
         try
@@ -155,7 +159,9 @@ public class MuaGiaiService implements IMuaGiaiService {
                 muaGiaiDTO.setId_nguoitao(muaGiaiEntity.getQuanLyMuaGiai().getId());
                 QuyDinhCauThuDTO quyDinhCauThuDTO = GenericConverter.convert(muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhCauThu(),QuyDinhCauThuDTO.class);
                 QuyDinhTinhDiemDTO quyDinhTinhDiemDTO = GenericConverter.convert(muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhTinhDiem(),QuyDinhTinhDiemDTO.class);
+                QuyDinhSoLuongDoiDTO quyDinhSoLuongDoiDTO = GenericConverter.convert(muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhSoLuongDoi(),QuyDinhSoLuongDoiDTO.class);
 
+                muaGiaiDTO.setQuyDinhSoLuongDoi(quyDinhSoLuongDoiDTO);
                 muaGiaiDTO.setQuyDinhCauThu(quyDinhCauThuDTO);
                 muaGiaiDTO.setQuyDinhTinhDiem(quyDinhTinhDiemDTO);
                 return ResponseEntity.status(HttpStatus.OK).body(
@@ -312,6 +318,30 @@ public class MuaGiaiService implements IMuaGiaiService {
         return (int) muaGiaiRepository.count();
     }
 
+    @Override
+    @Transactional
+    public ResponseEntity<ResponeObject> getRankingOfLeague(Long idMuagiai) {
+        // Get MuaGiaiEntity
+        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(idMuagiai).get();
+        if(muaGiaiEntity!=null)
+        {
+            BangXepHangEntity bxhEntity = muaGiaiEntity.getBxh();
+            if(bxhEntity == null)
+            {
+                // Tạo bảng xếp hạng
+                // save bảng xếp hạng vào mua giải đó
+                boolean result = bangXepHangService.CreateRanking(muaGiaiEntity);
+                System.out.println(result);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponeObject("SUCC","Test 2"+result,""));
+            }
+
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponeObject("Fail","Test",""));
+
+    }
+
     public ResponseEntity<ResponeObject> getLeagueOnRequest(Pageable pageable,String keyword, Integer trangThai) {
 //        List<MuaGiaiEntity> listMuaGiai = muaGiaiRepository.findByTenContainsIgnoreCase(keyword,trangThai);
         Page<MuaGiaiEntity> pageListMuaGiai = findLeaguesWithFiltered(pageable,keyword,trangThai);
@@ -350,7 +380,7 @@ public class MuaGiaiService implements IMuaGiaiService {
                     new ResponeObject("OK","Get all league succesful",dsMuaGiaiOutput)
             );
         }
-        return ResponseEntity.status(HttpStatus.OK).body(
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ResponeObject("OK","Not exsists league with key "+ keyword,"")
         );
     }
