@@ -1,5 +1,6 @@
 package backend.qlgiaibongda.config.Jwt;
 
+import backend.qlgiaibongda.dto.ResponeObject;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -55,10 +56,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             {
                 response.setHeader("error",ex.getMessage());
                 response.setStatus(HttpStatus.FORBIDDEN.value());
-                Map<String, String> error = new HashMap<>();
-                error.put("error_message",ex.getMessage());
+                ResponeObject responeObj = new ResponeObject("FAIL",ex.getMessage(),"");
+
+//                Map<String, String> error = new HashMap<>();
+//                error.put("error_message",ex.getMessage());
                 response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(),error);
+                new ObjectMapper().writeValue(response.getOutputStream(),responeObj);
             }
         }
         else{

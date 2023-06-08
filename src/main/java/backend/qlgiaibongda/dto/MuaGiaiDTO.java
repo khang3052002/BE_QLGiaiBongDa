@@ -20,7 +20,9 @@ public class MuaGiaiDTO {
 
     public Boolean checkValidInfo_CreateLeague(){
         Boolean check = true;
-        if(id_nguoitao == null || ten == null || quyDinhCauThu == null || quyDinhTinhDiem == null || quyDinhSoLuongDoi==null)
+        if(id_nguoitao == null || ten == null || quyDinhCauThu == null || quyDinhTinhDiem == null || quyDinhSoLuongDoi==null
+        || thoiDiemBatDau == null || thoiDiemKetThuc == null
+        )
         {
             check = false;
         }
