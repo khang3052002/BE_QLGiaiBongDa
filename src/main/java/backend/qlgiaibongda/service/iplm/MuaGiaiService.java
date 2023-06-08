@@ -1,6 +1,7 @@
 package backend.qlgiaibongda.service.iplm;
 
 import backend.qlgiaibongda.converter.GenericConverter;
+import backend.qlgiaibongda.dto.BXH_DoiBongDTO;
 import backend.qlgiaibongda.dto.DangKyThamGiaGiaiDTO;
 import backend.qlgiaibongda.dto.MuaGiaiDTO;
 import backend.qlgiaibongda.dto.Output.DSMuaGiaiOutput;
@@ -31,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class MuaGiaiService implements IMuaGiaiService {
@@ -86,7 +88,7 @@ public class MuaGiaiService implements IMuaGiaiService {
             quyDinhMuaGiaiRepository.save(quyDinhMuaGiai);
 
             muaGiaiEntity.setQuyDinhMuaGiai(quyDinhMuaGiai);
-
+            muaGiaiEntity.setTrangThai(0);
             muaGiaiRepository.save(muaGiaiEntity);
 
             return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK","Create league succesful",muaGiaiDTO));
@@ -262,7 +264,7 @@ public class MuaGiaiService implements IMuaGiaiService {
                 hoSoDangKyEntity.setCacCauThu(listCauThuThamGia);
 
                 hoSoDangKyRepository.save(hoSoDangKyEntity);
-                return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK","Update league succesful",dangKyThamGiaGiaiDTO));
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK","Join league succesful",dangKyThamGiaGiaiDTO));
 
             }
             else{
@@ -326,14 +328,29 @@ public class MuaGiaiService implements IMuaGiaiService {
         if(muaGiaiEntity!=null)
         {
             BangXepHangEntity bxhEntity = muaGiaiEntity.getBxh();
+            List<BXH_DoiBongDTO> bxh = null;
             if(bxhEntity == null)
             {
                 // Tạo bảng xếp hạng
                 // save bảng xếp hạng vào mua giải đó
                 boolean result = bangXepHangService.CreateRanking(muaGiaiEntity);
                 System.out.println(result);
+                if(result == true)
+                {
+                    bxh = bangXepHangService.getRanking(idMuagiai);
+                }
+            }
+            else{
+                bxh = bangXepHangService.getRanking(idMuagiai);
+            }
+            if(bxh==null)
+            {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new ResponeObject("Fail","Not found ranking of league",""));
+            }
+            else{
                 return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponeObject("SUCC","Test 2"+result,""));
+                        new ResponeObject("OK","Get ranking succeed",bxh));
             }
 
         }

@@ -4,17 +4,17 @@ import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "hosodangky")
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 public class HoSoDangKyEntity extends BaseEntity {
 
     @Column(name = "thoigiantao")
-    @CreatedDate
+//    @CreatedDate
     private Date thoiGianTao;
 
     @Column(name = "trangthai")
@@ -29,7 +29,10 @@ public class HoSoDangKyEntity extends BaseEntity {
     private DoiBongEntity doiBong;
 
     //ChiTietHoSoDangKy
-    @ManyToMany(mappedBy = "CacHoSoDangKy")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "chitiethosodangky",
+            joinColumns = @JoinColumn(name = "id_hoso"),
+            inverseJoinColumns = @JoinColumn(name = "id_cauthu"))
     private List<CauThuEntity> CacCauThu = new ArrayList<>();
 
     // QuanLy - HoSoDangKy

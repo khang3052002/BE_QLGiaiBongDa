@@ -42,10 +42,7 @@ public class CauThuEntity extends BaseEntity{
     private List<CauThuDoiBongEntity> CauThuDoiBong;
 
     //CHITIETHOSODANGKY
-    @ManyToMany
-    @JoinTable(name = "chitiethosodangky",
-                joinColumns = @JoinColumn(name = "id_cauthu"),
-                inverseJoinColumns = @JoinColumn(name = "id_hoso"))
+    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "CacCauThu")
     private List<HoSoDangKyEntity> CacHoSoDangKy = new ArrayList<>();
 
 

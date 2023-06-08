@@ -4,6 +4,7 @@ import backend.qlgiaibongda.entity.BangXepHangEntity;
 import backend.qlgiaibongda.entity.CauThuEntity;
 import backend.qlgiaibongda.entity.DoiBongEntity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
 import org.springframework.data.annotation.Transient;
 
 @Entity
@@ -29,11 +30,12 @@ public class BXHDoiBongEntity  {
     private Integer tranThua;
     @Column(name = "tranhoa")
     private Integer tranHoa;
-    @Transient
+
+    @Column(name="vong")
     private Integer vong;
 
     public Integer getVong() {
-        return tranHoa+tranThang+tranThua;
+        return vong;
     }
 
     @Column(name="phaluoi")
@@ -41,17 +43,26 @@ public class BXHDoiBongEntity  {
     @Column(name="thungluoi")
     private Integer thungLuoi;
 
-    @Transient
-    private Integer hieuso_test;
-    public Integer getHieuso_test() {
-        return phaLuoi-thungLuoi;
-    }
 
     @Column(name = "hieuso")
     private Integer hieuSo;
-    @Column(name = "hang")
-    private Integer hang;
 
+
+
+    @Column(name="diem")
+    private Integer diem;
+
+    public Integer getDiem() {
+        return diem;
+    }
+
+    public void setDiem(Integer diem) {
+        this.diem = diem;
+    }
+
+    public void setVong(Integer vong) {
+        this.vong = vong;
+    }
 
 
     public BXHDoiBongKey getKey() {
@@ -110,13 +121,7 @@ public class BXHDoiBongEntity  {
         this.hieuSo = hieuSo;
     }
 
-    public Integer getHang() {
-        return hang;
-    }
 
-    public void setHang(Integer hang) {
-        this.hang = hang;
-    }
 
     public Integer getPhaLuoi() {
         return phaLuoi;

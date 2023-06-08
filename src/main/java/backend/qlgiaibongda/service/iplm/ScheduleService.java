@@ -46,7 +46,7 @@ public class ScheduleService implements IScheduleService {
 
 
     @Override
-//    @Transactional
+    @Transactional
     public ResponseEntity<ResponeObject> createNewSchedule(NewSchedule newSchedule) {
 
 
@@ -73,7 +73,7 @@ public class ScheduleService implements IScheduleService {
             if(muaGiaiEntity.getTrangThai() !=0){
                 return GenResponse.gen(HttpStatus.CONFLICT, "FAIL", "The season is currently ongoing or has concluded!", "");
             }
-
+            // giai dau dang dang ky
             if(muaGiaiEntity.getLichThiDau() != null){
                 lichThiDauEntity = muaGiaiEntity.getLichThiDau();
                 //delete before create new:
@@ -198,6 +198,8 @@ public class ScheduleService implements IScheduleService {
                 ketQuaTranDauEntity.setDoiNha(doiNhaTD);
                 ketQuaTranDauEntity.setDoiKhach(doiKhachTD);
                 ketQuaTranDauEntity.setTrangThai("Chưa thi đấu");
+
+                ketQuaTranDauEntity.setTranDau(tranDauEntity);
                 ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
 
                 tranDauEntity.setKetQuaTranDau(ketQuaTranDauEntity);

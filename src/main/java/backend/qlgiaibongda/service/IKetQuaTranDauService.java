@@ -7,7 +7,7 @@ import backend.qlgiaibongda.dto.ResponeObject;
 import org.springframework.http.ResponseEntity;
 
 public interface IKetQuaTranDauService {
-    ResponseEntity<ResponeObject> updateMatchResult(ListMatchResultInput listMatchResultInput);
+    ResponseEntity<ResponeObject> updateMatchResult(ListMatchResultInput listMatchResultInput, Long id_trandau, Integer flagHoa0_0);
 
     ResponseEntity<ResponeObject> getOne(Long id);
 

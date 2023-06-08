@@ -4,31 +4,40 @@ import backend.qlgiaibongda.api.input.ListIdMatchResult;
 import backend.qlgiaibongda.api.input.ListMatchResultInput;
 import backend.qlgiaibongda.api.input.MatchResultInput;
 import backend.qlgiaibongda.dto.ResponeObject;
+import backend.qlgiaibongda.service.IBangXepHangService;
 import backend.qlgiaibongda.service.IKetQuaTranDauService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/ketquatrandau")
+@EnableTransactionManagement
 public class KetQuaTranDauAPI {
 
     @Autowired
     private IKetQuaTranDauService ketQuaTranDauService;
-
+    @Autowired
+    private IBangXepHangService bangXepHangService;
     @GetMapping("/{id}")
     public ResponseEntity<ResponeObject> getMatchResult(@PathVariable("id") Long id){
         return ketQuaTranDauService.getOne(id);
     }
-    @PutMapping
-    public ResponseEntity<ResponeObject> updateMatchResult(@RequestBody ListMatchResultInput listMatchResultInput){
+    @PutMapping("/{id_trandau}/capnhat")
+    public ResponseEntity<ResponeObject> updateMatchResult(@PathVariable("id_trandau") Long id_trandau,@RequestBody ListMatchResultInput listMatchResultInput){
         if(!listMatchResultInput.checkValidInfo()){
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ResponeObject("FAIL", "Invalid Info", ""));
         }
+        else {
+            Integer flagHoa0_0 = listMatchResultInput.getFlag_Hoa_0_banthang();
+            ResponseEntity<ResponeObject> respone = ketQuaTranDauService.updateMatchResult(listMatchResultInput,id_trandau,flagHoa0_0);
+            bangXepHangService.UpdateRanking(id_trandau);
+            return respone;
+        }
 
-        return ketQuaTranDauService.updateMatchResult(listMatchResultInput);
     }
 
     @PutMapping("/batdau")
