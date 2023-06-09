@@ -199,11 +199,15 @@ public class ScheduleService implements IScheduleService {
                 ketQuaTranDauEntity.setDoiKhach(doiKhachTD);
                 ketQuaTranDauEntity.setTrangThai("Chưa thi đấu");
 
-                ketQuaTranDauEntity.setTranDau(tranDauEntity);
+//                ketQuaTranDauEntity.setTranDau(tranDauEntity);
                 ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
 
                 tranDauEntity.setKetQuaTranDau(ketQuaTranDauEntity);
                 tranDauEntity = tranDauRepository.save(tranDauEntity);
+
+                ketQuaTranDauEntity.setTranDau(tranDauEntity);
+                ketQuaTranDauEntity=ketQuaTranDauRepository.save(ketQuaTranDauEntity);
+
                 dsTranDau.add(tranDauEntity);
                 tranDauCuaVong.add(tranDauEntity);
             }
