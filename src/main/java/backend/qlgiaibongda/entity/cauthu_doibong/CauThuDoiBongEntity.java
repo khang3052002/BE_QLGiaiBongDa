@@ -21,12 +21,12 @@ public class CauThuDoiBongEntity  {
     @ManyToOne
     @MapsId("IdCauThu")
     @JoinColumn(name = "id_cauthu")
-    private CauThuEntity CauThuDB;
+    private CauThuEntity cauThuDB;
 
     @ManyToOne
     @MapsId("IdDoiBong")
     @JoinColumn(name = "id_doibong")
-    private DoiBongEntity DoiBongCT;
+    private DoiBongEntity doiBongCT;
 
 
     @Column(name = "thoidiemketthuc")
@@ -45,19 +45,19 @@ public class CauThuDoiBongEntity  {
     }
 
     public CauThuEntity getCauThuDB() {
-        return CauThuDB;
+        return cauThuDB;
     }
 
     public void setCauThuDB(CauThuEntity cauThuDB) {
-        CauThuDB = cauThuDB;
+        this.cauThuDB = cauThuDB;
     }
 
     public DoiBongEntity getDoiBongCT() {
-        return DoiBongCT;
+        return doiBongCT;
     }
 
     public void setDoiBongCT(DoiBongEntity doiBongCT) {
-        DoiBongCT = doiBongCT;
+        this.doiBongCT = doiBongCT;
     }
 
 
@@ -82,8 +82,8 @@ public class CauThuDoiBongEntity  {
 
     public CauThuDoiBongEntity(CauThuDoiBongKey key, CauThuEntity cauThuDB, DoiBongEntity doiBongCT, Date thoiDiemBatDau, Date thoiDiemKetThuc, int tongSoBanThang) {
         this.key = key;
-        CauThuDB = cauThuDB;
-        DoiBongCT = doiBongCT;
+        this.cauThuDB = cauThuDB;
+        this.doiBongCT = doiBongCT;
         this.thoiDiemKetThuc = thoiDiemKetThuc;
         this.tongSoBanThang = tongSoBanThang;
     }

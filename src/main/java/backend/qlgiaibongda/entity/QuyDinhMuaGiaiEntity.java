@@ -8,23 +8,23 @@ import java.util.List;
 @Entity
 @Table(name = "quydinhmuagiai")
 public class QuyDinhMuaGiaiEntity extends BaseEntity {
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_quydinhtinhdiem")
     private QuyDinhTinhDiemEntity QuyDinhTinhDiem;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_quydinhuutienxephang")
     private QuyDinhUuTienXepHangEntity QuyDinhUuTienXepHang;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_quydinhcauthu")
     private QuyDinhCauThuEntity QuyDinhCauThu;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_quydinhsoluongdoi")
     private QuyDinhSoLuongDoiEntity QuyDinhSoLuongDoi;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_quydinhbanthang")
     private QuyDinhBanThangEntity QuyDinhBanThang;
 

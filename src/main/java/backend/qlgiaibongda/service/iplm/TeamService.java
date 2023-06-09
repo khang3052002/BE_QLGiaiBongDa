@@ -260,38 +260,44 @@ public class TeamService implements ITeamService {
 
     @Override
     public ResponseEntity<ResponeObject> getPlayerOfTeam(Long idTeam) {
-        DoiBongEntity doiBongEntity = doiBongRepository.findById(idTeam).get();
-        List<CauThuDoiBongEntity> cauThuDoiBongEntities = doiBongEntity.getDoiBongCauThu();
+        DoiBongEntity doiBongEntity = doiBongRepository.findById(idTeam).orElse(null);
+        if(doiBongEntity !=null)
+        {
+            List<CauThuDoiBongEntity> cauThuDoiBongEntities = doiBongEntity.getDoiBongCauThu();
 
-        if(cauThuDoiBongEntities == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("EMPTY","Team don't have any player",""));
-        }
-
-        List<CauThuDTO> players = new ArrayList<>();
-        cauThuDoiBongEntities.forEach((ctdb)->{
-            try {
-
-                if(ctdb.getThoiDiemKetThuc().compareTo(new Date(System.currentTimeMillis())) > 0){
-                    CauThuDTO cauThuDTO = GenericConverter.convert(ctdb.getCauThuDB(), CauThuDTO.class);
-                    cauThuDTO.setThoiDiemBatDau(ctdb.getKey().getThoiDiemBatDau());
-                    cauThuDTO.setThoiDiemKetThuc(ctdb.getThoiDiemKetThuc());
-                    cauThuDTO.setTongSoBanThang(ctdb.getTongSoBanThang());
-                    cauThuDTO.setIdDoi(ctdb.getDoiBongCT().getId());
-                    List<ViTriEntity> listVitri = ctdb.getCauThuDB().getCacViTri();
-                    List<String> str_roles = new ArrayList<>();
-                    listVitri.forEach(vitri->{
-                        str_roles.add(vitri.getCode());
-                    });
-                    cauThuDTO.setViTri(str_roles.toArray(new String[0]));
-                    players.add(cauThuDTO);
-                }
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            if(cauThuDoiBongEntities == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("EMPTY","Team don't have any player",""));
             }
-        });
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponeObject("ok","Get list succeed", players));
+
+            List<CauThuDTO> players = new ArrayList<>();
+            cauThuDoiBongEntities.forEach((ctdb)->{
+                try {
+
+                    if(ctdb.getThoiDiemKetThuc().compareTo(new Date(System.currentTimeMillis())) > 0){
+                        CauThuDTO cauThuDTO = GenericConverter.convert(ctdb.getCauThuDB(), CauThuDTO.class);
+                        cauThuDTO.setThoiDiemBatDau(ctdb.getKey().getThoiDiemBatDau());
+                        cauThuDTO.setThoiDiemKetThuc(ctdb.getThoiDiemKetThuc());
+                        cauThuDTO.setTongSoBanThang(ctdb.getTongSoBanThang());
+                        cauThuDTO.setIdDoi(ctdb.getDoiBongCT().getId());
+                        List<ViTriEntity> listVitri = ctdb.getCauThuDB().getCacViTri();
+                        List<String> str_roles = new ArrayList<>();
+                        listVitri.forEach(vitri->{
+                            str_roles.add(vitri.getCode());
+                        });
+                        cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+                        players.add(cauThuDTO);
+                    }
+
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            });
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponeObject("ok","Get list succeed", players));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponeObject("Fail","Không tồn tại đội bóng", ""));
+
 
 
     }

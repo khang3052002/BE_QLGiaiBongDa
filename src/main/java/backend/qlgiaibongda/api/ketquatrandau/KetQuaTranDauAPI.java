@@ -34,7 +34,12 @@ public class KetQuaTranDauAPI {
         else {
             Integer flagHoa0_0 = listMatchResultInput.getFlag_Hoa_0_banthang();
             ResponseEntity<ResponeObject> respone = ketQuaTranDauService.updateMatchResult(listMatchResultInput,id_trandau,flagHoa0_0);
-            bangXepHangService.UpdateRanking(id_trandau);
+            Boolean checkUpdateRank = bangXepHangService.UpdateRanking(id_trandau);
+            if(checkUpdateRank == false)
+            {
+                return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED)
+                        .body(new ResponeObject("FAIL", "Cập nhật bảng xếp hạng thất bại", ""));
+            }
             return respone;
         }
 

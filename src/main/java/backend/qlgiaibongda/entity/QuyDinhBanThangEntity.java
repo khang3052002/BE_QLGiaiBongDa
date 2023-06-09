@@ -15,8 +15,8 @@ public class QuyDinhBanThangEntity extends BaseEntity{
     @ManyToMany(mappedBy = "CacQuyDinhBanThang")
     private List<LoaiBanThangEntity> CacLoaiBanThang = new ArrayList<>();
 
-    @OneToOne(mappedBy = "QuyDinhBanThang")
-    private QuyDinhMuaGiaiEntity quyDinhMuaGiai;
+    @OneToMany(mappedBy = "QuyDinhBanThang")
+    private List<QuyDinhMuaGiaiEntity> listQuyDinhMuaGiai = new ArrayList<>();
     public List<LoaiBanThangEntity> getCacLoaiBanThang() {
         return CacLoaiBanThang;
     }
@@ -36,11 +36,11 @@ public class QuyDinhBanThangEntity extends BaseEntity{
         this.thoiDiemGhiBanToiDa = thoiDiemGhiBanToiDa;
     }
 
-    public QuyDinhMuaGiaiEntity getQuyDinhMuaGiai() {
-        return quyDinhMuaGiai;
+    public List<QuyDinhMuaGiaiEntity> getListQuyDinhMuaGiai() {
+        return listQuyDinhMuaGiai;
     }
 
-    public void setQuyDinhMuaGiai(QuyDinhMuaGiaiEntity quyDinhMuaGiai) {
-        this.quyDinhMuaGiai = quyDinhMuaGiai;
+    public void setListQuyDinhMuaGiai(List<QuyDinhMuaGiaiEntity> listQuyDinhMuaGiai) {
+        this.listQuyDinhMuaGiai = listQuyDinhMuaGiai;
     }
 }

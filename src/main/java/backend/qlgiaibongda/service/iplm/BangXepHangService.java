@@ -85,7 +85,7 @@ public class BangXepHangService implements IBangXepHangService {
     @Override
     @Transactional
     public boolean UpdateRanking(Long id_trandau) {
-        TranDauEntity tranDauEntity = tranDauRepository.findById(id_trandau).get();
+        TranDauEntity tranDauEntity = tranDauRepository.findById(id_trandau).orElse(null);
         if(tranDauEntity!=null)
         {
             KetQuaTranDauEntity ketQuaTranDauEntity = tranDauEntity.getKetQuaTranDau();
@@ -105,12 +105,15 @@ public class BangXepHangService implements IBangXepHangService {
 
 
             BXHDoiBongKey keyDoiNha = new BXHDoiBongKey(doiNha.getId(), bangXepHangEntity.getId());
-            BXHDoiBongEntity xhDoiNha = bxhDoiBongRepository.findById(keyDoiNha).get();
+            BXHDoiBongEntity xhDoiNha = bxhDoiBongRepository.findById(keyDoiNha).orElse(null);
 
             BXHDoiBongKey keyDoiKhach = new BXHDoiBongKey(doiKhach.getId(), bangXepHangEntity.getId());
-            BXHDoiBongEntity xhDoiKhach = bxhDoiBongRepository.findById(keyDoiKhach).get();
+            BXHDoiBongEntity xhDoiKhach = bxhDoiBongRepository.findById(keyDoiKhach).orElse(null);
 
-
+            if(xhDoiNha == null || xhDoiKhach ==null)
+            {
+                return false;
+            }
 
             //handle thang, hoa, thua
             if(sbtDoiNha > sbtDoiKhach) // doi nha WIN, sbt Nha > sbt Khach
@@ -193,7 +196,7 @@ public class BangXepHangService implements IBangXepHangService {
 
     @Override
     public List<BXH_DoiBongDTO> getRanking(Long idMuagiai) {
-        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(idMuagiai).get();
+        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(idMuagiai).orElse(null);
         if(muaGiaiEntity!=null)
         {
             BangXepHangEntity bangXepHangEntity = muaGiaiEntity.getBxh();

@@ -1,9 +1,9 @@
 package backend.qlgiaibongda.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "quydinhtinhdiem")
@@ -15,8 +15,8 @@ public class QuyDinhTinhDiemEntity extends BaseEntity{
     private int thua;
     @Column(name = "hoa")
     private int hoa;
-    @OneToOne(mappedBy = "QuyDinhTinhDiem")
-    private QuyDinhMuaGiaiEntity quyDinhMuaGiai;
+    @OneToMany(mappedBy = "QuyDinhTinhDiem")
+    private List<QuyDinhMuaGiaiEntity> listQuyDinhMuaGiai = new ArrayList<>();
 
     public QuyDinhTinhDiemEntity() {
     }
@@ -43,5 +43,13 @@ public class QuyDinhTinhDiemEntity extends BaseEntity{
 
     public void setHoa(int hoa) {
         this.hoa = hoa;
+    }
+
+    public List<QuyDinhMuaGiaiEntity> getListQuyDinhMuaGiai() {
+        return listQuyDinhMuaGiai;
+    }
+
+    public void setListQuyDinhMuaGiai(List<QuyDinhMuaGiaiEntity> listQuyDinhMuaGiai) {
+        this.listQuyDinhMuaGiai = listQuyDinhMuaGiai;
     }
 }

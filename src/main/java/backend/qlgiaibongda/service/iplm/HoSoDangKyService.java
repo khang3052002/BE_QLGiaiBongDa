@@ -28,7 +28,7 @@ public class HoSoDangKyService implements IHoSoDangKyService {
 
     @Override
     public ResponseEntity<ResponeObject> getHoSoDangKyByMuaGiai(Long id_muagiai) {
-        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(id_muagiai).get();
+        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(id_muagiai).orElse(null);
         if(muaGiaiEntity!=null)
         {
             List<HoSoDangKyEntity> listHoSoDangKy = muaGiaiEntity.getCacHoSoDangKy();
@@ -85,7 +85,7 @@ public class HoSoDangKyService implements IHoSoDangKyService {
 
     @Override
     public ResponseEntity<ResponeObject> getDetailHoSoDangKyByID(Long idHoso) {
-        HoSoDangKyEntity hoSoDangKyEntity = hoSoDangKyRepository.findById(idHoso).get();
+        HoSoDangKyEntity hoSoDangKyEntity = hoSoDangKyRepository.findById(idHoso).orElse(null);
         if(hoSoDangKyEntity!=null) {
             try {
                 HoSoDangKyDTO hoSoDangKyDTO = GenericConverter.convert(hoSoDangKyEntity, HoSoDangKyDTO.class);

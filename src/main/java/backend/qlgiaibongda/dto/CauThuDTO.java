@@ -13,6 +13,7 @@ public class CauThuDTO  {
     private String quocTich;
     private String hinhAnh;
     private String queQuan;
+    private String maDinhDanh;
     private String trangThai;
     private String loaiCauThu;
 
@@ -37,7 +38,7 @@ public class CauThuDTO  {
     public Boolean checkValidInfo(){
         Boolean check = true;
         if(hoTen == null || ngaySinh == null || quocTich == null || hinhAnh == null || queQuan==null
-                || loaiCauThu==null || thoiDiemKetThuc==null || viTri == null ){
+                || loaiCauThu==null || thoiDiemKetThuc==null || viTri == null || maDinhDanh == null ){
             check = false;
         }
 
@@ -82,6 +83,14 @@ public class CauThuDTO  {
 
     public void setIdDoi(Long idDoi) {
         this.idDoi = idDoi;
+    }
+
+    public String getMaDinhDanh() {
+        return maDinhDanh;
+    }
+
+    public void setMaDinhDanh(String maDinhDanh) {
+        this.maDinhDanh = maDinhDanh;
     }
 
     public String getHoTen() {

@@ -33,12 +33,21 @@ public class SignUpService {
             quanLy.setMatKhau(passwordEncoder.encode(signupRequest.getMatKhau()));
             quanLy.setNgaySinh(signupRequest.getNgaySinh()); // "2002-05-30"
 
-            VaiTroEntity vaiTro = vaiTroRepository.findByCode(signupRequest.getCodeVaiTro()).get();
-            quanLy.setVaiTro(vaiTro);
+            VaiTroEntity vaiTro = vaiTroRepository.findByCode(signupRequest.getCodeVaiTro()).orElse(null);
+            if(vaiTro!=null)
+            {
+                quanLy.setVaiTro(vaiTro);
 
-            quanLiRepository.save(quanLy);
+                quanLiRepository.save(quanLy);
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK","Register successful",signupRequest));
 
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK","Register successful",signupRequest));
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("Fail","Vai trò không tồn tại",""));
+
+            }
+
+
 
 
         }

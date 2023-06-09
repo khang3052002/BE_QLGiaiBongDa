@@ -12,9 +12,12 @@ import java.util.List;
 @Table(name = "cauthu")
 public class CauThuEntity extends BaseEntity{
 
-
     @Column(name = "hoten")
     private String hoTen;
+
+
+    @Column(name="madinhdanh", unique = true)
+    private String maDinhDanh;
 
     @Column(name = "ngaysinh")
     private Date ngaySinh;
@@ -38,7 +41,7 @@ public class CauThuEntity extends BaseEntity{
     private List<ViTriEntity> CacViTri = new ArrayList<>();
 
     //CauThu_DoiBong
-    @OneToMany(mappedBy = "CauThuDB")
+    @OneToMany(mappedBy = "cauThuDB")
     private List<CauThuDoiBongEntity> CauThuDoiBong;
 
     //CHITIETHOSODANGKY
@@ -52,7 +55,13 @@ public class CauThuEntity extends BaseEntity{
     private List<GhiNhanBanThangEntity> DSBanThangCauThu_TranDau = new ArrayList<>();
 
 
+    public String getMaDinhDanh() {
+        return maDinhDanh;
+    }
 
+    public void setMaDinhDanh(String maDinhDanh) {
+        this.maDinhDanh = maDinhDanh;
+    }
 
     public List<HoSoDangKyEntity> getCacHoSoDangKy() {
         return CacHoSoDangKy;

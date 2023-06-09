@@ -2,6 +2,7 @@ package backend.qlgiaibongda.service.iplm;
 
 import backend.qlgiaibongda.api.input.NewTeamPlayerInput;
 import backend.qlgiaibongda.converter.CauThuConverter;
+import backend.qlgiaibongda.converter.GenResponse;
 import backend.qlgiaibongda.converter.GenericConverter;
 import backend.qlgiaibongda.dto.CauThuDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
@@ -65,7 +66,7 @@ public class CauThuService implements ICauThuService {
             {
                 List<ViTriEntity> listVitriEntity = new ArrayList<>();
                 Arrays.asList(listVitri).forEach(vitri->{
-                    ViTriEntity viTri = viTriRepository.findByCode(vitri).get();
+                    ViTriEntity viTri = viTriRepository.findByCode(vitri).orElse(null);
                     if(viTri != null)
                     {
                         listVitriEntity.add(viTri);
@@ -108,15 +109,52 @@ public class CauThuService implements ICauThuService {
         List<CauThuDTO> players = teamPlayerInput.getDsCauThuMoi();
         List<CauThuDTO> result = new ArrayList<>();
 
+        List<CauThuEntity> cauThuEntityList = new ArrayList<>();
+        List<String> listMaDanhDanh = new ArrayList<>();
         for(CauThuDTO player:players){
+            try
+            {
+                CauThuEntity cauThuEntity = GenericConverter.convert(player,CauThuEntity.class);
+
+//                CauThuDoiBongEntity ctdb = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDB(cauThuEntity);
+
+                cauThuEntityList.add(cauThuEntity);
+
+            }catch (Exception exception)
+            {
+                System.out.println(exception.getMessage());
+            }
+
             player.setIdDoi(idDoi);
-            CauThuDTO temp = save(player);
-            if(temp == null){
+//            CauThuDTO temp = save(player);
+
+            DoiBongEntity doiBongEntity = doiBongRepository.findById(idDoi).orElse(null);
+
+            if(doiBongEntity == null){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("FAIL", "idDoi not found!", "") );
-            }else{
-                result.add(temp);
+            }
+
+            Boolean checkMaDinhDanh = cauThuRepository.existsByMaDinhDanh(player.getMaDinhDanh());
+            if(checkMaDinhDanh)
+            {
+                return GenResponse.gen(HttpStatus.CONFLICT,"FAIL","Mã định danh đã tồn tại","");
+            }
+            else{
+                if(listMaDanhDanh.indexOf(player.getMaDinhDanh()) ==-1)
+                {
+                    listMaDanhDanh.add(player.getMaDinhDanh());
+                }
+                else{
+                    return  GenResponse.gen(HttpStatus.CONFLICT,"FAIL","Thêm danh sách cầu thủ thất bại, danh sách bị trùng lặp mã định danh" + player.getMaDinhDanh() ,"");
+                }
             }
         }
+
+        for(CauThuDTO player:players)
+        {
+            CauThuDTO temp = save(player);
+        }
+
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK", "Add all new players succeed", result));
     }
@@ -125,12 +163,20 @@ public class CauThuService implements ICauThuService {
     public ResponseEntity<ResponeObject> getPlayerByID(Long id) {
 
 
-        CauThuEntity cauthu = cauThuRepository.findById(id).get();
+        CauThuEntity cauthu = cauThuRepository.findById(id).orElse(null);
         if(cauthu != null)
         {
             try
             {
                 CauThuDTO cauThuDTO = GenericConverter.convert(cauthu, CauThuDTO.class);
+
+                List<CauThuDoiBongEntity> listDoiBong = cauthu.getCauThuDoiBong();
+
+                CauThuDoiBongEntity doiBongEntity =  cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDB(cauthu);
+                if(doiBongEntity != null)
+                {
+                    cauThuDTO.setIdDoi(doiBongEntity.getDoiBongCT().getId());
+                }
                 List<ViTriEntity> listVitriEntity =  cauthu.getCacViTri();
                 List<String> listVitri = new ArrayList<>();
                 listVitriEntity.forEach(viTriEntity -> {
@@ -158,7 +204,7 @@ public class CauThuService implements ICauThuService {
             String[] listViTri = cauThuDTO.getViTri();
             List<ViTriEntity> listVitriEntity = new ArrayList<>();
             Arrays.asList(listViTri).forEach(vitri -> {
-                ViTriEntity viTri = viTriRepository.findByCode(vitri).get();
+                ViTriEntity viTri = viTriRepository.findByCode(vitri).orElse(null);
                 if(viTri != null)
                 {
                     listVitriEntity.add(viTri);
@@ -178,7 +224,7 @@ public class CauThuService implements ICauThuService {
 
     @Override
     public ResponseEntity<ResponeObject> editPlayer(CauThuDTO cauThuDTO) {
-        CauThuEntity cauThuEntity = cauThuRepository.findById(cauThuDTO.getId()).get();
+        CauThuEntity cauThuEntity = cauThuRepository.findById(cauThuDTO.getId()).orElse(null);
         if(cauThuEntity != null)
         {
             try

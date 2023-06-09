@@ -63,7 +63,7 @@ public class MuaGiaiService implements IMuaGiaiService {
         try
         {
             MuaGiaiEntity muaGiaiEntity = GenericConverter.convert(muaGiaiDTO, MuaGiaiEntity.class);
-            QuanLyEntity quanLyMuaGiai = quanLiRepository.findById(muaGiaiDTO.getId_nguoitao()).get();
+            QuanLyEntity quanLyMuaGiai = quanLiRepository.findById(muaGiaiDTO.getId_nguoitao()).orElse(null);
             if(quanLyMuaGiai != null)
             {
                 muaGiaiEntity.setQuanLyMuaGiai(quanLyMuaGiai);
@@ -152,7 +152,7 @@ public class MuaGiaiService implements IMuaGiaiService {
 
     @Override
     public ResponseEntity<ResponeObject> getLeagueById(Long id) {
-        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(id).get();
+        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(id).orElse(null);
         if(muaGiaiEntity!=null)
         {
             try
@@ -183,7 +183,7 @@ public class MuaGiaiService implements IMuaGiaiService {
 
     @Override
     public ResponseEntity<ResponeObject> updateLeague(MuaGiaiDTO muaGiaiDTO) {
-        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(muaGiaiDTO.getId()).get();
+        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(muaGiaiDTO.getId()).orElse(null);
         if(muaGiaiEntity!=null)
         {
             try
@@ -229,8 +229,15 @@ public class MuaGiaiService implements IMuaGiaiService {
             Long id_muagiai = dangKyThamGiaGiaiDTO.getId_giai();
             Long id_doibong = dangKyThamGiaGiaiDTO.getId_doibong();
 
-            MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(id_muagiai).get();
-            DoiBongEntity doiBongEntity = doiBongRepository.findById(dangKyThamGiaGiaiDTO.getId_doibong()).get();
+            MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(id_muagiai).orElse(null);
+            DoiBongEntity doiBongEntity = doiBongRepository.findById(id_doibong).orElse(null);
+
+            if(muaGiaiEntity == null || doiBongEntity == null)
+            {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(
+                        new ResponeObject("FAIL","Mùa giải hoặc đội bóng không tồn tại",""));
+
+            }
 
             Long soLuongDoiHienTai = hoSoDangKyRepository.countByTrangThaiAndMuaGiai("Đã duyệt", muaGiaiEntity);
             int soLuongDoiQuyDinh = muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhSoLuongDoi().getSoLuongDoi();
@@ -254,7 +261,7 @@ public class MuaGiaiService implements IMuaGiaiService {
                 Long[] list_id_cauThu = dangKyThamGiaGiaiDTO.getDs_id_cauthu_thamgia();
                 List<CauThuEntity> listCauThuThamGia = new ArrayList<>();
                 Arrays.asList(list_id_cauThu).forEach(idCauThu ->{
-                    CauThuEntity cauThu = cauThuRepository.findById(idCauThu).get();
+                    CauThuEntity cauThu = cauThuRepository.findById(idCauThu).orElse(null);
                     if(cauThu!=null)
                     {
                         listCauThuThamGia.add(cauThu);
@@ -324,7 +331,7 @@ public class MuaGiaiService implements IMuaGiaiService {
     @Transactional
     public ResponseEntity<ResponeObject> getRankingOfLeague(Long idMuagiai) {
         // Get MuaGiaiEntity
-        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(idMuagiai).get();
+        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(idMuagiai).orElse(null);
         if(muaGiaiEntity!=null)
         {
             BangXepHangEntity bxhEntity = muaGiaiEntity.getBxh();

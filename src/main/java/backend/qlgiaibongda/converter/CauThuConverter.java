@@ -14,6 +14,7 @@ public class CauThuConverter {
     public CauThuEntity toEntity(CauThuDTO dto){
         CauThuEntity entity = new CauThuEntity();
 
+        entity.setMaDinhDanh(dto.getMaDinhDanh());
         entity.setHoTen(dto.getHoTen());
         entity.setNgaySinh(dto.getNgaySinh());
         entity.setQuocTich(dto.getQuocTich());
@@ -33,6 +34,8 @@ public class CauThuConverter {
         entity.setQueQuan(dto.getQueQuan());
         entity.setTrangThai(dto.getTrangThai());
         entity.setLoaiCauThu(dto.getLoaiCauThu());
+        entity.setMaDinhDanh(dto.getMaDinhDanh());
+
         return entity;
     }
 
