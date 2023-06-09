@@ -1,11 +1,14 @@
 package backend.qlgiaibongda.config;
 
 import backend.qlgiaibongda.config.Jwt.JwtAuthenticationFilter;
+import backend.qlgiaibongda.dto.ResponeObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -24,6 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -45,7 +49,7 @@ public class SecurityConfig {
                         authCustomizer -> authCustomizer
 //                                .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/**").permitAll()
-//                        .requestMatchers("/**").hasAuthority("QLGD")
+//                        .requestMatchers("/**").hasAuthority("QLDB")
 //                        .requestMatchers("/api/auth/**").permitAll()
 //                        .requestMatchers(PUT,"/api/test").hasAnyAuthority("QLDB")
 //                        .anyRequest()
@@ -54,13 +58,20 @@ public class SecurityConfig {
 
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//                .logout(
-//                        logout -> logout.logoutUrl("/api/auth/logout")
-//                                .addLogoutHandler(logoutHandler)
-//                                .logoutSuccessHandler(((request, response, authentication) ->
-//                                        SecurityContextHolder.clearContext()))
-//                );
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(
+                        logout -> logout.logoutUrl("/api/auth/logout")
+                                .addLogoutHandler(logoutHandler)
+                                .logoutSuccessHandler(((request, response, authentication) ->
+                                        {
+                                            response.setStatus(HttpStatus.OK.value());
+                                            response.setContentType(APPLICATION_JSON_VALUE);
+                                            ResponeObject responeObj = new ResponeObject("OK","Đăng xuất thành công","");
+                                            SecurityContextHolder.clearContext();
+                                            new ObjectMapper().writeValue(response.getOutputStream(),responeObj);
+                                        }
+                                        ))
+                );
 
 
         return http.build();

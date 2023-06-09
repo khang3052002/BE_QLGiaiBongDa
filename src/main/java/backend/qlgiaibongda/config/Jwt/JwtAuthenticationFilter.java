@@ -1,9 +1,13 @@
 package backend.qlgiaibongda.config.Jwt;
 
 import backend.qlgiaibongda.dto.ResponeObject;
+import backend.qlgiaibongda.entity.TokenEntity;
+import backend.qlgiaibongda.repository.TokenRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -11,6 +15,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,7 +33,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+    @Autowired
+    private TokenRepository tokenRepository;
     @Value("${app.jwtSecret}")
     private  String jwtSecret;
     @Override
@@ -38,6 +44,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         {
             try {
                 String token = authorizationHeader.substring(7);
+                TokenEntity tokenEntity = tokenRepository.findByToken(token);
+
+                if(tokenEntity.isExpired() == true && tokenEntity.isRevoked() == true)
+                {
+                    response.setHeader("error","Token expired");
+                    response.setStatus(HttpStatus.FORBIDDEN.value());
+                    ResponeObject responeObj = new ResponeObject("FAIL","Token expired","");
+                    response.setContentType(APPLICATION_JSON_VALUE);
+                    new ObjectMapper().writeValue(response.getOutputStream(),responeObj);
+                    return;
+                }
+
                 Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes());
                 JWTVerifier jwtVerifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = jwtVerifier.verify(token);
@@ -52,14 +70,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 filterChain.doFilter(request,response);
             }
-            catch(Exception ex)
+            catch (TokenExpiredException e) {
+                // Token expired
+                response.setHeader("error",e.getMessage());
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                ResponeObject responeObj = new ResponeObject("FAIL",e.getMessage(),"");
+
+                String token = authorizationHeader.substring(7);
+                TokenEntity tokenEntity = tokenRepository.findByToken(token);
+                tokenEntity.setExpired(true);
+                tokenEntity.setRevoked(true);
+                tokenRepository.save(tokenEntity);
+                response.setContentType(APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(),responeObj);
+
+            }
+            catch(JWTVerificationException ex)
             {
                 response.setHeader("error",ex.getMessage());
                 response.setStatus(HttpStatus.FORBIDDEN.value());
                 ResponeObject responeObj = new ResponeObject("FAIL",ex.getMessage(),"");
-
-//                Map<String, String> error = new HashMap<>();
-//                error.put("error_message",ex.getMessage());
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(),responeObj);
             }

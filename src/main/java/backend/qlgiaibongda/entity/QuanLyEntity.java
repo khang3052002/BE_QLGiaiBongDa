@@ -47,7 +47,8 @@ public class QuanLyEntity extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "quanLyDkiHoSo")
     private List<HoSoDangKyEntity> DSHoSoDKYCuaQuanLy = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "quanLy")
+    List<TokenEntity> listToken = new ArrayList<>();
     public VaiTroEntity getVaiTro() {
         return this.VaiTro;
     }
@@ -102,6 +103,14 @@ public class QuanLyEntity extends BaseEntity implements UserDetails {
 
     public void setDsLichThiDauTaoBoiQuanLi(List<LichThiDauEntity> dsLichThiDauTaoBoiQuanLi) {
         this.dsLichThiDauTaoBoiQuanLi = dsLichThiDauTaoBoiQuanLi;
+    }
+
+    public List<TokenEntity> getListToken() {
+        return listToken;
+    }
+
+    public void setListToken(List<TokenEntity> listToken) {
+        this.listToken = listToken;
     }
 
     @Override
