@@ -28,9 +28,9 @@ public class QuyDinhMuaGiaiService implements IQuyDinhMuaGiaiService {
     private QuyDinhMuaGiaiRepository quyDinhMuaGiaiRepository;
     @Override
     public ResponseEntity<ResponeObject> getQuyDinhCuaAllMuaGiai() {
-//        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "id"));
-//        List<QuyDinhMuaGiaiEntity> listQuyDinhMuaGiai = quyDinhMuaGiaiRepository.findAll(pageable).getContent();
-        List<QuyDinhMuaGiaiEntity> listQuyDinhMuaGiai = quyDinhMuaGiaiRepository.findAll();
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "id"));
+        List<QuyDinhMuaGiaiEntity> listQuyDinhMuaGiai = quyDinhMuaGiaiRepository.findAll(pageable).getContent();
+//        List<QuyDinhMuaGiaiEntity> listQuyDinhMuaGiai = quyDinhMuaGiaiRepository.findAll();
 
         if(listQuyDinhMuaGiai.size()>0)
         {

@@ -59,7 +59,7 @@ public class MuaGiaiService implements IMuaGiaiService {
     @Autowired
     private IBangXepHangService bangXepHangService;
     @Override
-    public ResponseEntity<ResponeObject> createLeague(MuaGiaiDTO muaGiaiDTO) {
+    public ResponseEntity<ResponeObject> createLeagueWithNewRule(MuaGiaiDTO muaGiaiDTO) {
         try
         {
             MuaGiaiEntity muaGiaiEntity = GenericConverter.convert(muaGiaiDTO, MuaGiaiEntity.class);
@@ -85,12 +85,13 @@ public class MuaGiaiService implements IMuaGiaiService {
             quyDinhMuaGiai.setQuyDinhSoLuongDoi(quyDinhSoLuongDoiEntity);
 
 
-            quyDinhMuaGiaiRepository.save(quyDinhMuaGiai);
+            quyDinhMuaGiai=quyDinhMuaGiaiRepository.save(quyDinhMuaGiai);
 
             muaGiaiEntity.setQuyDinhMuaGiai(quyDinhMuaGiai);
             muaGiaiEntity.setTrangThai(0);
-            muaGiaiRepository.save(muaGiaiEntity);
-
+            muaGiaiEntity = muaGiaiRepository.save(muaGiaiEntity);
+            muaGiaiDTO.setId(muaGiaiEntity.getId());
+            muaGiaiDTO.setId_quydinh(quyDinhMuaGiai.getId());
             return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK","Create league succesful",muaGiaiDTO));
 
 
@@ -363,6 +364,51 @@ public class MuaGiaiService implements IMuaGiaiService {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ResponeObject("Fail","Test",""));
+
+    }
+
+    @Override
+    public ResponseEntity<ResponeObject> createLeagueWithOldRule(MuaGiaiDTO muaGiaiDTO) {
+        try
+        {
+            MuaGiaiEntity muaGiaiEntity = GenericConverter.convert(muaGiaiDTO, MuaGiaiEntity.class);
+            QuanLyEntity quanLyMuaGiai = quanLiRepository.findById(muaGiaiDTO.getId_nguoitao()).orElse(null);
+            if(quanLyMuaGiai != null)
+            {
+                muaGiaiEntity.setQuanLyMuaGiai(quanLyMuaGiai);
+            }
+
+
+
+            // Set quy dinh cho mua giai
+            QuyDinhMuaGiaiEntity quyDinhMuaGiai = quyDinhMuaGiaiRepository.findById(muaGiaiDTO.getId_quydinh()).orElse(null);
+
+            if(quyDinhMuaGiai !=null)
+            {
+                muaGiaiEntity.setQuyDinhMuaGiai(quyDinhMuaGiai);
+                muaGiaiEntity.setTrangThai(0);
+                muaGiaiEntity = muaGiaiRepository.save(muaGiaiEntity);
+
+                QuyDinhCauThuDTO quyDinhCauThuDTO = GenericConverter.convert(quyDinhMuaGiai.getQuyDinhCauThu(),QuyDinhCauThuDTO.class);
+                QuyDinhTinhDiemDTO quyDinhTinhDiemDTO = GenericConverter.convert(quyDinhMuaGiai.getQuyDinhTinhDiem(), QuyDinhTinhDiemDTO.class);
+                QuyDinhSoLuongDoiDTO quyDinhSoLuongDoiDTO = GenericConverter.convert(quyDinhMuaGiai.getQuyDinhSoLuongDoi(), QuyDinhSoLuongDoiDTO.class);
+
+                muaGiaiDTO.setId(muaGiaiEntity.getId());
+                muaGiaiDTO.setQuyDinhSoLuongDoi(quyDinhSoLuongDoiDTO);
+                muaGiaiDTO.setQuyDinhTinhDiem(quyDinhTinhDiemDTO);
+                muaGiaiDTO.setQuyDinhCauThu(quyDinhCauThuDTO);
+
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK","Create league succesful",muaGiaiDTO));
+
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("FAIL","Tạo giải thất bại, quy định mùa giải không tồn tại",""));
+        }
+        catch (Exception ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponeObject("FAIL","Create league fail",""));
+
 
     }
 

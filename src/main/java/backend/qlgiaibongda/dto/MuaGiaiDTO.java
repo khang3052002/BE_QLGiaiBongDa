@@ -13,6 +13,8 @@ public class MuaGiaiDTO {
     private Long id_nguoitao;
     private Date thoiDiemBatDau;
     private Date thoiDiemKetThuc;
+
+    private Long id_quydinh;
     private QuyDinhCauThuDTO quyDinhCauThu;
     private QuyDinhTinhDiemDTO quyDinhTinhDiem;
     private QuyDinhSoLuongDoiDTO quyDinhSoLuongDoi;
@@ -28,9 +30,20 @@ public class MuaGiaiDTO {
         }
         return check;
     }
+
+    public Boolean checkValidInfo_CreateLeagueWithOldRule(){
+        Boolean check = true;
+        if(id_nguoitao == null || ten == null || id_quydinh==null
+                || thoiDiemBatDau == null || thoiDiemKetThuc == null
+        )
+        {
+            check = false;
+        }
+        return check;
+    }
     public Boolean checkValidInfo_UpdateLeague(){
         Boolean check = true;
-        if(id == null || ten == null || quyDinhCauThu == null || quyDinhTinhDiem == null || quyDinhSoLuongDoi==null)
+        if(id == null || ten == null || quyDinhCauThu == null || quyDinhTinhDiem == null || quyDinhSoLuongDoi==null ||thoiDiemKetThuc == null || thoiDiemBatDau == null)
         {
             check = false;
         }
@@ -42,6 +55,14 @@ public class MuaGiaiDTO {
 
     public void setTen(String ten) {
         this.ten = ten;
+    }
+
+    public Long getId_quydinh() {
+        return id_quydinh;
+    }
+
+    public void setId_quydinh(Long id_quydinh) {
+        this.id_quydinh = id_quydinh;
     }
 
     public Long getId_nguoitao() {

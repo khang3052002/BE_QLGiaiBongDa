@@ -20,15 +20,25 @@ public class MuaGiaiAPI {
     @Autowired
     private IMuaGiaiService muaGiaiService;
 
-    @PostMapping("/taogiaidau")
-    public ResponseEntity<ResponeObject> createLeague(@RequestBody MuaGiaiDTO muaGiaiDTO)
+    @PostMapping("/taogiaidau_quydinhmoi")
+    public ResponseEntity<ResponeObject> createLeagueWithNewRule(@RequestBody MuaGiaiDTO muaGiaiDTO)
     {
         if(muaGiaiDTO.checkValidInfo_CreateLeague() == false)
         {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ResponeObject("FAIL", "Invalid Info", ""));
         }
-        return muaGiaiService.createLeague(muaGiaiDTO);
+        return muaGiaiService.createLeagueWithNewRule(muaGiaiDTO);
+    }
+    @PostMapping("/taogiaidau_quydinhcu")
+    public ResponseEntity<ResponeObject> createLeagueWithOldRule(@RequestBody MuaGiaiDTO muaGiaiDTO)
+    {
+        if(muaGiaiDTO.checkValidInfo_CreateLeagueWithOldRule() == false)
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ResponeObject("FAIL", "Invalid Info", ""));
+        }
+        return muaGiaiService.createLeagueWithOldRule(muaGiaiDTO);
     }
     @GetMapping("")
     public ResponseEntity<ResponeObject> getAllLeague(

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Pageable;
 
 public interface IMuaGiaiService {
-    ResponseEntity<ResponeObject> createLeague(MuaGiaiDTO muaGiaiDTO);
+    ResponseEntity<ResponeObject> createLeagueWithNewRule(MuaGiaiDTO muaGiaiDTO);
 
     ResponseEntity<ResponeObject> getAllLeague(Pageable pageable);
 
@@ -23,4 +23,6 @@ public interface IMuaGiaiService {
     int totalItem() ;
 
     ResponseEntity<ResponeObject> getRankingOfLeague(Long idMuagiai);
+
+    ResponseEntity<ResponeObject> createLeagueWithOldRule(MuaGiaiDTO muaGiaiDTO);
 }
