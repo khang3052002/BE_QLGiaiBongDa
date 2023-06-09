@@ -49,7 +49,7 @@ public class SecurityConfig {
                         authCustomizer -> authCustomizer
 //                                .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/**").permitAll()
-//                        .requestMatchers("/**").hasAuthority("QLDB")
+//                        .requestMatchers("/api/doibong/**").hasAuthority("QLDB")
 //                        .requestMatchers("/api/auth/**").permitAll()
 //                        .requestMatchers(PUT,"/api/test").hasAnyAuthority("QLDB")
 //                        .anyRequest()
@@ -69,6 +69,7 @@ public class SecurityConfig {
                                             ResponeObject responeObj = new ResponeObject("OK","Đăng xuất thành công","");
                                             SecurityContextHolder.clearContext();
                                             new ObjectMapper().writeValue(response.getOutputStream(),responeObj);
+
                                         }
                                         ))
                 );
