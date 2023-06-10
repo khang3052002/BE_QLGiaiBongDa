@@ -15,4 +15,5 @@ import java.util.Optional;
 
 public interface DoiBongRepository extends JpaRepository<DoiBongEntity, Long> {
     Optional<DoiBongEntity> findBySanBongId(Long sanBongId);
+    List<DoiBongEntity> findAllByTenContainsIgnoreCase(String keyword);
 }

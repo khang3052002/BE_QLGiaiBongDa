@@ -35,5 +35,12 @@ public class CauThuAPI {
         return cauThuService.editPlayer(cauThuDTO);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<ResponeObject> searchAllPlayerByNameOrRole(@RequestParam(value = "keyword", required = false) String keyword,
+                                                                     @RequestParam(value = "role",required = false) String role)
+    {
+        return cauThuService.searchAllPlayerByNameOrRole(keyword,role);
+    }
+
 
 }

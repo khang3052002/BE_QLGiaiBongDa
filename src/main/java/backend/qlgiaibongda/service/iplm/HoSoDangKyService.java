@@ -126,16 +126,26 @@ public class HoSoDangKyService implements IHoSoDangKyService {
         HoSoDangKyEntity hoSoDangKyEntity = hoSoDangKyRepository.findById(idHoso).orElse(null);
         if(hoSoDangKyEntity!=null)
         {
+            MuaGiaiEntity muaGiaiEntity = hoSoDangKyEntity.getMuaGiai();
             if(hoSoDangKyEntity.getTrangThai().equals("Chờ duyệt"))
             {
-                hoSoDangKyEntity.setTrangThai("Đã duyệt");
-                hoSoDangKyRepository.save(hoSoDangKyEntity);
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponeObject("OK","Đã duyệt hồ sơ","")
+
+                Long soLuongDoiHienTai = hoSoDangKyRepository.countByTrangThaiAndMuaGiai("Đã duyệt", muaGiaiEntity);
+                int soLuongDoiQuyDinh = muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhSoLuongDoi().getSoLuongDoi();
+                if(soLuongDoiHienTai < soLuongDoiQuyDinh) // số lượng đội đã duyệt hiện tại so với số luowjgn đội quy định của giải
+                {
+                    // Cho đăng kí
+                    hoSoDangKyEntity.setTrangThai("Đã duyệt");
+                    hoSoDangKyRepository.save(hoSoDangKyEntity);
+                    return ResponseEntity.status(HttpStatus.OK).body(
+                            new ResponeObject("OK","Đã duyệt hồ sơ",""));
+                }
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                        new ResponeObject("FAIL","Đã đủ số lượng đội tham gia, duyệt hồ sơ thất bại","")
                 );
             }
             else{
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(
                         new ResponeObject("FAIL","Hồ sơ đã được duyệt trước đó","")
                 );
             }

@@ -17,7 +17,8 @@ public class MuaGiaiEntity extends BaseEntity {
     private Date thoiDiemBatDau;
     @Column(name = "thoidiemketthuc")
     private Date thoiDiemKetThuc;
-
+    @Column(name = "hinhanh")
+    private String hinhAnh;
     @Column(name="trangthai")
     private Integer trangThai;
     // Co 3 loai:
@@ -46,6 +47,14 @@ public class MuaGiaiEntity extends BaseEntity {
 
     @OneToOne(mappedBy = "MuaGiai")
     private LichThiDauEntity LichThiDau;
+
+    public String getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
+    }
 
     public List<CauThuGhiBanEntity> getCacCauThuGhiBan() {
         return CacCauThuGhiBan;

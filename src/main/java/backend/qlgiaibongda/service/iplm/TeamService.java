@@ -220,6 +220,8 @@ public class TeamService implements ITeamService {
                 List<CauThuDTO> listPlayerDto = new ArrayList<>();
                 listCauThuEntity.forEach(cauThu ->{
                     try {
+
+                        // thiếu so thời gian kết thúc với hiện tại
                         CauThuDTO cauThuDTO = GenericConverter.convert(cauThu, CauThuDTO.class);
                         List<ViTriEntity> listVitri = cauThu.getCacViTri();
                         List<String> str_roles = new ArrayList<>();

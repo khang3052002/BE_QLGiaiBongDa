@@ -10,6 +10,18 @@ import java.util.List;
 
 @Entity
 @Table(name = "cauthu")
+@NamedStoredProcedureQueries(
+        @NamedStoredProcedureQuery(
+                name = "searchAllPlayerByNameOrRole",
+                procedureName = "searchAllPlayerByNameOrRole",
+                resultClasses = {CauThuEntity.class},
+                parameters = {
+                        @StoredProcedureParameter(name="keyword",type = String.class, mode=ParameterMode.IN),
+                        @StoredProcedureParameter(name="roles",type = String.class,mode = ParameterMode.IN)
+                }
+        )
+)
+
 public class CauThuEntity extends BaseEntity{
 
     @Column(name = "hoten")

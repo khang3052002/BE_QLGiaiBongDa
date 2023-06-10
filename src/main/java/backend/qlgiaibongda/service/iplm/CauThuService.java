@@ -16,6 +16,8 @@ import backend.qlgiaibongda.repository.CauThuRepository;
 import backend.qlgiaibongda.repository.DoiBongRepository;
 import backend.qlgiaibongda.repository.ViTriRepository;
 import backend.qlgiaibongda.service.ICauThuService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.StoredProcedureQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +44,8 @@ public class CauThuService implements ICauThuService {
 
     @Autowired
     private ViTriRepository viTriRepository;
+    @Autowired
+    private EntityManager entityManager;
 
 
     @Override
@@ -265,6 +269,53 @@ public class CauThuService implements ICauThuService {
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("FAIL","Update player fail",""));
+
+    }
+
+    @Override
+    public ResponseEntity<ResponeObject> searchAllPlayerByNameOrRole(String keyword, String role) {
+        try {
+            // call procedure
+            StoredProcedureQuery spQuery =
+                    entityManager.createNamedStoredProcedureQuery("searchAllPlayerByNameOrRole")
+                            .setParameter("keyword", keyword)
+                            .setParameter("roles", role);
+            List<CauThuEntity> listCauThuEntity = spQuery.getResultList();
+            if (listCauThuEntity.size() > 0) {
+                List<CauThuDTO> listPlayerDto = new ArrayList<>();
+                for (CauThuEntity cauThu : listCauThuEntity) {
+                    try {
+
+                        // thiếu so thời gian kết thúc với hiện tại
+                        CauThuDTO cauThuDTO = GenericConverter.convert(cauThu, CauThuDTO.class);
+                        List<ViTriEntity> listVitri = cauThu.getCacViTri();
+                        List<String> str_roles = new ArrayList<>();
+                        listVitri.forEach(vitri -> {
+                            str_roles.add(vitri.getCode());
+                        });
+
+//                        cauThuDTO.setIdDoi(idTeam);
+                        cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+
+                        listPlayerDto.add(cauThuDTO);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+                                .body(new ResponeObject("FAIL", "FAIL", e.getMessage()));
+                    }
+                }
+
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponeObject("ok", "Get list succeed", listPlayerDto));
+            }
+        }
+        catch (Exception ex)
+        {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponeObject("FAIL", "FAIL", ex.getMessage()));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponeObject("FAIL","No player exists", ""));
 
     }
 }

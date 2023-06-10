@@ -14,4 +14,6 @@ public interface ICauThuService {
     ResponseEntity<ResponeObject> addNewPlayer(CauThuDTO cauThuDTO) ;
 
     ResponseEntity<ResponeObject> editPlayer(CauThuDTO cauThuDTO);
+
+    ResponseEntity<ResponeObject> searchAllPlayerByNameOrRole(String keyword, String roles);
 }

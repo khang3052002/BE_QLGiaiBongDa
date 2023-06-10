@@ -6,6 +6,7 @@ public class BXH_DoiBongDTO {
     private String ten_doi;
     private Integer xephang;
     private Long id_doibong;
+    private String hinhAnh;
     private Integer diem;
     private Integer hieuSo;
     private Integer phaLuoi;
@@ -14,6 +15,14 @@ public class BXH_DoiBongDTO {
     private Integer tranHoa;
     private Integer tranThua;
     private Integer vong;
+
+    public String getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
+    }
 
     public String getTen_doi() {
         return ten_doi;

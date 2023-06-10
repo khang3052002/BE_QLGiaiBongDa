@@ -13,6 +13,7 @@ public class MuaGiaiDTO {
     private Long id_nguoitao;
     private Date thoiDiemBatDau;
     private Date thoiDiemKetThuc;
+    private String hinhAnh;
 
     private Long id_quydinh;
     private QuyDinhCauThuDTO quyDinhCauThu;
@@ -51,6 +52,14 @@ public class MuaGiaiDTO {
     }
     public String getTen() {
         return ten;
+    }
+
+    public String getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
     }
 
     public void setTen(String ten) {

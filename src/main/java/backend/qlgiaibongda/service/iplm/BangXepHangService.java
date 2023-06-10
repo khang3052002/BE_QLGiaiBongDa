@@ -219,6 +219,7 @@ public class BangXepHangService implements IBangXepHangService {
                     try
                     {
                         BXH_DoiBongDTO bxhDoiBongDTO = GenericConverter.convert(bxhDoiBong, BXH_DoiBongDTO.class);
+                        bxhDoiBongDTO.setHinhAnh(bxhDoiBong.getDoiBong().getHinhAnh());
                         bxhDoiBongDTO.setId_doibong(bxhDoiBong.getDoiBong().getId());
                         bxhDoiBongDTO.setXephang(listbxhDoiBongEntity.indexOf(bxhDoiBong)+1);
                         bxhDoiBongDTO.setTen_doi(bxhDoiBong.getDoiBong().getTen());
