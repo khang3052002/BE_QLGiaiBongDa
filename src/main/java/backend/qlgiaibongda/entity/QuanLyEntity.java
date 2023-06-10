@@ -35,6 +35,8 @@ public class QuanLyEntity extends BaseEntity implements UserDetails {
     private String taiKhoan;
     @Column(name = "matkhau")
     private String matKhau;
+    @Column(name="hinhanh")
+    private String hinhAnh;
     @OneToOne(mappedBy = "QuanLy")
     private DoiBongEntity DoiBong;
     @ManyToOne
@@ -49,6 +51,15 @@ public class QuanLyEntity extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "quanLy")
     List<TokenEntity> listToken = new ArrayList<>();
+
+    public String getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
+    }
+
     public VaiTroEntity getVaiTro() {
         return this.VaiTro;
     }

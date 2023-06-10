@@ -32,7 +32,7 @@ public class SignUpService {
             quanLy.setTaiKhoan(signupRequest.getTaiKhoan());
             quanLy.setMatKhau(passwordEncoder.encode(signupRequest.getMatKhau()));
             quanLy.setNgaySinh(signupRequest.getNgaySinh()); // "2002-05-30"
-
+            quanLy.setHinhAnh(signupRequest.getHinhAnh());
             VaiTroEntity vaiTro = vaiTroRepository.findByCode(signupRequest.getCodeVaiTro()).orElse(null);
             if(vaiTro!=null)
             {

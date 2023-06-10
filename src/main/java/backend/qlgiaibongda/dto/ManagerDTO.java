@@ -9,6 +9,15 @@ public class ManagerDTO {
     private  Long id;
     private String hoTen;
     private Date ngaySinh;
+    private String hinhAnh;
+
+    public String getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
+    }
 
     public String getHoTen() {
         return hoTen;

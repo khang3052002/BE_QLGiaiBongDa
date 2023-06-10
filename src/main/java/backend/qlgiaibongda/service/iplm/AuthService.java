@@ -51,7 +51,7 @@ public class AuthService {
                 tokenRepository.saveAll(listToken);
             }
             saveToken(quanLy,jwtToken);
-            InfoUserRespone infoUserRespone = new InfoUserRespone(loginRequest.taiKhoan, quanLy.getVaiTro().getCode(),jwtToken);
+            InfoUserRespone infoUserRespone = new InfoUserRespone(loginRequest.taiKhoan, quanLy.getVaiTro().getCode(),jwtToken, quanLy.getHoTen(), quanLy.getHinhAnh(), quanLy.getNgaySinh());
             return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("ok","Authenticated Success",infoUserRespone));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("fail","Authenticated Fail",loginRequest));

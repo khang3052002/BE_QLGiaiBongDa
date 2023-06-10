@@ -9,8 +9,15 @@ public class SignUpRequestDTO {
     private String taiKhoan;
     private String matKhau;
     private String codeVaiTro;
+    private String hinhAnh;
 
+    public String getHinhAnh() {
+        return hinhAnh;
+    }
 
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
+    }
 
     public String getHoTen() {
         return hoTen;
