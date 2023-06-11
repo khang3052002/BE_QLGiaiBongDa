@@ -7,9 +7,7 @@ import backend.qlgiaibongda.converter.GenericConverter;
 import backend.qlgiaibongda.dto.*;
 import backend.qlgiaibongda.entity.*;
 import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
-import backend.qlgiaibongda.repository.DoiBongRepository;
-import backend.qlgiaibongda.repository.QuanLiRepository;
-import backend.qlgiaibongda.repository.SanBongRepository;
+import backend.qlgiaibongda.repository.*;
 import backend.qlgiaibongda.service.ITeamService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -40,7 +38,11 @@ public class TeamService implements ITeamService {
     private SanBongRepository sanBongRepository;
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private CauThuRepository cauThuRepository;
 
+    @Autowired
+    private CauThuDoiBongRepository cauThuDoiBongRepository;
     @Override
     public List<TeamDTO> findAll(Pageable pageable) {
         List<TeamDTO> results = new ArrayList<>();
@@ -275,7 +277,7 @@ public class TeamService implements ITeamService {
             cauThuDoiBongEntities.forEach((ctdb)->{
                 try {
 
-                    if(ctdb.getThoiDiemKetThuc().compareTo(new Date(System.currentTimeMillis())) > 0){
+                    if(ctdb.getThoiDiemKetThuc().compareTo(new Date(System.currentTimeMillis())) > 0 && ctdb.isInTeam() == 1){
                         CauThuDTO cauThuDTO = GenericConverter.convert(ctdb.getCauThuDB(), CauThuDTO.class);
                         cauThuDTO.setThoiDiemBatDau(ctdb.getKey().getThoiDiemBatDau());
                         cauThuDTO.setThoiDiemKetThuc(ctdb.getThoiDiemKetThuc());
@@ -299,6 +301,47 @@ public class TeamService implements ITeamService {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ResponeObject("Fail","Không tồn tại đội bóng", ""));
+
+
+
+    }
+
+    @Override
+    public ResponseEntity<ResponeObject> kickPlayerInTeam(RequestKickPlayerInTeamDTO requestKickPlayerInTeamDTO) {
+        Long id_cauthu = requestKickPlayerInTeamDTO.getId_cauthu();
+        Long id_doibong = requestKickPlayerInTeamDTO.getId_doibong();
+
+        CauThuEntity cauThuEntity = cauThuRepository.findById(id_cauthu).orElse(null);
+        DoiBongEntity doiBongEntity = doiBongRepository.findById(id_doibong).orElse(null);
+
+        if(cauThuEntity == null || doiBongEntity == null)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponeObject("Fail","Không tồn tại đội bóng hoặc cầu thủ", ""));
+
+        }
+
+        // set trạng thái của cầu thủ là tự do
+        cauThuEntity.setTrangThai("Tự do");
+
+        // Tìm cầu thủ trong cauthu_doibong ới doibongentity, set trạng thái inTeam = 0 (tức cầu thủ không còn thi đấu
+        // cho đội bóng đó và set ngayKetThuc là ngày hiện tại kick
+
+        CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauThuEntity,doiBongEntity);
+        if(cauThuDoiBongEntity == null)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponeObject("Fail","Không tìm thấy cầu thủ trong đội bóng", ""));
+        }
+        cauThuDoiBongEntity.setInTeam(0);
+        cauThuDoiBongEntity.setThoiDiemKetThuc(new Date(System.currentTimeMillis()));
+
+
+        cauThuRepository.save(cauThuEntity);
+        cauThuDoiBongRepository.save(cauThuDoiBongEntity);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponeObject("OK","Xóa cầu thủ khỏi đội bóng thành công", ""));
 
 
 
@@ -342,7 +385,7 @@ public class TeamService implements ITeamService {
             cauThuDoiBongEntities.forEach((ctdb)->{
                 try {
 
-                    if(ctdb.getThoiDiemKetThuc().compareTo(new Date(System.currentTimeMillis())) > 0){
+                    if(ctdb.getThoiDiemKetThuc().compareTo(new Date(System.currentTimeMillis())) > 0 && ctdb.isInTeam() == 1){
                         CauThuDTO cauThuDTO = GenericConverter.convert(ctdb.getCauThuDB(), CauThuDTO.class);
                         cauThuDTO.setThoiDiemBatDau(ctdb.getKey().getThoiDiemBatDau());
                         cauThuDTO.setThoiDiemKetThuc(ctdb.getThoiDiemKetThuc());

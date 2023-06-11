@@ -29,19 +29,14 @@ import java.util.List;
 
 @Service
 public class CauThuService implements ICauThuService {
-
     @Autowired
     private CauThuRepository cauThuRepository;
-
     @Autowired
     private DoiBongRepository doiBongRepository;
-
     @Autowired
     private CauThuDoiBongRepository cauThuDoiBongRepository;
-
     @Autowired
     private CauThuConverter cauThuConverter;
-
     @Autowired
     private ViTriRepository viTriRepository;
     @Autowired
@@ -90,6 +85,7 @@ public class CauThuService implements ICauThuService {
         cauThuDoiBongEntity.setCauThuDB(cauThuEntity);
         cauThuDoiBongEntity.setDoiBongCT(doiBongEntity);
         cauThuDoiBongEntity.setThoiDiemKetThuc(cauThuDTO.getThoiDiemKetThuc());
+        cauThuDoiBongEntity.setInTeam(1);
         cauThuDoiBongEntity.setTongSoBanThang(0);
 
 
@@ -176,7 +172,7 @@ public class CauThuService implements ICauThuService {
 
                 List<CauThuDoiBongEntity> listDoiBong = cauthu.getCauThuDoiBong();
 
-                CauThuDoiBongEntity doiBongEntity =  cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDB(cauthu);
+                CauThuDoiBongEntity doiBongEntity =  cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndInTeam(cauthu,1);
                 if(doiBongEntity != null)
                 {
                     cauThuDTO.setIdDoi(doiBongEntity.getDoiBongCT().getId());
@@ -239,7 +235,7 @@ public class CauThuService implements ICauThuService {
                 cauThuEntity.setQuocTich(cauThuDTO.getQuocTich());
                 cauThuEntity.setHinhAnh(cauThuDTO.getHinhAnh());
                 cauThuEntity.setQueQuan(cauThuDTO.getQueQuan());
-                cauThuEntity.setTrangThai(cauThuDTO.getTrangThai());
+//                cauThuEntity.setTrangThai(cauThuDTO.getTrangThai());
                 cauThuEntity.setLoaiCauThu(cauThuDTO.getLoaiCauThu());
 
                 if(cauThuDTO.getViTri() != null) // cập nhật vị trí
@@ -317,5 +313,40 @@ public class CauThuService implements ICauThuService {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ResponeObject("FAIL","No player exists", ""));
 
+    }
+
+    @Override
+    public ResponseEntity<ResponeObject> getPlayerFree() {
+        List<CauThuEntity> cauThuEntityList = cauThuRepository.findAllByTrangThai("Tự do");
+        List<CauThuDTO> listPlayerDto = new ArrayList<>();
+
+        if (cauThuEntityList.size() > 0) {
+            for (CauThuEntity cauThu : cauThuEntityList) {
+                try {
+
+                    // thiếu so thời gian kết thúc với hiện tại
+                    CauThuDTO cauThuDTO = GenericConverter.convert(cauThu, CauThuDTO.class);
+                    List<ViTriEntity> listVitri = cauThu.getCacViTri();
+                    List<String> str_roles = new ArrayList<>();
+                    listVitri.forEach(vitri -> {
+                        str_roles.add(vitri.getCode());
+                    });
+
+//                        cauThuDTO.setIdDoi(idTeam);
+                    cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+
+                    listPlayerDto.add(cauThuDTO);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+                            .body(new ResponeObject("FAIL", "FAIL", e.getMessage()));
+                }
+            }
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponeObject("ok", "Get list succeed", listPlayerDto));
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponeObject("ok", "Không tồn tại cầu thủ nào", listPlayerDto));
     }
 }

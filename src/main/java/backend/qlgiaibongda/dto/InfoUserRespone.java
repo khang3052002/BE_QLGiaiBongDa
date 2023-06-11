@@ -9,6 +9,15 @@ public class InfoUserRespone {
     private String hoTen;
     private String hinhAnh;
     private Date ngaySinh;
+    private Long id_doibong;
+
+    public Long getId_doibong() {
+        return id_doibong;
+    }
+
+    public void setId_doibong(Long id_doibong) {
+        this.id_doibong = id_doibong;
+    }
 
     public String getHoTen() {
         return hoTen;
@@ -34,13 +43,14 @@ public class InfoUserRespone {
         this.ngaySinh = ngaySinh;
     }
 
-    public InfoUserRespone(String username, String role, String token, String hoTen, String hinhAnh, Date ngaySinh) {
+    public InfoUserRespone(String username, String role, String token, String hoTen, String hinhAnh, Date ngaySinh, Long id_doibong) {
         this.username = username;
         this.role = role;
         this.token = token;
         this.hoTen = hoTen;
         this.hinhAnh = hinhAnh;
         this.ngaySinh = ngaySinh;
+        this.id_doibong = id_doibong;
     }
 
     public String getUsername() {

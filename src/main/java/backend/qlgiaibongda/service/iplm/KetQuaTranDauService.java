@@ -173,7 +173,6 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
         KetQuaTranDauEntity ketQuaTranDauEntity = ketQuaTranDauRepository.findById(id).orElse(null);
         if(ketQuaTranDauEntity == null){
             return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "MatchResult not found", "");
-
         }
         return GenResponse.gen(HttpStatus.OK, "OK", "Get MatchResult succeed!", convertToKetQuaTranDau(ketQuaTranDauEntity));
     }

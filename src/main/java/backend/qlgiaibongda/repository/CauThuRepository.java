@@ -10,4 +10,6 @@ public interface CauThuRepository extends JpaRepository<CauThuEntity, Long> {
     boolean existsByMaDinhDanh(String madDinhDanh);
     List<CauThuEntity> findAllByHoTenContainsIgnoreCase(String keyword);
 
+    List<CauThuEntity> findAllByTrangThai(String trangThai);
+
 }

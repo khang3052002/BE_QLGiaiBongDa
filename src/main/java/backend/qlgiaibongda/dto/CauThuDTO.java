@@ -24,7 +24,7 @@ public class CauThuDTO  {
     public Boolean checkValidInfo_EditPlayer(){
         Boolean check = true;
         if( id ==null || hoTen == null || ngaySinh == null || quocTich == null ||
-                hinhAnh == null || queQuan==null || trangThai == null ||
+                hinhAnh == null || queQuan==null || 
                 loaiCauThu == null || viTri == null)
         {
             check = false;

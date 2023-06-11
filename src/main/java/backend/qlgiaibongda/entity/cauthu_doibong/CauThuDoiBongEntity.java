@@ -35,6 +35,16 @@ public class CauThuDoiBongEntity  {
     @Column(name = "tongsobanthang")
     private int tongSoBanThang;
 
+    @Column(name="inteam")
+    private Integer inTeam;
+
+    public Integer isInTeam() {
+        return inTeam;
+    }
+
+    public void setInTeam(Integer inTeam) {
+        this.inTeam = inTeam;
+    }
 
     public CauThuDoiBongKey getKey() {
         return key;
@@ -80,7 +90,7 @@ public class CauThuDoiBongEntity  {
     public CauThuDoiBongEntity() {
     }
 
-    public CauThuDoiBongEntity(CauThuDoiBongKey key, CauThuEntity cauThuDB, DoiBongEntity doiBongCT, Date thoiDiemBatDau, Date thoiDiemKetThuc, int tongSoBanThang) {
+    public CauThuDoiBongEntity(CauThuDoiBongKey key, CauThuEntity cauThuDB, DoiBongEntity doiBongCT, Date thoiDiemKetThuc, int tongSoBanThang) {
         this.key = key;
         this.cauThuDB = cauThuDB;
         this.doiBongCT = doiBongCT;

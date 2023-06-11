@@ -4,10 +4,9 @@ import backend.qlgiaibongda.converter.GenericConverter;
 import backend.qlgiaibongda.dto.CauThuDTO;
 import backend.qlgiaibongda.dto.HoSoDangKyDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
-import backend.qlgiaibongda.entity.CauThuEntity;
-import backend.qlgiaibongda.entity.HoSoDangKyEntity;
-import backend.qlgiaibongda.entity.MuaGiaiEntity;
-import backend.qlgiaibongda.entity.ViTriEntity;
+import backend.qlgiaibongda.entity.*;
+import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
+import backend.qlgiaibongda.repository.CauThuDoiBongRepository;
 import backend.qlgiaibongda.repository.HoSoDangKyRepository;
 import backend.qlgiaibongda.repository.MuaGiaiRepository.MuaGiaiRepository;
 import backend.qlgiaibongda.service.IHoSoDangKyService;
@@ -25,6 +24,8 @@ public class HoSoDangKyService implements IHoSoDangKyService {
     private MuaGiaiRepository muaGiaiRepository;
     @Autowired
     private HoSoDangKyRepository hoSoDangKyRepository;
+    @Autowired
+    private CauThuDoiBongRepository cauThuDoiBongRepository;
 
     @Override
     public ResponseEntity<ResponeObject> getHoSoDangKyByMuaGiai(Long id_muagiai) {
@@ -51,18 +52,27 @@ public class HoSoDangKyService implements IHoSoDangKyService {
                         hoSoDangKyDTO.setId_doibong(hoSoDangKyEntity.getDoiBong().getId());
                         hoSoDangKyDTO.setTen_doibong(hoSoDangKyEntity.getDoiBong().getTen());
 
+                        DoiBongEntity doiBongEntity = hoSoDangKyEntity.getDoiBong();
+
                         List<CauThuDTO> listCauThuDTO = new ArrayList<>();
                         for(CauThuEntity cauthu: hoSoDangKyEntity.getCacCauThu())
                         {
-                            CauThuDTO cauThuDTO = GenericConverter.convert(cauthu, CauThuDTO.class);
-                            List<ViTriEntity> listVitri = cauthu.getCacViTri();
-                            List<String> str_roles = new ArrayList<>();
-                            listVitri.forEach(vitri->{
-                                str_roles.add(vitri.getCode());
-                            });
-                            cauThuDTO.setViTri(str_roles.toArray(new String[0]));
-                            listCauThuDTO.add(cauThuDTO);
+                            // chỉ lấy những cầu thủ trong hồ sơ đăng kí với trạng thái còn thi đấu ở đội bóng đó
 
+                            CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauthu,doiBongEntity);
+
+                            Integer isInTeam = cauThuDoiBongEntity.isInTeam();
+                            if(isInTeam == 1)
+                            {
+                                CauThuDTO cauThuDTO = GenericConverter.convert(cauthu, CauThuDTO.class);
+                                List<ViTriEntity> listVitri = cauthu.getCacViTri();
+                                List<String> str_roles = new ArrayList<>();
+                                listVitri.forEach(vitri->{
+                                    str_roles.add(vitri.getCode());
+                                });
+                                cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+                                listCauThuDTO.add(cauThuDTO);
+                            }
                         }
                         hoSoDangKyDTO.setDsCauThuDangKy(listCauThuDTO);
                         listHoSoDangKyDTO.add(hoSoDangKyDTO);
@@ -94,18 +104,23 @@ public class HoSoDangKyService implements IHoSoDangKyService {
                 hoSoDangKyDTO.setTen_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getHoTen());
                 hoSoDangKyDTO.setId_doibong(hoSoDangKyEntity.getDoiBong().getId());
                 hoSoDangKyDTO.setTen_doibong(hoSoDangKyEntity.getDoiBong().getTen());
-
+                DoiBongEntity doiBongEntity = hoSoDangKyEntity.getDoiBong();
                 List<CauThuDTO> listCauThuDTO = new ArrayList<>();
                 for (CauThuEntity cauthu : hoSoDangKyEntity.getCacCauThu()) {
-                    CauThuDTO cauThuDTO = GenericConverter.convert(cauthu, CauThuDTO.class);
-                    List<ViTriEntity> listVitri = cauthu.getCacViTri();
-                    List<String> str_roles = new ArrayList<>();
-                    listVitri.forEach(vitri -> {
-                        str_roles.add(vitri.getCode());
-                    });
-                    cauThuDTO.setViTri(str_roles.toArray(new String[0]));
-                    listCauThuDTO.add(cauThuDTO);
+                    CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauthu,doiBongEntity);
 
+                    Integer isInTeam = cauThuDoiBongEntity.isInTeam();
+                    if(isInTeam == 1)
+                    {
+                        CauThuDTO cauThuDTO = GenericConverter.convert(cauthu, CauThuDTO.class);
+                        List<ViTriEntity> listVitri = cauthu.getCacViTri();
+                        List<String> str_roles = new ArrayList<>();
+                        listVitri.forEach(vitri -> {
+                            str_roles.add(vitri.getCode());
+                        });
+                        cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+                        listCauThuDTO.add(cauThuDTO);
+                    }
                 }
                 hoSoDangKyDTO.setDsCauThuDangKy(listCauThuDTO);
                 return ResponseEntity.status(HttpStatus.OK).body(

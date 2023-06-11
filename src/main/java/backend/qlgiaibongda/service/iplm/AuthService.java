@@ -4,6 +4,7 @@ import backend.qlgiaibongda.config.Jwt.JwtService;
 import backend.qlgiaibongda.dto.InfoUserRespone;
 import backend.qlgiaibongda.dto.LoginRequestDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
+import backend.qlgiaibongda.entity.DoiBongEntity;
 import backend.qlgiaibongda.entity.QuanLyEntity;
 import backend.qlgiaibongda.entity.TokenEntity;
 import backend.qlgiaibongda.repository.QuanLiRepository;
@@ -40,7 +41,7 @@ public class AuthService {
             String jwtToken = jwtTokenProvider.generateToken(loginRequest.getTaiKhoan());
 
             QuanLyEntity quanLy = quanLiRepository.findByTaiKhoan(loginRequest.getTaiKhoan()).get();
-
+            DoiBongEntity doiBongEntity = quanLy.getDoiBong();
             List<TokenEntity> listToken = tokenRepository.findAllByQuanLyAndExpiredIsFalseOrRevokedIsFalse(quanLy);
             if(!listToken.isEmpty())
             {
@@ -51,7 +52,14 @@ public class AuthService {
                 tokenRepository.saveAll(listToken);
             }
             saveToken(quanLy,jwtToken);
-            InfoUserRespone infoUserRespone = new InfoUserRespone(loginRequest.taiKhoan, quanLy.getVaiTro().getCode(),jwtToken, quanLy.getHoTen(), quanLy.getHinhAnh(), quanLy.getNgaySinh());
+            InfoUserRespone infoUserRespone = new InfoUserRespone(
+                    loginRequest.taiKhoan,
+                    quanLy.getVaiTro().getCode(),
+                    jwtToken,
+                    quanLy.getHoTen(),
+                    quanLy.getHinhAnh(),
+                    quanLy.getNgaySinh(),
+                    doiBongEntity.getId());
             return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("ok","Authenticated Success",infoUserRespone));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("fail","Authenticated Fail",loginRequest));

@@ -6,5 +6,7 @@ import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CauThuDoiBongRepository extends JpaRepository<CauThuDoiBongEntity, Long> {
-    CauThuDoiBongEntity findCauThuDoiBongEntityByCauThuDB(CauThuEntity cauThu);
+    CauThuDoiBongEntity findCauThuDoiBongEntityByCauThuDBAndInTeam(CauThuEntity cauThu, Integer inTeam);
+    CauThuDoiBongEntity findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(CauThuEntity cauThu, DoiBongEntity doiBongEntity);
+
 }

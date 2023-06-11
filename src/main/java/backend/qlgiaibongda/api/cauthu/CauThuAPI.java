@@ -41,6 +41,10 @@ public class CauThuAPI {
     {
         return cauThuService.searchAllPlayerByNameOrRole(keyword,role);
     }
-
+    @GetMapping("/tudo")
+    public ResponseEntity<ResponeObject> getPlayerFree()
+    {
+        return cauThuService.getPlayerFree();
+    }
 
 }

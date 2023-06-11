@@ -6,6 +6,7 @@ import backend.qlgiaibongda.api.input.UpdateTeamInput;
 import backend.qlgiaibongda.api.output.AllTeamOuput;
 import backend.qlgiaibongda.api.output.ErrorOutput;
 import backend.qlgiaibongda.dto.CauThuDTO;
+import backend.qlgiaibongda.dto.RequestKickPlayerInTeamDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
 import backend.qlgiaibongda.dto.TeamDTO;
 import backend.qlgiaibongda.service.ICauThuService;
@@ -81,6 +82,16 @@ public class DoiBongAPI {
                     .body(new ResponeObject("FAIL", "Invalid Info", ""));
         }
         return teamService.updateTeam(updateTeamInput);
+    }
+
+    @PutMapping("/huycauthu")
+    public ResponseEntity<ResponeObject> kickPlayerInTeam(@RequestBody RequestKickPlayerInTeamDTO requestKickPlayerInTeamDTO)
+    {
+        if(!requestKickPlayerInTeamDTO.checkValidInfo()){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ResponeObject("FAIL", "Invalid Info", ""));
+        }
+        return teamService.kickPlayerInTeam(requestKickPlayerInTeamDTO);
     }
 
 }
