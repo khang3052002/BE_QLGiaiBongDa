@@ -9,4 +9,7 @@ public interface CauThuDoiBongRepository extends JpaRepository<CauThuDoiBongEnti
     CauThuDoiBongEntity findCauThuDoiBongEntityByCauThuDBAndInTeam(CauThuEntity cauThu, Integer inTeam);
     CauThuDoiBongEntity findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(CauThuEntity cauThu, DoiBongEntity doiBongEntity);
 
+
+    CauThuDoiBongEntity findCauThuDoibongEntityByCauThuDBAndDoiBongCTAndInTeam(CauThuEntity cauThu, DoiBongEntity doiBongEntity, Integer inTeam);
+
 }

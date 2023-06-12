@@ -5,6 +5,7 @@ import backend.qlgiaibongda.converter.CauThuConverter;
 import backend.qlgiaibongda.converter.GenResponse;
 import backend.qlgiaibongda.converter.GenericConverter;
 import backend.qlgiaibongda.dto.CauThuDTO;
+import backend.qlgiaibongda.dto.PlayerFreeDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
 import backend.qlgiaibongda.entity.CauThuEntity;
 import backend.qlgiaibongda.entity.DoiBongEntity;
@@ -23,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -106,57 +108,135 @@ public class CauThuService implements ICauThuService {
     @Override
     public ResponseEntity<ResponeObject> addNewListTeamPlayer(NewTeamPlayerInput teamPlayerInput) {
         Long idDoi = teamPlayerInput.getIdDoi();
-        List<CauThuDTO> players = teamPlayerInput.getDsCauThuMoi();
-        List<CauThuDTO> result = new ArrayList<>();
 
-        List<CauThuEntity> cauThuEntityList = new ArrayList<>();
-        List<String> listMaDanhDanh = new ArrayList<>();
-        for(CauThuDTO player:players){
-            try
-            {
-                CauThuEntity cauThuEntity = GenericConverter.convert(player,CauThuEntity.class);
+        List<CauThuDTO> newPlayers = teamPlayerInput.getDsCauThuMoi();
+        List<PlayerFreeDTO> freePlayers = teamPlayerInput.getDsCauThuTuDo();
+        List<CauThuDTO> result = new ArrayList<>();
+        DoiBongEntity doiBongEntity = doiBongRepository.findById(idDoi).orElse(null);
+        if(doiBongEntity == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("FAIL", "idDoi not found!", "") );
+        }
+        if(!newPlayers.isEmpty())
+        {
+            List<CauThuEntity> cauThuEntityList = new ArrayList<>();
+            List<String> listMaDanhDanh = new ArrayList<>();
+            for(CauThuDTO player:newPlayers){
+                try
+                {
+                    CauThuEntity cauThuEntity = GenericConverter.convert(player,CauThuEntity.class);
 
 //                CauThuDoiBongEntity ctdb = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDB(cauThuEntity);
 
-                cauThuEntityList.add(cauThuEntity);
+                    cauThuEntityList.add(cauThuEntity);
 
-            }catch (Exception exception)
-            {
-                System.out.println(exception.getMessage());
-            }
+                }catch (Exception exception)
+                {
+                    System.out.println(exception.getMessage());
+                }
 
-            player.setIdDoi(idDoi);
+                player.setIdDoi(idDoi);
 //            CauThuDTO temp = save(player);
 
-            DoiBongEntity doiBongEntity = doiBongRepository.findById(idDoi).orElse(null);
 
-            if(doiBongEntity == null){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("FAIL", "idDoi not found!", "") );
-            }
-
-            Boolean checkMaDinhDanh = cauThuRepository.existsByMaDinhDanh(player.getMaDinhDanh());
-            if(checkMaDinhDanh)
-            {
-                return GenResponse.gen(HttpStatus.CONFLICT,"FAIL","Mã định danh đã tồn tại","");
-            }
-            else{
-                if(listMaDanhDanh.indexOf(player.getMaDinhDanh()) ==-1)
+                Boolean checkMaDinhDanh = cauThuRepository.existsByMaDinhDanh(player.getMaDinhDanh());
+                if(checkMaDinhDanh)
                 {
-                    listMaDanhDanh.add(player.getMaDinhDanh());
+                    return GenResponse.gen(HttpStatus.CONFLICT,"FAIL","Mã định danh đã tồn tại","");
                 }
                 else{
-                    return  GenResponse.gen(HttpStatus.CONFLICT,"FAIL","Thêm danh sách cầu thủ thất bại, danh sách bị trùng lặp mã định danh" + player.getMaDinhDanh() ,"");
+                    if(listMaDanhDanh.indexOf(player.getMaDinhDanh()) ==-1)
+                    {
+                        listMaDanhDanh.add(player.getMaDinhDanh());
+                    }
+                    else{
+                        return  GenResponse.gen(HttpStatus.CONFLICT,"FAIL","Thêm danh sách cầu thủ thất bại, danh sách bị trùng lặp mã định danh" + player.getMaDinhDanh() ,"");
+                    }
                 }
             }
+
+            for(CauThuDTO player:newPlayers)
+            {
+                CauThuDTO temp = save(player);
+            }
+
         }
 
-        for(CauThuDTO player:players)
+        if(!freePlayers.isEmpty())
         {
-            CauThuDTO temp = save(player);
+            boolean checkExsist = true;
+            // check hợp lệ tất cả cầu thủ trước
+            for(PlayerFreeDTO player: freePlayers)
+            {
+                // check tất cả cầu thủ tồn tại và cầu thủ đó là "Tự do" trước
+                CauThuEntity cauThuEntity = cauThuRepository.findById(player.getId_cauthu()).orElse(null);
+                if(cauThuEntity == null)
+                {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("FAIL", "Không tổn tại cầu thủ "+cauThuEntity.getHoTen()+", Thêm cầu thủ tự do thất bại", "") );
+
+                }
+
+                if(cauThuEntity.getTrangThai().equals("Tự do") == false)
+                {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(new ResponeObject("FAIL", "Không tổn tại cầu thủ "+cauThuEntity.getHoTen()+" với trạng thái tự do, Thêm cầu thủ tự do thất bại", "") );
+                }
+
+                // hợp lệ
+                // check exsists in team old
+
+
+
+            }
+
+            // sau khi check hợp lệ, tiến hành xử lí và thêm
+            List<CauThuEntity> cauThuEntityList = new ArrayList<>();
+            List<CauThuDoiBongEntity> cauThuDoiBongEntities = new ArrayList<>();
+            for(PlayerFreeDTO player: freePlayers)
+            {
+                CauThuEntity cauThuEntity = cauThuRepository.findById(player.getId_cauthu()).orElse(null);
+                CauThuDoiBongEntity cauThuDoiBong = cauThuDoiBongRepository.findCauThuDoibongEntityByCauThuDBAndDoiBongCTAndInTeam(cauThuEntity,doiBongEntity,0);
+
+                cauThuEntity.setTrangThai("Thi đấu");
+                if(cauThuDoiBong !=null) // tồn tại ở team cũ
+                {
+
+                    cauThuDoiBong.setInTeam(1);
+//                    cauThuDoiBong.getKey().setThoiDiemBatDau(new Date(System.currentTimeMillis()));
+                    cauThuDoiBong.setThoiDiemKetThuc(player.getThoiDiemKetThuc());
+
+//                    cauThuDoiBongEntities.add(cauThuDoiBong);
+                    cauThuDoiBongRepository.save(cauThuDoiBong);
+
+
+                }
+                else{
+                    // set key cho CauThuDoiBong
+                    CauThuDoiBongKey cauThuDoiBongKey = new CauThuDoiBongKey( doiBongEntity.getId(), cauThuEntity.getId());
+                    CauThuDoiBongEntity cauThuDoiBongEntity = new CauThuDoiBongEntity();
+                    cauThuDoiBongEntity.setKey(cauThuDoiBongKey);
+                    cauThuDoiBongEntity.setCauThuDB(cauThuEntity);
+                    cauThuDoiBongEntity.setDoiBongCT(doiBongEntity);
+                    cauThuDoiBongEntity.setThoiDiemKetThuc(player.getThoiDiemKetThuc());
+                    cauThuDoiBongEntity.setInTeam(1);
+                    cauThuDoiBongEntity.setTongSoBanThang(0);
+
+//                    cauThuDoiBongEntities.add(cauThuDoiBongEntity);
+                    cauThuDoiBongRepository.save(cauThuDoiBongEntity);
+
+                }
+//                cauThuEntityList.add(cauThuEntity);
+
+                cauThuRepository.save(cauThuEntity);
+            }
+//            cauThuRepository.saveAll(cauThuEntityList);
+//            cauThuDoiBongRepository.saveAll(cauThuDoiBongEntities);
+
+
+
         }
 
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK", "Add all new players succeed", result));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK", "Add all players succeed", result));
     }
 
     @Override

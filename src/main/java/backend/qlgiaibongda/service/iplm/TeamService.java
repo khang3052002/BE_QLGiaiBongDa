@@ -224,6 +224,7 @@ public class TeamService implements ITeamService {
                     try {
 
                         // thiếu so thời gian kết thúc với hiện tại
+                        // đã check trong lúc gọi procedure
                         CauThuDTO cauThuDTO = GenericConverter.convert(cauThu, CauThuDTO.class);
                         List<ViTriEntity> listVitri = cauThu.getCacViTri();
                         List<String> str_roles = new ArrayList<>();

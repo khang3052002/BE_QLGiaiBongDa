@@ -11,5 +11,6 @@ public interface CauThuRepository extends JpaRepository<CauThuEntity, Long> {
     List<CauThuEntity> findAllByHoTenContainsIgnoreCase(String keyword);
 
     List<CauThuEntity> findAllByTrangThai(String trangThai);
+    boolean existsByIdAndTrangThai(Long id, String trangThai);
 
 }
