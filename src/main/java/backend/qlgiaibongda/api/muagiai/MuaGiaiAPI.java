@@ -96,6 +96,11 @@ public class MuaGiaiAPI {
     }
 
     // nhấn kích hoạt mùa giải => Tạo lịch, tạo bảng xếp hạng
+    @PostMapping("/{id_muagiai}/kichhoat")
+    public  ResponseEntity<ResponeObject> startLeague(@PathVariable("id_muagiai") Long id_muagiai)
+    {
+        return muaGiaiService.startLeague(id_muagiai);
+    }
 
 
 

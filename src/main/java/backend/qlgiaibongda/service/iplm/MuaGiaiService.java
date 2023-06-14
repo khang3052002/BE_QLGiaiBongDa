@@ -412,6 +412,45 @@ public class MuaGiaiService implements IMuaGiaiService {
 
     }
 
+    @Override
+//    @Transactional
+    public ResponseEntity<ResponeObject> startLeague(Long idMuagiai) {
+        MuaGiaiEntity muaGiaiEntity = muaGiaiRepository.findById(idMuagiai).orElse(null);
+        if(muaGiaiEntity!=null)
+        {
+            BangXepHangEntity bxhEntity = muaGiaiEntity.getBxh();
+            List<BXH_DoiBongDTO> bxh = null;
+            if(bxhEntity == null)
+            {
+                // Tạo bảng xếp hạng
+                // save bảng xếp hạng vào mua giải đó
+                boolean result = bangXepHangService.CreateRanking(muaGiaiEntity);
+                System.out.println(result);
+                if(result == true)
+                {
+                    muaGiaiEntity.setTrangThai(1);
+                    muaGiaiRepository.save(muaGiaiEntity);
+                    return ResponseEntity.status(HttpStatus.OK).body(
+                            new ResponeObject("OK","Kích hoạt mùa giải thành công",""));
+                }
+                else{
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                            new ResponeObject("OK","Tạo bảng xếp hạng thất bại",""));
+                }
+
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                        new ResponeObject("FAIL","Bảng xếp hạng của mùa giải đã được tạo trước đó",""));
+            }
+
+
+
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponeObject("Fail","Không tìm thấy mùa giải này",""));
+    }
+
     public ResponseEntity<ResponeObject> getLeagueOnRequest(Pageable pageable,String keyword, Integer trangThai) {
 //        List<MuaGiaiEntity> listMuaGiai = muaGiaiRepository.findByTenContainsIgnoreCase(keyword,trangThai);
         Page<MuaGiaiEntity> pageListMuaGiai = findLeaguesWithFiltered(pageable,keyword,trangThai);

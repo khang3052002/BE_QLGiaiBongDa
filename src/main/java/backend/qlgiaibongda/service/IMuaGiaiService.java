@@ -25,4 +25,6 @@ public interface IMuaGiaiService {
     ResponseEntity<ResponeObject> getRankingOfLeague(Long idMuagiai);
 
     ResponseEntity<ResponeObject> createLeagueWithOldRule(MuaGiaiDTO muaGiaiDTO);
+
+    ResponseEntity<ResponeObject> startLeague(Long idMuagiai);
 }
