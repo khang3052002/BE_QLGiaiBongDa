@@ -43,6 +43,9 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
     @Autowired
     private KetQuaTranDauRepository ketQuaTranDauRepository;
 
+    @Autowired
+    private CauThuGhiBanRepository cauThuGhiBanRepository;
+
     @Override
     @Transactional
     public ResponseEntity<ResponeObject> updateMatchResult(ListMatchResultInput listMatchResultInput, Long id_trandau, Integer flagHoa0_0) {
@@ -131,6 +134,32 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
                 if(loaiBanThangEntity == null){
                     return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Match"+idTranDau+": Type of goal not found", "");
                 }
+
+                //add to cauthughibanmuagiai:
+                CauThuGhiBanEntity cauThuGhiBanEntity = null;
+                boolean checkCauThuDaGhiBan  = false;
+                List<CauThuGhiBanEntity> listCauThuGhiBan = muaGiaiEntity.getCacCauThuGhiBan();
+                for(CauThuGhiBanEntity cauThuGhiBan:listCauThuGhiBan){
+                    if(cauThuGhiBan.getCauThu().getId() == cauThuEntity.getId()){
+                        checkCauThuDaGhiBan = true;
+                        cauThuGhiBanEntity = cauThuGhiBan;
+                        break;
+                    }
+                }
+                if(!checkCauThuDaGhiBan){
+                    cauThuGhiBanEntity = new CauThuGhiBanEntity();
+                    cauThuGhiBanEntity.setCauThu(cauThuEntity);
+                    cauThuGhiBanEntity.setDoiBong(doiGhiBan);
+                    cauThuGhiBanEntity.setMuaGiai(muaGiaiEntity);
+                    cauThuGhiBanEntity.setSoBanThang(1);
+                }else{
+                    cauThuGhiBanEntity.setSoBanThang(cauThuGhiBanEntity.getSoBanThang()+1);
+                }
+
+                cauThuGhiBanRepository.save(cauThuGhiBanEntity);
+
+
+
 
                 ghiNhanThangEntity.setThoiDiemGhiBan(thoiDiemGhiBan);
                 ghiNhanThangEntity.setCauThu(cauThuEntity);

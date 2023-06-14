@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class CauThuGhiBanEntity extends BaseEntity{
     @OneToOne
     @JoinColumn(name = "id_cauthu")
-    private CauThuEntity CauThu;
+        private CauThuEntity CauThu;
 
     @OneToOne
     @JoinColumn(name = "id_doi")
