@@ -29,10 +29,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class MuaGiaiService implements IMuaGiaiService {
@@ -253,11 +250,6 @@ public class MuaGiaiService implements IMuaGiaiService {
             if(isHaveSlot == true && isTeamExistsInHSoDangKy_MuaGiai == false)
             {
                 // cho Đăng ký
-                HoSoDangKyEntity hoSoDangKyEntity = new HoSoDangKyEntity();
-                hoSoDangKyEntity.setTrangThai("Chờ duyệt");
-                hoSoDangKyEntity.setDoiBong(doiBongEntity);
-                hoSoDangKyEntity.setMuaGiai(muaGiaiEntity);
-                hoSoDangKyEntity.setQuanLyDkiHoSo(doiBongEntity.getQuanLy());
 
                 Long[] list_id_cauThu = dangKyThamGiaGiaiDTO.getDs_id_cauthu_thamgia();
                 List<CauThuEntity> listCauThuThamGia = new ArrayList<>();
@@ -268,6 +260,44 @@ public class MuaGiaiService implements IMuaGiaiService {
                         listCauThuThamGia.add(cauThu);
                     }
                 });
+                Map<Integer,String> mapErr = checkQuyDinhSoLuong(listCauThuThamGia,muaGiaiEntity);
+                boolean checkQuyDinhTuoi = checkQuyDinhTuoi(listCauThuThamGia,muaGiaiEntity);
+//                boolean checkQuyDinhSoLuong = true;
+                if(mapErr.size() > 1)
+                {
+                    if(mapErr.get(1)!=null)
+                    {
+                        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                                .body(new ResponeObject("FAIL","Đăng ký thất bại. "+mapErr.get(1),""));
+
+                    }
+                    if(mapErr.get(2)!=null)
+                    {
+                        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                                .body(new ResponeObject("FAIL","Đăng ký thất bại. "+mapErr.get(2),""));
+
+                    }
+                    if(mapErr.get(3)!=null)
+                    {
+                        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                                .body(new ResponeObject("FAIL","Đăng ký thất bại. "+mapErr.get(3),""));
+
+                    }
+                }
+
+                if(checkQuyDinhTuoi == false)
+                {
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                            .body(new ResponeObject("FAIL","Đăng ký thất bại. Vi phạm quy định về tuổi cầu thủ",""));
+
+                }
+
+
+                HoSoDangKyEntity hoSoDangKyEntity = new HoSoDangKyEntity();
+                hoSoDangKyEntity.setTrangThai("Chờ duyệt");
+                hoSoDangKyEntity.setDoiBong(doiBongEntity);
+                hoSoDangKyEntity.setMuaGiai(muaGiaiEntity);
+                hoSoDangKyEntity.setQuanLyDkiHoSo(doiBongEntity.getQuanLy());
 
                 hoSoDangKyEntity.setCacCauThu(listCauThuThamGia);
 
@@ -288,6 +318,74 @@ public class MuaGiaiService implements IMuaGiaiService {
 
     }
 
+    private boolean checkQuyDinhTuoi(List<CauThuEntity> listCauThuThamGia, MuaGiaiEntity muaGiaiEntity) {
+        boolean check =true;
+        try
+        {
+            QuyDinhCauThuDTO quyDinhCauThuDTO = GenericConverter.convert(muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhCauThu(),QuyDinhCauThuDTO.class);
+
+            int tuoiToiDa = quyDinhCauThuDTO.getTuoiToiDa();
+            int tuoiToiThieu = quyDinhCauThuDTO.getTuoiToiThieu();
+            for(CauThuEntity player: listCauThuThamGia)
+            {
+                int age = player.calculateAge();
+                if(age < tuoiToiThieu || age > tuoiToiDa)
+                {
+                    check = false;
+                    break;
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            System.out.println(ex);
+        }
+
+        return  check;
+    }
+
+    Map<Integer,String> checkQuyDinhSoLuong(List<CauThuEntity> listPlayer, MuaGiaiEntity muaGiaiEntity)
+    {
+        Integer size = listPlayer.size();
+        Map<Integer,String> mapErr = new HashMap<>();
+        mapErr.put(0,"");
+        try {
+            QuyDinhCauThuDTO quyDinhCauThuDTO = GenericConverter.convert(muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhCauThu(),QuyDinhCauThuDTO.class);
+            if(size > quyDinhCauThuDTO.getSoLuongCauThuToiDa())
+            {
+                mapErr.put(1,"Vượt quá giới hạn số lượng cầu thủ cho phép");
+            }
+            else if(size < quyDinhCauThuDTO.getSoLuongCauThuToiThieu())
+            {
+                mapErr.put(2,"Không đủ số lượng cầu thủ tối thiểu tham gia giải");
+
+            }
+            else{
+                // check quy định cầu thủ nhập tịch
+                // count số lượng cầu thủ ngoại binh
+                int countNgoaiBinh = 0 ;
+                for(CauThuEntity player: listPlayer)
+                {
+                    if(player.getLoaiCauThu().equals("Ngoại binh"))
+                    {
+                        countNgoaiBinh++;
+                    }
+                }
+                if(countNgoaiBinh > quyDinhCauThuDTO.getSoLuongCauThuNuocNgoaiToiDa())
+                {
+                    mapErr.put(3,"Số lượng ngoại binh vướt quá giới hạn quy định");
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        return mapErr;
+
+    }
 
     public Page<MuaGiaiEntity> findLeaguesWithFiltered(Pageable pageable, String keyword, Integer trangthai) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();

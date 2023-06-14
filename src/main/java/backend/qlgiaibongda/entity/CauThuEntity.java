@@ -4,6 +4,9 @@ import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +48,33 @@ public class CauThuEntity extends BaseEntity{
     @Column(name = "loaicauthu")
     private String loaiCauThu;
 
+//    @Transient
+//    private Integer age;
+//    @Transient
+//    public Integer getAge() {
+//        System.out.println(283928392);
+//
+//        Date safeDate = new Date(this.ngaySinh.getTime());
+//        if(safeDate !=null)
+//        {
+//            LocalDate birthday = safeDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//            return Period.between(birthday, LocalDate.now()).getYears();
+//
+//        }
+//        return 0;
+////        age = ;
+//    }
+    public int calculateAge() {
+        Date safeDate = new Date(this.ngaySinh.getTime());
+        if(safeDate !=null)
+        {
+            LocalDate birthday = safeDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            return Period.between(birthday, LocalDate.now()).getYears();
+
+        }
+        return 0;
+    }
+
     //CauThu_ViTri
     @ManyToMany
     @JoinTable(name="cauthu_vitri",
@@ -66,6 +96,11 @@ public class CauThuEntity extends BaseEntity{
     @OneToMany(mappedBy = "CauThu")
     private List<GhiNhanBanThangEntity> DSBanThangCauThu_TranDau = new ArrayList<>();
 
+
+
+//    public void setAge(Integer age) {
+//        this.age = age;
+//    }
 
     public String getMaDinhDanh() {
         return maDinhDanh;

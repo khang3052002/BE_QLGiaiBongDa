@@ -13,6 +13,7 @@ public class CauThuDTO  {
     private String quocTich;
     private String hinhAnh;
     private String queQuan;
+    private Integer  age;
     private String maDinhDanh;
     private String trangThai;
     private String loaiCauThu;
@@ -31,6 +32,14 @@ public class CauThuDTO  {
         }
 
         return check;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     private String[] viTri;
