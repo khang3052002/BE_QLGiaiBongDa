@@ -39,9 +39,15 @@ public class AuthService {
         if(authentication.isAuthenticated())
         {
             String jwtToken = jwtTokenProvider.generateToken(loginRequest.getTaiKhoan());
-
+            InfoUserRespone infoUserRespone= null;
             QuanLyEntity quanLy = quanLiRepository.findByTaiKhoan(loginRequest.getTaiKhoan()).get();
-            DoiBongEntity doiBongEntity = quanLy.getDoiBong();
+            DoiBongEntity doiBongEntity = null;
+            Long id_team = null;
+            if(!quanLy.getVaiTro().getCode().equals("QLGD"))
+            {
+                doiBongEntity = quanLy.getDoiBong();
+                id_team = doiBongEntity.getId();
+            }
             List<TokenEntity> listToken = tokenRepository.findAllByQuanLyAndExpiredIsFalseOrRevokedIsFalse(quanLy);
             if(!listToken.isEmpty())
             {
@@ -52,14 +58,14 @@ public class AuthService {
                 tokenRepository.saveAll(listToken);
             }
             saveToken(quanLy,jwtToken);
-            InfoUserRespone infoUserRespone = new InfoUserRespone(
+            infoUserRespone = new InfoUserRespone(
                     loginRequest.taiKhoan,
                     quanLy.getVaiTro().getCode(),
                     jwtToken,
                     quanLy.getHoTen(),
                     quanLy.getHinhAnh(),
                     quanLy.getNgaySinh(),
-                    doiBongEntity.getId());
+                    id_team);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("ok","Authenticated Success",infoUserRespone));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("fail","Authenticated Fail",loginRequest));
