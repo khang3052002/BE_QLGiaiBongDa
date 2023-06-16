@@ -14,7 +14,7 @@ public class MuaGiaiDTO {
     private Date thoiDiemBatDau;
     private Date thoiDiemKetThuc;
     private String hinhAnh;
-
+    private Integer trangThai;
     private Long id_quydinh;
     private QuyDinhCauThuDTO quyDinhCauThu;
     private QuyDinhTinhDiemDTO quyDinhTinhDiem;
@@ -50,6 +50,15 @@ public class MuaGiaiDTO {
         }
         return check;
     }
+
+    public Integer getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(Integer trangThai) {
+        this.trangThai = trangThai;
+    }
+
     public String getTen() {
         return ten;
     }
