@@ -8,11 +8,12 @@ package backend.qlgiaibongda.entity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "trandau")
 public class TranDauEntity extends BaseEntity {
-    private Date ThoiGian;
+    private Timestamp ThoiGian;
     @ManyToOne
     @JoinColumn(name = "id_doinha")
     private DoiBongEntity DoiNha;
@@ -32,12 +33,12 @@ public class TranDauEntity extends BaseEntity {
     @OneToOne(mappedBy = "tranDau")
     private KetQuaTranDauEntity KetQuaTranDau;
 
-    public Date getThoiGian() {
-        return ThoiGian;
+    public void setThoiGian(Timestamp thoiGian) {
+        ThoiGian = thoiGian;
     }
 
-    public void setThoiGian(Date thoiGian) {
-        ThoiGian = thoiGian;
+    public Timestamp getThoiGian() {
+        return ThoiGian;
     }
 
     public DoiBongEntity getDoiNha() {

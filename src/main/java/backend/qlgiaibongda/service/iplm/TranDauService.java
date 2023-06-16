@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class TranDauService implements ITranDauService {
 
         for(DateMatchInput dateMatchInput: updateMatchInput.getDsTranDau()){
             Long idTranDauLong = dateMatchInput.getIdTranDau();
-            Date time = dateMatchInput.getTime();
+            Timestamp time = dateMatchInput.getTime();
 
             TranDauEntity tranDauEntity = tranDauRepository.findById(idTranDauLong).orElse(null);
             if(tranDauEntity != null){

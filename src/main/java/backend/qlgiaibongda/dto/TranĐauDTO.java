@@ -7,16 +7,28 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class TranĐauDTO {
     private Long id;
-    private Date ThoiGian;
+    private Timestamp ThoiGian;
+
+    private String thoiGianVietNam;
     private TeamDTO DoiNha;
     private TeamDTO DoiKhach;
     private Long idVong;
     private String tenVong;
     private Long idLichThiDau;
     private KetQuaTranDauDTO ketQuaTranDau;
+
+    public String getThoiGianVietNam() {
+        return thoiGianVietNam;
+    }
+
+    public void setThoiGianVietNam(String thoiGianVietNam) {
+        this.thoiGianVietNam = thoiGianVietNam;
+    }
 
     public String getTenVong() {
         return tenVong;
@@ -34,12 +46,15 @@ public class TranĐauDTO {
         this.id = id;
     }
 
-    public Date getThoiGian() {
+    public Timestamp getThoiGian() {
         return ThoiGian;
     }
 
-    public void setThoiGian(Date thoiGian) {
+    public void setThoiGian(Timestamp thoiGian) {
         ThoiGian = thoiGian;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        thoiGianVietNam = dateFormat.format(thoiGian);
     }
 
     public TeamDTO getDoiNha() {
