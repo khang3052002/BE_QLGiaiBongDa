@@ -126,6 +126,8 @@ public class MuaGiaiService implements IMuaGiaiService {
                     QuyDinhTinhDiemDTO quyDinhTinhDiemDTO = GenericConverter.convert(muaGiai.getQuyDinhMuaGiai().getQuyDinhTinhDiem(),QuyDinhTinhDiemDTO.class);
                     QuyDinhSoLuongDoiDTO quyDinhSoLuongDoiDTO = GenericConverter.convert(muaGiai.getQuyDinhMuaGiai().getQuyDinhSoLuongDoi(),QuyDinhSoLuongDoiDTO.class);
 
+                    muaGiaiDTO.setId_quydinh(muaGiai.getQuyDinhMuaGiai().getId());
+
                     muaGiaiDTO.setQuyDinhSoLuongDoi(quyDinhSoLuongDoiDTO);
                     muaGiaiDTO.setQuyDinhCauThu(quyDinhCauThuDTO);
                     muaGiaiDTO.setQuyDinhTinhDiem(quyDinhTinhDiemDTO);
@@ -156,11 +158,14 @@ public class MuaGiaiService implements IMuaGiaiService {
             try
             {
                 MuaGiaiDTO muaGiaiDTO = GenericConverter.convert(muaGiaiEntity, MuaGiaiDTO.class);
+
+
                 muaGiaiDTO.setId_nguoitao(muaGiaiEntity.getQuanLyMuaGiai().getId());
                 QuyDinhCauThuDTO quyDinhCauThuDTO = GenericConverter.convert(muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhCauThu(),QuyDinhCauThuDTO.class);
                 QuyDinhTinhDiemDTO quyDinhTinhDiemDTO = GenericConverter.convert(muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhTinhDiem(),QuyDinhTinhDiemDTO.class);
                 QuyDinhSoLuongDoiDTO quyDinhSoLuongDoiDTO = GenericConverter.convert(muaGiaiEntity.getQuyDinhMuaGiai().getQuyDinhSoLuongDoi(),QuyDinhSoLuongDoiDTO.class);
 
+                muaGiaiDTO.setId_quydinh(muaGiaiEntity.getQuyDinhMuaGiai().getId());
                 muaGiaiDTO.setQuyDinhSoLuongDoi(quyDinhSoLuongDoiDTO);
                 muaGiaiDTO.setQuyDinhCauThu(quyDinhCauThuDTO);
                 muaGiaiDTO.setQuyDinhTinhDiem(quyDinhTinhDiemDTO);
