@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.Date;
@@ -74,9 +75,10 @@ public class TeamService implements ITeamService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<ResponeObject> save(NewTeamInput newTeamInput) {
         Long idQuanLy = newTeamInput.getIdQuanLy();
-        Long idSanNha = newTeamInput.getIdSanNha();
+        Long idSanNha = newTeamInput.getSanbong().getId();
 
         QuanLyEntity quanLyEntity = quanLiRepository.findById(idQuanLy).orElse(null);
         if(quanLyEntity == null){
@@ -93,20 +95,31 @@ public class TeamService implements ITeamService {
                 }
             }
         }
+        SanBongEntity sanBongEntity = null;
+        if(idSanNha !=null)
+        {
+            sanBongEntity = sanBongRepository.findById(idSanNha).orElse(null);
+            if(sanBongEntity == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponeObject("FAIL", "No SanBong has this id!", ""));
 
-        SanBongEntity sanBongEntity = sanBongRepository.findById(idSanNha).orElse(null);
-        if(sanBongEntity == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponeObject("FAIL", "No SanBong has this id!", ""));
+            }else{
+                DoiBongEntity entity = doiBongRepository.findBySanBongId(idSanNha).orElse(null);
+                if(entity != null){
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                            .body(new ResponeObject("FAIL", "SanBong has been owned by another team!", ""));
 
-        }else{
-            DoiBongEntity entity = doiBongRepository.findBySanBongId(idSanNha).orElse(null);
-            if(entity != null){
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body(new ResponeObject("FAIL", "SanBong has been owned by another team!", ""));
-
+                }
             }
+
         }
+        else{
+            sanBongEntity = new SanBongEntity();
+            sanBongEntity.setTenSan(newTeamInput.getSanbong().getTenSan());
+            sanBongEntity.setDiaDiem(newTeamInput.getSanbong().getDiaDiem());
+            sanBongRepository.save(sanBongEntity);
+        }
+
 
         DoiBongEntity entity = null;
 

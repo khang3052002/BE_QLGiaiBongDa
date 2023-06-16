@@ -1,10 +1,12 @@
 package backend.qlgiaibongda.api.input;
 
 import backend.qlgiaibongda.dto.FieldDTO;
+import backend.qlgiaibongda.dto.SanBongDTO;
 
 public class NewTeamInput {
     private Long idQuanLy;
-    private Long idSanNha;
+//    private Long idSanNha;
+    private SanBongDTO sanbong;
     private String ten;
     private String hinhAnh;
     private int namThanhLap;
@@ -12,7 +14,7 @@ public class NewTeamInput {
 
     public Boolean checkValidInfo(){
         Boolean check = true;
-        if(idQuanLy == null || idSanNha == null || ten == null || hinhAnh == null || namThanhLap==0  ){
+        if(idQuanLy == null || ten == null || hinhAnh == null || namThanhLap==0 || sanbong== null ){
             check = false;
         }
         return check;
@@ -22,17 +24,25 @@ public class NewTeamInput {
         return idQuanLy;
     }
 
+    public SanBongDTO getSanbong() {
+        return sanbong;
+    }
+
+    public void setSanbong(SanBongDTO sanbong) {
+        this.sanbong = sanbong;
+    }
+
     public void setIdQuanLy(Long idQuanLy) {
         this.idQuanLy = idQuanLy;
     }
 
-    public Long getIdSanNha() {
-        return idSanNha;
-    }
-
-    public void setIdSanNha(Long idSanNha) {
-        this.idSanNha = idSanNha;
-    }
+//    public Long getIdSanNha() {
+//        return idSanNha;
+//    }
+//
+//    public void setIdSanNha(Long idSanNha) {
+//        this.idSanNha = idSanNha;
+//    }
 
     public String getTen() {
         return ten;
