@@ -533,7 +533,7 @@ public class MuaGiaiService implements IMuaGiaiService {
                 }
                 else{
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                            new ResponeObject("OK","Tạo bảng xếp hạng thất bại",""));
+                            new ResponeObject("OK","Chưa đủ số lượng đội tham gia giải",""));
                 }
 
             }
