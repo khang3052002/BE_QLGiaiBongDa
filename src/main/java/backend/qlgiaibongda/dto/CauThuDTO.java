@@ -14,6 +14,7 @@ public class CauThuDTO  {
     private String hinhAnh;
     private String queQuan;
     private Integer  age;
+    private Integer soAo;
     private String maDinhDanh;
     private String trangThai;
     private String loaiCauThu;
@@ -26,12 +27,20 @@ public class CauThuDTO  {
         Boolean check = true;
         if( id ==null || hoTen == null || ngaySinh == null || quocTich == null ||
                 hinhAnh == null || queQuan==null || 
-                loaiCauThu == null || viTri == null)
+                loaiCauThu == null || viTri == null || soAo == null)
         {
             check = false;
         }
 
         return check;
+    }
+
+    public Integer getSoAo() {
+        return soAo;
+    }
+
+    public void setSoAo(Integer soAo) {
+        this.soAo = soAo;
     }
 
     public Integer getAge() {
@@ -47,7 +56,7 @@ public class CauThuDTO  {
     public Boolean checkValidInfo(){
         Boolean check = true;
         if(hoTen == null || ngaySinh == null || quocTich == null || hinhAnh == null || queQuan==null
-                || loaiCauThu==null || thoiDiemKetThuc==null || viTri == null || maDinhDanh == null ){
+                || loaiCauThu==null || thoiDiemKetThuc==null || viTri == null || maDinhDanh == null || soAo == null){
             check = false;
         }
 

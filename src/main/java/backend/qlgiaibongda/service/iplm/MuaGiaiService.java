@@ -345,6 +345,7 @@ public class MuaGiaiService implements IMuaGiaiService {
         catch (Exception ex)
         {
             System.out.println(ex);
+            check = false;
         }
 
         return  check;

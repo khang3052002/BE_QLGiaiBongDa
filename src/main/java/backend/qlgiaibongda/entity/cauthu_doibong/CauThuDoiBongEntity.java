@@ -35,8 +35,22 @@ public class CauThuDoiBongEntity  {
     @Column(name = "tongsobanthang")
     private int tongSoBanThang;
 
+    @Column(name="soao")
+    private Integer soAo;
     @Column(name="inteam")
     private Integer inTeam;
+
+    public Integer getSoAo() {
+        return soAo;
+    }
+
+    public void setSoAo(Integer soAo) {
+        this.soAo = soAo;
+    }
+
+    public Integer getInTeam() {
+        return inTeam;
+    }
 
     public Integer isInTeam() {
         return inTeam;

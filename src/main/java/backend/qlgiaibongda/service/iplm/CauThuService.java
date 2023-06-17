@@ -89,6 +89,7 @@ public class CauThuService implements ICauThuService {
         cauThuDoiBongEntity.setThoiDiemKetThuc(cauThuDTO.getThoiDiemKetThuc());
         cauThuDoiBongEntity.setInTeam(1);
         cauThuDoiBongEntity.setTongSoBanThang(0);
+        cauThuDoiBongEntity.setSoAo(cauThuDTO.getSoAo());
 
 
 
@@ -101,7 +102,7 @@ public class CauThuService implements ICauThuService {
         cauThuDTORS.setThoiDiemBatDau(cauThuDoiBongEntity.getKey().getThoiDiemBatDau());
         cauThuDTORS.setThoiDiemKetThuc(cauThuDTO.getThoiDiemKetThuc());
         cauThuDTORS.setIdDoi(idDoi);
-
+        cauThuDTORS.setSoAo(cauThuDoiBongEntity.getSoAo());
         return cauThuDTORS;
     }
 
@@ -256,6 +257,7 @@ public class CauThuService implements ICauThuService {
                 if(doiBongEntity != null)
                 {
                     cauThuDTO.setIdDoi(doiBongEntity.getDoiBongCT().getId());
+                    cauThuDTO.setSoAo(doiBongEntity.getSoAo());
                 }
                 List<ViTriEntity> listVitriEntity =  cauthu.getCacViTri();
                 List<String> listVitri = new ArrayList<>();
@@ -263,6 +265,10 @@ public class CauThuService implements ICauThuService {
                     listVitri.add(viTriEntity.getCode());
                 });
                 cauThuDTO.setViTri(listVitri.toArray(new String[0]));
+//                cauThuDTO.setAge(cauthu.calculateAge());
+//                System.out.println(cauthu.calculateAge());
+                int age = cauthu.calculateAge();
+                cauThuDTO.setAge(age);
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK","Get player succesfull",cauThuDTO));
 
             }
@@ -305,7 +311,10 @@ public class CauThuService implements ICauThuService {
     @Override
     public ResponseEntity<ResponeObject> editPlayer(CauThuDTO cauThuDTO) {
         CauThuEntity cauThuEntity = cauThuRepository.findById(cauThuDTO.getId()).orElse(null);
-        if(cauThuEntity != null)
+        DoiBongEntity doiBongEntity = doiBongRepository.findById(cauThuDTO.getIdDoi()).orElse(null);
+        CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauThuEntity,doiBongEntity);
+
+        if(cauThuDoiBongEntity != null)
         {
             try
             {
@@ -315,8 +324,11 @@ public class CauThuService implements ICauThuService {
                 cauThuEntity.setQuocTich(cauThuDTO.getQuocTich());
                 cauThuEntity.setHinhAnh(cauThuDTO.getHinhAnh());
                 cauThuEntity.setQueQuan(cauThuDTO.getQueQuan());
+//                cauThuEntity.setTrangThai(cauD);
 //                cauThuEntity.setTrangThai(cauThuDTO.getTrangThai());
                 cauThuEntity.setLoaiCauThu(cauThuDTO.getLoaiCauThu());
+
+                cauThuDoiBongEntity.setSoAo(cauThuDTO.getSoAo());
 
                 if(cauThuDTO.getViTri() != null) // cập nhật vị trí
                 {
@@ -336,6 +348,9 @@ public class CauThuService implements ICauThuService {
                     }
                 }
                 cauThuRepository.save(cauThuEntity);
+                cauThuDoiBongRepository.save(cauThuDoiBongEntity);
+                cauThuDTO.setMaDinhDanh(cauThuEntity.getMaDinhDanh());
+                cauThuDTO.setTrangThai(cauThuEntity.getTrangThai());
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK","Update player succesful",cauThuDTO));
 
             }catch (Exception ex)
@@ -369,9 +384,16 @@ public class CauThuService implements ICauThuService {
                         listVitri.forEach(vitri -> {
                             str_roles.add(vitri.getCode());
                         });
+                        CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndInTeam(cauThu,1);
+                        if(cauThuDoiBongEntity!=null)
+                        {
+                            cauThuDTO.setIdDoi(cauThuDoiBongEntity.getDoiBongCT().getId());
+                            cauThuDTO.setSoAo(cauThuDoiBongEntity.getSoAo());
 
-//                        cauThuDTO.setIdDoi(idTeam);
+                        }
+
                         cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+                        cauThuDTO.setAge(cauThu.calculateAge());
 
                         listPlayerDto.add(cauThuDTO);
                     } catch (Exception e) {
@@ -414,6 +436,7 @@ public class CauThuService implements ICauThuService {
 
 //                        cauThuDTO.setIdDoi(idTeam);
                     cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+                    cauThuDTO.setAge(cauThu.calculateAge());
 
                     listPlayerDto.add(cauThuDTO);
                 } catch (Exception e) {

@@ -24,7 +24,7 @@ public class CauThuAPI {
     {
         return cauThuService.addNewPlayer(cauThuDTO);
     }
-    @PostMapping("/")
+    @PutMapping("/")
     public ResponseEntity<ResponeObject> editPlayer(@RequestBody CauThuDTO cauThuDTO)
     {
         if(cauThuDTO.checkValidInfo_EditPlayer() == false)

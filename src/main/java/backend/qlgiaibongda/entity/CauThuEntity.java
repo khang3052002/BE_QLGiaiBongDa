@@ -64,17 +64,26 @@ public class CauThuEntity extends BaseEntity{
 //        return 0;
 ////        age = ;
 //    }
+//    public int calculateAge() {
+//        Date safeDate = new Date(this.ngaySinh.getTime());
+//        if(safeDate !=null)
+//        {
+//            LocalDate birthday = safeDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//            return Period.between(birthday, LocalDate.now()).getYears();
+//
+//        }
+//        return 0;
+//    }
     public int calculateAge() {
-        Date safeDate = new Date(this.ngaySinh.getTime());
-        if(safeDate !=null)
-        {
-            LocalDate birthday = safeDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            return Period.between(birthday, LocalDate.now()).getYears();
+        if (this.ngaySinh != null) {
+//            LocalDate birthday = this.ngaySinh.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate();
+            LocalDate birthday = this.ngaySinh.toLocalDate();
 
+            return Period.between(birthday, LocalDate.now()).getYears();
+//            return  2;
         }
         return 0;
     }
-
     //CauThu_ViTri
     @ManyToMany
     @JoinTable(name="cauthu_vitri",

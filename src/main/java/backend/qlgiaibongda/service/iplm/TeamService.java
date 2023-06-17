@@ -230,6 +230,7 @@ public class TeamService implements ITeamService {
                             .setParameter("id_team",idTeam)
                             .setParameter("roles",roles);
             List<CauThuEntity> listCauThuEntity = spQuery.getResultList();
+            DoiBongEntity doiBongEntity = doiBongRepository.findById(idTeam).orElse(null);
             if(listCauThuEntity.size()>0)
             {
                 List<CauThuDTO> listPlayerDto = new ArrayList<>();
@@ -245,9 +246,12 @@ public class TeamService implements ITeamService {
                             str_roles.add(vitri.getCode());
                         });
 
+                        CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauThu,doiBongEntity);
+
                         cauThuDTO.setIdDoi(idTeam);
                         cauThuDTO.setViTri(str_roles.toArray(new String[0]));
-
+                        cauThuDTO.setAge(cauThu.calculateAge());
+                        cauThuDTO.setSoAo(cauThuDoiBongEntity.getSoAo());
                         listPlayerDto.add(cauThuDTO);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
@@ -303,6 +307,8 @@ public class TeamService implements ITeamService {
                             str_roles.add(vitri.getCode());
                         });
                         cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+                        cauThuDTO.setAge(ctdb.getCauThuDB().calculateAge());
+                        cauThuDTO.setSoAo(ctdb.getSoAo());
                         players.add(cauThuDTO);
                     }
 
@@ -405,12 +411,14 @@ public class TeamService implements ITeamService {
                         cauThuDTO.setThoiDiemKetThuc(ctdb.getThoiDiemKetThuc());
                         cauThuDTO.setTongSoBanThang(ctdb.getTongSoBanThang());
                         cauThuDTO.setIdDoi(ctdb.getDoiBongCT().getId());
+                        cauThuDTO.setSoAo(ctdb.getSoAo());
                         List<ViTriEntity> listVitri = ctdb.getCauThuDB().getCacViTri();
                         List<String> str_roles = new ArrayList<>();
                         listVitri.forEach(vitri->{
                             str_roles.add(vitri.getCode());
                         });
                         cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+                        cauThuDTO.setAge(ctdb.getCauThuDB().calculateAge());
                         players.add(cauThuDTO);
                     }
 

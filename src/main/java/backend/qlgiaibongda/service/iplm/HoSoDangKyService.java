@@ -71,6 +71,8 @@ public class HoSoDangKyService implements IHoSoDangKyService {
                                     str_roles.add(vitri.getCode());
                                 });
                                 cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+                                cauThuDTO.setAge(cauthu.calculateAge());
+                                cauThuDTO.setSoAo(cauThuDoiBongEntity.getSoAo());
                                 listCauThuDTO.add(cauThuDTO);
                             }
                         }
@@ -119,6 +121,8 @@ public class HoSoDangKyService implements IHoSoDangKyService {
                             str_roles.add(vitri.getCode());
                         });
                         cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+                        cauThuDTO.setAge(cauthu.calculateAge());
+                        cauThuDTO.setSoAo(cauThuDoiBongEntity.getSoAo());
                         listCauThuDTO.add(cauThuDTO);
                     }
                 }
