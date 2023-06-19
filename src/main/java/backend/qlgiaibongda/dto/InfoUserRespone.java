@@ -3,6 +3,7 @@ package backend.qlgiaibongda.dto;
 import java.sql.Date;
 
 public class InfoUserRespone {
+
     private String username;
     private String role;
     private String token;
@@ -10,6 +11,7 @@ public class InfoUserRespone {
     private String hinhAnh;
     private Date ngaySinh;
     private Long id_doibong;
+    private Long id_quanly;
 
     public Long getId_doibong() {
         return id_doibong;
@@ -43,7 +45,15 @@ public class InfoUserRespone {
         this.ngaySinh = ngaySinh;
     }
 
-    public InfoUserRespone(String username, String role, String token, String hoTen, String hinhAnh, Date ngaySinh, Long id_doibong) {
+    public Long getId_quanly() {
+        return id_quanly;
+    }
+
+    public void setId_quanly(Long id_quanly) {
+        this.id_quanly = id_quanly;
+    }
+
+    public InfoUserRespone(String username, String role, String token, String hoTen, String hinhAnh, Date ngaySinh, Long id_doibong, Long id_quanly) {
         this.username = username;
         this.role = role;
         this.token = token;
@@ -51,6 +61,7 @@ public class InfoUserRespone {
         this.hinhAnh = hinhAnh;
         this.ngaySinh = ngaySinh;
         this.id_doibong = id_doibong;
+        this.id_quanly = id_quanly;
     }
 
     public String getUsername() {

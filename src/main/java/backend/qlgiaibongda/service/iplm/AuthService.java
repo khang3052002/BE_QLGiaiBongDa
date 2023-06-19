@@ -65,7 +65,7 @@ public class AuthService {
                     quanLy.getHoTen(),
                     quanLy.getHinhAnh(),
                     quanLy.getNgaySinh(),
-                    id_team);
+                    id_team, quanLy.getId());
             return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("ok","Authenticated Success",infoUserRespone));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponeObject("fail","Authenticated Fail",loginRequest));
