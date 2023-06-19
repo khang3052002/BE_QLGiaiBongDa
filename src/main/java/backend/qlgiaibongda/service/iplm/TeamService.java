@@ -142,9 +142,6 @@ public class TeamService implements ITeamService {
 
     @Override
     public ResponseEntity<ResponeObject> updateTeam(UpdateTeamInput updateTeamInput) {
-
-
-
         DoiBongEntity doiBongEntity = doiBongRepository.findById(updateTeamInput.getId()).orElse(null);
         if(doiBongEntity == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -192,7 +189,7 @@ public class TeamService implements ITeamService {
         SanBongEntity oldSanBong = doiBongEntity.getSanBong();
         if(oldSanBong.getId() != updateTeamInput.getIdSanNha()){
 
-            Long idSanBongNew = updateTeamInput.getId();
+            Long idSanBongNew = updateTeamInput.getIdSanNha();
             SanBongEntity sanBongEntity = sanBongRepository.findById(idSanBongNew).orElse(null);
 
 
