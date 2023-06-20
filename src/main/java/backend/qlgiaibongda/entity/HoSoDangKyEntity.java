@@ -20,6 +20,9 @@ public class HoSoDangKyEntity extends BaseEntity {
     @Column(name = "trangthai")
     private String trangThai;
 
+    @Column(name="ghichu")
+    private String ghiChu;
+
     @ManyToOne
     @JoinColumn(name = "id_muagiai")
     private MuaGiaiEntity muaGiai;
@@ -42,6 +45,14 @@ public class HoSoDangKyEntity extends BaseEntity {
 
     ////////////////////////////////GETTER SETTER///////////////////////////////////////////
 
+
+    public String getGhiChu() {
+        return ghiChu;
+    }
+
+    public void setGhiChu(String ghiChu) {
+        this.ghiChu = ghiChu;
+    }
 
     public List<CauThuEntity> getCacCauThu() {
         return CacCauThu;

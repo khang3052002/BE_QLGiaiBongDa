@@ -4,6 +4,7 @@ import backend.qlgiaibongda.converter.GenericConverter;
 import backend.qlgiaibongda.dto.CauThuDTO;
 import backend.qlgiaibongda.dto.HoSoDangKyDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
+import backend.qlgiaibongda.dto.TuChoiHoSoDTO;
 import backend.qlgiaibongda.entity.*;
 import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
 import backend.qlgiaibongda.repository.CauThuDoiBongRepository;
@@ -51,7 +52,7 @@ public class HoSoDangKyService implements IHoSoDangKyService {
                         hoSoDangKyDTO.setTen_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getHoTen());
                         hoSoDangKyDTO.setId_doibong(hoSoDangKyEntity.getDoiBong().getId());
                         hoSoDangKyDTO.setTen_doibong(hoSoDangKyEntity.getDoiBong().getTen());
-
+                        hoSoDangKyDTO.setGhiChu(hoSoDangKyEntity.getGhiChu());
                         DoiBongEntity doiBongEntity = hoSoDangKyEntity.getDoiBong();
 
                         List<CauThuDTO> listCauThuDTO = new ArrayList<>();
@@ -102,6 +103,7 @@ public class HoSoDangKyService implements IHoSoDangKyService {
             try {
                 HoSoDangKyDTO hoSoDangKyDTO = GenericConverter.convert(hoSoDangKyEntity, HoSoDangKyDTO.class);
                 hoSoDangKyDTO.setId_giai(hoSoDangKyEntity.getMuaGiai().getId());
+                hoSoDangKyDTO.setGhiChu(hoSoDangKyEntity.getGhiChu());
                 hoSoDangKyDTO.setId_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getId());
                 hoSoDangKyDTO.setTen_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getHoTen());
                 hoSoDangKyDTO.setId_doibong(hoSoDangKyEntity.getDoiBong().getId());
@@ -165,12 +167,71 @@ public class HoSoDangKyService implements IHoSoDangKyService {
             }
             else{
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                        new ResponeObject("FAIL","Hồ sơ đã được duyệt trước đó","")
+                        new ResponeObject("FAIL","Hồ sơ đã được "+ (hoSoDangKyEntity.getTrangThai()).toLowerCase()+ " trước đó","")
                 );
             }
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ResponeObject("FAIL","Không tồn tại hồ sơ","")
         );
+    }
+
+    @Override
+    public ResponseEntity<ResponeObject> tuChoiHoSoDangKy(TuChoiHoSoDTO tuChoiHoSoDTO) {
+        HoSoDangKyEntity hoSoDangKyEntity = hoSoDangKyRepository.findById(tuChoiHoSoDTO.getId_hoso()).orElse(null);
+        if(hoSoDangKyEntity!=null)
+        {
+            if(hoSoDangKyEntity.getTrangThai().equals("Chờ duyệt"))
+            {
+                hoSoDangKyEntity.setTrangThai("Từ chối");
+                if(tuChoiHoSoDTO.getGhiChu()!=null)
+                {
+                    hoSoDangKyEntity.setGhiChu(tuChoiHoSoDTO.getGhiChu());
+                }
+                else{
+                    hoSoDangKyEntity.setGhiChu("");
+                }
+                hoSoDangKyRepository.save(hoSoDangKyEntity);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponeObject("OK","Đã từ chối hồ sơ",""));
+
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                        new ResponeObject("FAIL","Hồ sơ đã được "+ (hoSoDangKyEntity.getTrangThai()).toLowerCase()+ " trước đó","")
+                );
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponeObject("FAIL","Không tồn tại hồ sơ","")
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponeObject> huyHoSoDangKyByQLDB(Long idHoso) {
+        HoSoDangKyEntity hoSoDangKyEntity = hoSoDangKyRepository.findById(idHoso).orElse(null);
+        if(hoSoDangKyEntity!=null)
+        {
+            if(hoSoDangKyEntity.getTrangThai().equals("Chờ duyệt"))
+            {
+                hoSoDangKyEntity.setTrangThai("Hủy");
+                hoSoDangKyRepository.save(hoSoDangKyEntity);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponeObject("OK","Đã hủy hồ sơ",""));
+
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                        new ResponeObject("FAIL","Hồ sơ đã được "+ (hoSoDangKyEntity.getTrangThai()).toLowerCase()+ " trước đó","")
+                );
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponeObject("FAIL","Không tồn tại hồ sơ","")
+        );
+
+
+
+
     }
 }

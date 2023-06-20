@@ -13,6 +13,15 @@ public class HoSoDangKyDTO {
     private String ten_doibong;
     private Long id_quanly;
     private String ten_quanly;
+    private String ghiChu;
+
+    public String getGhiChu() {
+        return ghiChu;
+    }
+
+    public void setGhiChu(String ghiChu) {
+        this.ghiChu = ghiChu;
+    }
 
     private List<CauThuDTO> dsCauThuDangKy = new ArrayList<>();
 

@@ -1,6 +1,7 @@
 package backend.qlgiaibongda.service;
 
 import backend.qlgiaibongda.dto.ResponeObject;
+import backend.qlgiaibongda.dto.TuChoiHoSoDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface IHoSoDangKyService {
@@ -9,4 +10,8 @@ public interface IHoSoDangKyService {
     ResponseEntity<ResponeObject> getDetailHoSoDangKyByID(Long idHoso);
 
     ResponseEntity<ResponeObject> duyetHoSoDangKy(Long idHoso);
+
+    ResponseEntity<ResponeObject> tuChoiHoSoDangKy(TuChoiHoSoDTO tuChoiHoSoDTO);
+
+    ResponseEntity<ResponeObject> huyHoSoDangKyByQLDB(Long idHoso);
 }

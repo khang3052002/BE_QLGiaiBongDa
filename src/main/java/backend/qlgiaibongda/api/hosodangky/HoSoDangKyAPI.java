@@ -1,6 +1,7 @@
 package backend.qlgiaibongda.api.hosodangky;
 
 import backend.qlgiaibongda.dto.ResponeObject;
+import backend.qlgiaibongda.dto.TuChoiHoSoDTO;
 import backend.qlgiaibongda.entity.MuaGiaiEntity;
 import backend.qlgiaibongda.service.IHoSoDangKyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,14 @@ public class HoSoDangKyAPI {
     {
         return hoSoDangKyService.duyetHoSoDangKy(id_hoso);
     }
-
-
+    @PutMapping("/tuchoi")
+    public ResponseEntity<ResponeObject> tuChoiHoSoDangKy(@RequestBody TuChoiHoSoDTO tuChoiHoSoDTO)
+    {
+        return hoSoDangKyService.tuChoiHoSoDangKy(tuChoiHoSoDTO);
+    }
+    @PutMapping("/huy")
+    public ResponseEntity<ResponeObject> huyHoSoDangKyByQLDB(@RequestParam("hoso") Long id_hoso)
+    {
+        return hoSoDangKyService.huyHoSoDangKyByQLDB(id_hoso);
+    }
 }
