@@ -17,6 +17,13 @@ public class TranDauAPI {
     private ITranDauService tranDauService;
 
 
+    @GetMapping
+    public ResponseEntity<ResponeObject> getAllMatchByTeamAndLeague(@RequestParam("muagiai") Long idMuaGia,
+                                                                    @RequestParam("doibong") Long idDoiBong,
+                                                                    @RequestParam("trangthai") String trangThai){
+        return tranDauService.getAllMatchByTeamAndLeague(idMuaGia, idDoiBong, trangThai);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ResponeObject> getMatch(@PathVariable("id") Long id){
         return tranDauService.getMatch(id);

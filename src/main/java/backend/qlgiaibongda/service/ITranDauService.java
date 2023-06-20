@@ -8,4 +8,7 @@ public interface ITranDauService {
 
     ResponseEntity<ResponeObject> getMatch(Long id);
     ResponseEntity<ResponeObject> updateTime(UpdateMatchInput updateMatchInput);
+
+
+    ResponseEntity<ResponeObject> getAllMatchByTeamAndLeague(Long idMuaGiai,Long idDoiBong, String trangThai);
 }
