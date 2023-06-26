@@ -14,4 +14,6 @@ public interface IHoSoDangKyService {
     ResponseEntity<ResponeObject> tuChoiHoSoDangKy(TuChoiHoSoDTO tuChoiHoSoDTO);
 
     ResponseEntity<ResponeObject> huyHoSoDangKyByQLDB(Long idHoso);
+
+    ResponseEntity<ResponeObject> getHoSoDangKy_DoiBong(Long idDoibong);
 }

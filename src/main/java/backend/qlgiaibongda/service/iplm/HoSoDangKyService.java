@@ -8,6 +8,7 @@ import backend.qlgiaibongda.dto.TuChoiHoSoDTO;
 import backend.qlgiaibongda.entity.*;
 import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
 import backend.qlgiaibongda.repository.CauThuDoiBongRepository;
+import backend.qlgiaibongda.repository.DoiBongRepository;
 import backend.qlgiaibongda.repository.HoSoDangKyRepository;
 import backend.qlgiaibongda.repository.MuaGiaiRepository.MuaGiaiRepository;
 import backend.qlgiaibongda.service.IHoSoDangKyService;
@@ -27,6 +28,8 @@ public class HoSoDangKyService implements IHoSoDangKyService {
     private HoSoDangKyRepository hoSoDangKyRepository;
     @Autowired
     private CauThuDoiBongRepository cauThuDoiBongRepository;
+    @Autowired
+    private DoiBongRepository doiBongRepository;
 
     @Override
     public ResponseEntity<ResponeObject> getHoSoDangKyByMuaGiai(Long id_muagiai) {
@@ -232,6 +235,75 @@ public class HoSoDangKyService implements IHoSoDangKyService {
 
 
 
+
+    }
+
+    @Override
+    public ResponseEntity<ResponeObject> getHoSoDangKy_DoiBong(Long idDoibong) {
+
+        DoiBongEntity doiBongEntity = doiBongRepository.findById(idDoibong).orElse(null);
+        if(doiBongEntity!=null)
+        {
+            List<HoSoDangKyEntity> hoSoDangKyEntityList = doiBongEntity.getCacHoSoDangKy();
+            List<HoSoDangKyDTO> listHoSoDangKyDTO = new ArrayList<>();
+            if(hoSoDangKyEntityList.size() == 0 || hoSoDangKyEntityList == null)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponeObject("OK","Chưa có hồ sơ đăng ký nào","")
+                );
+            }
+            else{
+                for(HoSoDangKyEntity hoSoDangKyEntity : hoSoDangKyEntityList)
+                {
+                    try
+                    {
+                        HoSoDangKyDTO hoSoDangKyDTO = GenericConverter.convert(hoSoDangKyEntity, HoSoDangKyDTO.class);
+                        hoSoDangKyDTO.setId_giai(hoSoDangKyEntity.getMuaGiai().getId());
+                        hoSoDangKyDTO.setId_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getId());
+                        hoSoDangKyDTO.setTen_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getHoTen());
+                        hoSoDangKyDTO.setId_doibong(hoSoDangKyEntity.getDoiBong().getId());
+                        hoSoDangKyDTO.setTen_doibong(hoSoDangKyEntity.getDoiBong().getTen());
+                        hoSoDangKyDTO.setGhiChu(hoSoDangKyEntity.getGhiChu());
+//                        DoiBongEntity doiBongEntity = hoSoDangKyEntity.getDoiBong();
+
+                        List<CauThuDTO> listCauThuDTO = new ArrayList<>();
+                        for(CauThuEntity cauthu: hoSoDangKyEntity.getCacCauThu())
+                        {
+                            // chỉ lấy những cầu thủ trong hồ sơ đăng kí với trạng thái còn thi đấu ở đội bóng đó
+
+                            CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauthu,doiBongEntity);
+
+                            Integer isInTeam = cauThuDoiBongEntity.isInTeam();
+                            if(isInTeam == 1)
+                            {
+                                CauThuDTO cauThuDTO = GenericConverter.convert(cauthu, CauThuDTO.class);
+                                List<ViTriEntity> listVitri = cauthu.getCacViTri();
+                                List<String> str_roles = new ArrayList<>();
+                                listVitri.forEach(vitri->{
+                                    str_roles.add(vitri.getCode());
+                                });
+                                cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+                                cauThuDTO.setAge(cauthu.calculateAge());
+                                cauThuDTO.setSoAo(cauThuDoiBongEntity.getSoAo());
+                                listCauThuDTO.add(cauThuDTO);
+                            }
+                        }
+                        hoSoDangKyDTO.setDsCauThuDangKy(listCauThuDTO);
+                        listHoSoDangKyDTO.add(hoSoDangKyDTO);
+                    }catch (Exception ex)
+                    {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponeObject("OK","SUCCESS",listHoSoDangKyDTO)
+                );
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponeObject("FAIL","Đội bóng không tồn tại","")
+        );
 
     }
 }
