@@ -51,6 +51,8 @@ public class HoSoDangKyService implements IHoSoDangKyService {
                     {
                         HoSoDangKyDTO hoSoDangKyDTO = GenericConverter.convert(hoSoDangKyEntity, HoSoDangKyDTO.class);
                         hoSoDangKyDTO.setId_giai(muaGiaiEntity.getId());
+                        hoSoDangKyDTO.setTenGiai(hoSoDangKyEntity.getMuaGiai().getTen());
+                        hoSoDangKyDTO.setHinhAnhGiai(hoSoDangKyEntity.getMuaGiai().getHinhAnh());
                         hoSoDangKyDTO.setId_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getId());
                         hoSoDangKyDTO.setTen_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getHoTen());
                         hoSoDangKyDTO.setId_doibong(hoSoDangKyEntity.getDoiBong().getId());
@@ -106,6 +108,8 @@ public class HoSoDangKyService implements IHoSoDangKyService {
             try {
                 HoSoDangKyDTO hoSoDangKyDTO = GenericConverter.convert(hoSoDangKyEntity, HoSoDangKyDTO.class);
                 hoSoDangKyDTO.setId_giai(hoSoDangKyEntity.getMuaGiai().getId());
+                hoSoDangKyDTO.setTenGiai(hoSoDangKyEntity.getMuaGiai().getTen());
+                hoSoDangKyDTO.setHinhAnhGiai(hoSoDangKyEntity.getMuaGiai().getHinhAnh());
                 hoSoDangKyDTO.setGhiChu(hoSoDangKyEntity.getGhiChu());
                 hoSoDangKyDTO.setId_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getId());
                 hoSoDangKyDTO.setTen_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getHoTen());
@@ -259,6 +263,8 @@ public class HoSoDangKyService implements IHoSoDangKyService {
                     {
                         HoSoDangKyDTO hoSoDangKyDTO = GenericConverter.convert(hoSoDangKyEntity, HoSoDangKyDTO.class);
                         hoSoDangKyDTO.setId_giai(hoSoDangKyEntity.getMuaGiai().getId());
+                        hoSoDangKyDTO.setTenGiai(hoSoDangKyEntity.getMuaGiai().getTen());
+                        hoSoDangKyDTO.setHinhAnhGiai(hoSoDangKyEntity.getMuaGiai().getHinhAnh());
                         hoSoDangKyDTO.setId_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getId());
                         hoSoDangKyDTO.setTen_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getHoTen());
                         hoSoDangKyDTO.setId_doibong(hoSoDangKyEntity.getDoiBong().getId());

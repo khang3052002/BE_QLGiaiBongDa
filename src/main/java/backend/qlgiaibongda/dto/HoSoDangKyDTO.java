@@ -9,12 +9,16 @@ public class HoSoDangKyDTO {
     private Date thoiGianTao;
     private String trangThai;
     private Long id_giai;
+    private String tenGiai;
+    private String hinhAnhGiai;
     private Long id_doibong;
     private String ten_doibong;
     private Long id_quanly;
     private String ten_quanly;
     private String ghiChu;
 
+
+    private List<CauThuDTO> dsCauThuDangKy = new ArrayList<>();
     public String getGhiChu() {
         return ghiChu;
     }
@@ -23,8 +27,21 @@ public class HoSoDangKyDTO {
         this.ghiChu = ghiChu;
     }
 
-    private List<CauThuDTO> dsCauThuDangKy = new ArrayList<>();
+    public String getTenGiai() {
+        return tenGiai;
+    }
 
+    public void setTenGiai(String tenGiai) {
+        this.tenGiai = tenGiai;
+    }
+
+    public String getHinhAnhGiai() {
+        return hinhAnhGiai;
+    }
+
+    public void setHinhAnhGiai(String hinhAnhGiai) {
+        this.hinhAnhGiai = hinhAnhGiai;
+    }
     public Long getId() {
         return id;
     }
