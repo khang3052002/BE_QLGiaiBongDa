@@ -11,6 +11,7 @@ import backend.qlgiaibongda.dto.LoaiBanThangDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
 import backend.qlgiaibongda.entity.*;
 import backend.qlgiaibongda.repository.*;
+import backend.qlgiaibongda.repository.MuaGiaiRepository.MuaGiaiRepository;
 import backend.qlgiaibongda.service.IKetQuaTranDauService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,8 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
 
     @Autowired
     private CauThuGhiBanRepository cauThuGhiBanRepository;
-
+    @Autowired
+    private MuaGiaiRepository muaGiaiRepository;
     @Override
     @Transactional
     public ResponseEntity<ResponeObject> updateMatchResult(ListMatchResultInput listMatchResultInput, Long id_trandau, Integer flagHoa0_0) {
@@ -156,7 +158,7 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
                     cauThuGhiBanEntity.setSoBanThang(cauThuGhiBanEntity.getSoBanThang()+1);
                 }
 
-                cauThuGhiBanRepository.save(cauThuGhiBanEntity);
+                cauThuGhiBanEntity = cauThuGhiBanRepository.save(cauThuGhiBanEntity);
 
 
 
@@ -185,7 +187,7 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
                 listTranDau_LoaiBanThang.add(ghiNhanThangEntity);
                 loaiBanThangEntity.setDSKetQuaTranDau_LoaiBanThang(listTranDau_LoaiBanThang);
                 loaiBanThangEntity = loaiBanThangRepository.save(loaiBanThangEntity);
-
+//                muaGiaiRepository.save(muaGiaiEntity);
                 KetQuaTranDauDTO ketQuaTranDauDTO = convertToKetQuaTranDau(ketQuaTranDauEntity);
                 dsKetQuaTranDauDTO.add(ketQuaTranDauDTO);
             }
