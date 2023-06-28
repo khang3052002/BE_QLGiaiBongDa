@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
 @RestController
 @RequestMapping("/api/test")
 public class testAPI {
@@ -20,6 +23,13 @@ public class testAPI {
     @PostMapping("")
     public ResponseEntity<ResponeObject> test()
     {
+
+        Timestamp time = new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedTime = sdf.format(time);
+
+        System.out.println("Current time: " + formattedTime);
+
         return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("HAHAH","Authenticated HAHA","TEST"));
     }
 

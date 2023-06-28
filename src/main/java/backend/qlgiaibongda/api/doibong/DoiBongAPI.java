@@ -40,6 +40,8 @@ public class DoiBongAPI {
         result.setListResult(teamService.findAll(pageable));
         result.setTotalPage((int) Math.ceil((double) teamService.totalItem()/ limit));
         return ResponseEntity.status(HttpStatus.OK).body(new ResponeObject("OK", "Get list teams succeed", result));
+
+
     }
 
     @GetMapping("/{id}")

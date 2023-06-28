@@ -5,6 +5,7 @@ import backend.qlgiaibongda.converter.CauThuConverter;
 import backend.qlgiaibongda.converter.GenResponse;
 import backend.qlgiaibongda.converter.GenericConverter;
 import backend.qlgiaibongda.dto.CauThuDTO;
+import backend.qlgiaibongda.dto.ListPlayerDTO;
 import backend.qlgiaibongda.dto.PlayerFreeDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
 import backend.qlgiaibongda.entity.CauThuEntity;
@@ -20,6 +21,10 @@ import backend.qlgiaibongda.service.ICauThuService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.StoredProcedureQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -364,14 +369,40 @@ public class CauThuService implements ICauThuService {
     }
 
     @Override
-    public ResponseEntity<ResponeObject> searchAllPlayerByNameOrRole(String keyword, String role) {
+    public ResponseEntity<ResponeObject> searchAllPlayerByNameOrRole(String keyword, String role, Integer page, Integer limit) {
         try {
+
+//            Pageable pageable = PageRequest.of(page-1, limit);
             // call procedure
             StoredProcedureQuery spQuery =
                     entityManager.createNamedStoredProcedureQuery("searchAllPlayerByNameOrRole")
                             .setParameter("keyword", keyword)
                             .setParameter("roles", role);
+            // Set the parameters for pagination in the stored procedure query
+            Integer totalPages = null;
             List<CauThuEntity> listCauThuEntity = spQuery.getResultList();
+            if(page!=null && limit != null)
+            {
+                int startIndex = (page - 1) * limit;
+                int endIndex = Math.min(startIndex + limit, listCauThuEntity.size());
+                totalPages = (int) Math.ceil((double) listCauThuEntity.size() / limit);
+                listCauThuEntity = listCauThuEntity.subList(startIndex, endIndex);
+
+            }
+
+// Slice the result list based on the desired page and limit
+//            spQuery.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+//            spQuery.setMaxResults(pageable.getPageSize());
+
+            // Execute the stored procedure query and retrieve the result list
+
+            // Create a Page object from the result list and pageable information
+//            Page<CauThuEntity> pageResult = new PageImpl<>(listCauThuEntity, pageable, listCauThuEntity.size());
+
+//            listCauThuEntity = pageResult.stream().toList();
+//            int size = pageResult.getContent().size();
+//            System.out.println(size);
+
             if (listCauThuEntity.size() > 0) {
                 List<CauThuDTO> listPlayerDto = new ArrayList<>();
                 for (CauThuEntity cauThu : listCauThuEntity) {
@@ -402,9 +433,12 @@ public class CauThuService implements ICauThuService {
                                 .body(new ResponeObject("FAIL", "FAIL", e.getMessage()));
                     }
                 }
-
+                ListPlayerDTO listPlayerDTO = new ListPlayerDTO();
+                listPlayerDTO.setPage(page);
+                listPlayerDTO.setTotalPage(totalPages);
+                listPlayerDTO.setListPlayerDto(listPlayerDto);
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponeObject("ok", "Get list succeed", listPlayerDto));
+                        .body(new ResponeObject("ok", "Get list succeed", listPlayerDTO));
             }
         }
         catch (Exception ex)

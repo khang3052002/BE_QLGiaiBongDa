@@ -36,10 +36,13 @@ public class CauThuAPI {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<ResponeObject> searchAllPlayerByNameOrRole(@RequestParam(value = "keyword", required = false) String keyword,
-                                                                     @RequestParam(value = "role",required = false) String role)
+    public ResponseEntity<ResponeObject> searchAllPlayerByNameOrRole(
+            @RequestParam(value="page",required = false) Integer page,
+            @RequestParam(value = "limit",required = false) Integer limit,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "role",required = false) String role)
     {
-        return cauThuService.searchAllPlayerByNameOrRole(keyword,role);
+        return cauThuService.searchAllPlayerByNameOrRole(keyword,role,page,limit);
     }
     @GetMapping("/tudo")
     public ResponseEntity<ResponeObject> getPlayerFree()
