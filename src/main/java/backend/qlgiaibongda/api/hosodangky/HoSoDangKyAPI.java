@@ -18,6 +18,11 @@ public class HoSoDangKyAPI {
     {
         return hoSoDangKyService.getHoSoDangKyByMuaGiai(id_muagiai);
     }
+//    @GetMapping("/{id_muagiai}/doibong")
+//    public ResponseEntity<ResponeObject> getHoSoDangKy_MuaGiai(@PathVariable("id_muagiai") Long id_muagiai)
+//    {
+//        return hoSoDangKyService.getHoSoDangKyByMuaGiai(id_muagiai);
+//    }
     @GetMapping("/{id_doibong}/danhsach")
     public ResponseEntity<ResponeObject> getHoSoDangKy_DoiBong(@PathVariable("id_doibong") Long id_doibong)
     {

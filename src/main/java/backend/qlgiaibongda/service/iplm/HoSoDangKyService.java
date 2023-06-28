@@ -56,32 +56,33 @@ public class HoSoDangKyService implements IHoSoDangKyService {
                         hoSoDangKyDTO.setId_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getId());
                         hoSoDangKyDTO.setTen_quanly(hoSoDangKyEntity.getQuanLyDkiHoSo().getHoTen());
                         hoSoDangKyDTO.setId_doibong(hoSoDangKyEntity.getDoiBong().getId());
+                        hoSoDangKyDTO.setHinhAnhDoi(hoSoDangKyEntity.getDoiBong().getHinhAnh());
                         hoSoDangKyDTO.setTen_doibong(hoSoDangKyEntity.getDoiBong().getTen());
                         hoSoDangKyDTO.setGhiChu(hoSoDangKyEntity.getGhiChu());
-                        DoiBongEntity doiBongEntity = hoSoDangKyEntity.getDoiBong();
-
+//                        DoiBongEntity doiBongEntity = hoSoDangKyEntity.getDoiBong();
+//
                         List<CauThuDTO> listCauThuDTO = new ArrayList<>();
-                        for(CauThuEntity cauthu: hoSoDangKyEntity.getCacCauThu())
-                        {
-                            // chỉ lấy những cầu thủ trong hồ sơ đăng kí với trạng thái còn thi đấu ở đội bóng đó
-
-                            CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauthu,doiBongEntity);
-
-                            Integer isInTeam = cauThuDoiBongEntity.isInTeam();
-                            if(isInTeam == 1)
-                            {
-                                CauThuDTO cauThuDTO = GenericConverter.convert(cauthu, CauThuDTO.class);
-                                List<ViTriEntity> listVitri = cauthu.getCacViTri();
-                                List<String> str_roles = new ArrayList<>();
-                                listVitri.forEach(vitri->{
-                                    str_roles.add(vitri.getCode());
-                                });
-                                cauThuDTO.setViTri(str_roles.toArray(new String[0]));
-                                cauThuDTO.setAge(cauthu.calculateAge());
-                                cauThuDTO.setSoAo(cauThuDoiBongEntity.getSoAo());
-                                listCauThuDTO.add(cauThuDTO);
-                            }
-                        }
+//                        for(CauThuEntity cauthu: hoSoDangKyEntity.getCacCauThu())
+//                        {
+//                            // chỉ lấy những cầu thủ trong hồ sơ đăng kí với trạng thái còn thi đấu ở đội bóng đó
+//
+//                            CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauthu,doiBongEntity);
+//
+//                            Integer isInTeam = cauThuDoiBongEntity.isInTeam();
+//                            if(isInTeam == 1)
+//                            {
+//                                CauThuDTO cauThuDTO = GenericConverter.convert(cauthu, CauThuDTO.class);
+//                                List<ViTriEntity> listVitri = cauthu.getCacViTri();
+//                                List<String> str_roles = new ArrayList<>();
+//                                listVitri.forEach(vitri->{
+//                                    str_roles.add(vitri.getCode());
+//                                });
+//                                cauThuDTO.setViTri(str_roles.toArray(new String[0]));
+//                                cauThuDTO.setAge(cauthu.calculateAge());
+//                                cauThuDTO.setSoAo(cauThuDoiBongEntity.getSoAo());
+//                                listCauThuDTO.add(cauThuDTO);
+//                            }
+//                        }
                         hoSoDangKyDTO.setDsCauThuDangKy(listCauThuDTO);
                         listHoSoDangKyDTO.add(hoSoDangKyDTO);
                     }catch (Exception ex)

@@ -12,6 +12,7 @@ import backend.qlgiaibongda.dto.ResponeObject;
 import backend.qlgiaibongda.entity.*;
 import backend.qlgiaibongda.entity.CauThuGhiBan.CauThuGhiBanEntity;
 import backend.qlgiaibongda.entity.CauThuGhiBan.CauThuGhiBanKey;
+import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
 import backend.qlgiaibongda.repository.*;
 import backend.qlgiaibongda.repository.MuaGiaiRepository.MuaGiaiRepository;
 import backend.qlgiaibongda.service.IKetQuaTranDauService;
@@ -49,6 +50,8 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
     private CauThuGhiBanRepository cauThuGhiBanRepository;
     @Autowired
     private MuaGiaiRepository muaGiaiRepository;
+    @Autowired
+    private CauThuDoiBongRepository cauThuDoiBongRepository;
     @Override
     @Transactional
     public ResponseEntity<ResponeObject> updateMatchResult(ListMatchResultInput listMatchResultInput, Long id_trandau, Integer flagHoa0_0) {
@@ -169,7 +172,11 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
                     cauThuGhiBanEntity.setSoBanThang(cauThuGhiBanEntity.getSoBanThang()+1);
                 }
 
-                cauThuGhiBanEntity = cauThuGhiBanRepository.save(cauThuGhiBanEntity);
+                // cập nhật tổng số bàn thắng của CauThu_DoiBong
+
+//                CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.
+//
+//                cauThuGhiBanEntity = cauThuGhiBanRepository.save(cauThuGhiBanEntity);
 
 
 

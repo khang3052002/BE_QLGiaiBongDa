@@ -13,6 +13,7 @@ public class HoSoDangKyDTO {
     private String hinhAnhGiai;
     private Long id_doibong;
     private String ten_doibong;
+    private String hinhAnhDoi;
     private Long id_quanly;
     private String ten_quanly;
     private String ghiChu;
@@ -88,6 +89,14 @@ public class HoSoDangKyDTO {
 
     public void setTen_doibong(String ten_doibong) {
         this.ten_doibong = ten_doibong;
+    }
+
+    public String getHinhAnhDoi() {
+        return hinhAnhDoi;
+    }
+
+    public void setHinhAnhDoi(String hinhAnhDoi) {
+        this.hinhAnhDoi = hinhAnhDoi;
     }
 
     public Long getId_quanly() {
