@@ -3,7 +3,7 @@ package backend.qlgiaibongda.service.iplm;
 import backend.qlgiaibongda.converter.GenResponse;
 import backend.qlgiaibongda.dto.CauThuGhiBanDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
-import backend.qlgiaibongda.entity.CauThuGhiBanEntity;
+import backend.qlgiaibongda.entity.CauThuGhiBan.CauThuGhiBanEntity;
 import backend.qlgiaibongda.entity.MuaGiaiEntity;
 import backend.qlgiaibongda.repository.CauThuGhiBanRepository;
 import backend.qlgiaibongda.repository.MuaGiaiRepository.MuaGiaiRepository;
@@ -40,7 +40,7 @@ public class CauThuGhiBanService implements ICauThuGhiBanService {
 
         for(CauThuGhiBanEntity cauThuGhiBan: dsCauThuGhiBan){
             CauThuGhiBanDTO cauThuGhiBanDTO = new CauThuGhiBanDTO();
-            cauThuGhiBanDTO.setId(cauThuGhiBan.getId());
+//            cauThuGhiBanDTO.setId(cauThuGhiBan.getId());
             cauThuGhiBanDTO.setIdCauThu(cauThuGhiBan.getCauThu().getId());
             cauThuGhiBanDTO.setTenCauThu(cauThuGhiBan.getCauThu().getHoTen());
             cauThuGhiBanDTO.setIdDoi(cauThuGhiBan.getDoiBong().getId());

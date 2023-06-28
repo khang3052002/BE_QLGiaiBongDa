@@ -1,20 +1,20 @@
 package backend.qlgiaibongda.dto;
 
 public class CauThuGhiBanDTO {
-    private Long id;
+//    private Long id;
     private Long idCauThu;
     private String tenCauThu;
     private Long idDoi;
     private String tenDoi;
     private int soLuongBanThang;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public Long getIdCauThu() {
         return idCauThu;

@@ -1,5 +1,6 @@
 package backend.qlgiaibongda.entity;
 
+import backend.qlgiaibongda.entity.CauThuGhiBan.CauThuGhiBanEntity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -33,7 +34,7 @@ public class MuaGiaiEntity extends BaseEntity {
     @OneToMany(mappedBy = "muaGiai")
     private List<HoSoDangKyEntity> CacHoSoDangKy = new ArrayList<>();
 
-    @OneToMany(mappedBy = "MuaGiai")
+    @OneToMany(mappedBy = "muaGiai")
     private List<CauThuGhiBanEntity> CacCauThuGhiBan = new ArrayList<>();
 
     @ManyToOne

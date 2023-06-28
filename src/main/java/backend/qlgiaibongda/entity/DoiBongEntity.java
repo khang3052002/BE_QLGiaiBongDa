@@ -1,5 +1,7 @@
 package backend.qlgiaibongda.entity;
 
+//import backend.qlgiaibongda.entity.CauThuGhiBan.CauThuGhiBanEntity;
+import backend.qlgiaibongda.entity.CauThuGhiBan.CauThuGhiBanEntity;
 import backend.qlgiaibongda.entity.bxh_doibong.BXHDoiBongEntity;
 import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
 import jakarta.persistence.*;
@@ -62,8 +64,19 @@ public class DoiBongEntity extends BaseEntity{
     private List<KetQuaTranDauEntity> dsKetQuaDoiKhach = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "doiBong")
+    private List<CauThuGhiBanEntity> cauThuGhiBanEntity;
+
     ////////////////////////////////GETTER SETTER///////////////////////////////////////////
 
+
+    public List<CauThuGhiBanEntity> getCauThuGhiBanEntity() {
+        return cauThuGhiBanEntity;
+    }
+
+    public void setCauThuGhiBanEntity(List<CauThuGhiBanEntity> cauThuGhiBanEntity) {
+        this.cauThuGhiBanEntity = cauThuGhiBanEntity;
+    }
 
     public List<KetQuaTranDauEntity> getDsKetQuaDoiNha() {
         return dsKetQuaDoiNha;

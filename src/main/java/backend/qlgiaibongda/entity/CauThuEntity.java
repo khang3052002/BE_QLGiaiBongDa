@@ -1,12 +1,12 @@
 package backend.qlgiaibongda.entity;
 
+import backend.qlgiaibongda.entity.CauThuGhiBan.CauThuGhiBanEntity;
 import backend.qlgiaibongda.entity.cauthu_doibong.CauThuDoiBongEntity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,9 +105,18 @@ public class CauThuEntity extends BaseEntity{
     @OneToMany(mappedBy = "CauThu")
     private List<GhiNhanBanThangEntity> DSBanThangCauThu_TranDau = new ArrayList<>();
 
+    @OneToMany(mappedBy = "cauThu")
+    private List<CauThuGhiBanEntity> cauThuGhiBanEntity;
 
+    public List<CauThuGhiBanEntity> getCauThuGhiBanEntity() {
+        return cauThuGhiBanEntity;
+    }
 
-//    public void setAge(Integer age) {
+    public void setCauThuGhiBanEntity(List<CauThuGhiBanEntity> cauThuGhiBanEntity) {
+        this.cauThuGhiBanEntity = cauThuGhiBanEntity;
+    }
+
+    //    public void setAge(Integer age) {
 //        this.age = age;
 //    }
 

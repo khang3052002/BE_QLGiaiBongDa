@@ -10,6 +10,8 @@ import backend.qlgiaibongda.dto.KetQuaTranDauDTO;
 import backend.qlgiaibongda.dto.LoaiBanThangDTO;
 import backend.qlgiaibongda.dto.ResponeObject;
 import backend.qlgiaibongda.entity.*;
+import backend.qlgiaibongda.entity.CauThuGhiBan.CauThuGhiBanEntity;
+import backend.qlgiaibongda.entity.CauThuGhiBan.CauThuGhiBanKey;
 import backend.qlgiaibongda.repository.*;
 import backend.qlgiaibongda.repository.MuaGiaiRepository.MuaGiaiRepository;
 import backend.qlgiaibongda.service.IKetQuaTranDauService;
@@ -19,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,22 +140,32 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
 
                 //add to cauthughibanmuagiai:
                 CauThuGhiBanEntity cauThuGhiBanEntity = null;
-                boolean checkCauThuDaGhiBan  = false;
-                List<CauThuGhiBanEntity> listCauThuGhiBan = muaGiaiEntity.getCacCauThuGhiBan();
-                for(CauThuGhiBanEntity cauThuGhiBan:listCauThuGhiBan){
-                    if(cauThuGhiBan.getCauThu().getId() == cauThuEntity.getId()){
-                        checkCauThuDaGhiBan = true;
-                        cauThuGhiBanEntity = cauThuGhiBan;
-                        break;
-                    }
-                }
+                boolean checkCauThuDaGhiBan  = cauThuGhiBanRepository.existsByCauThuAndDoiBongAndMuaGiai(cauThuEntity,doiGhiBan,muaGiaiEntity);
+
+
+
+//                List<CauThuGhiBanEntity> listCauThuGhiBan = muaGiaiEntity.getCacCauThuGhiBan();
+//                for(CauThuGhiBanEntity cauThuGhiBan:listCauThuGhiBan){
+//                    if(cauThuGhiBan.getCauThu().getId() == cauThuEntity.getId()){
+//                        checkCauThuDaGhiBan = true;
+//                        cauThuGhiBanEntity = cauThuGhiBan;
+//                        break;
+//                    }
+//                }
+
                 if(!checkCauThuDaGhiBan){
+
+                    CauThuGhiBanKey cauThuGhiBanKey = new CauThuGhiBanKey();
+                    cauThuGhiBanKey.setIdDoibong(doiGhiBan.getId());
+                    cauThuGhiBanKey.setIdCauthu(cauThuEntity.getId());
                     cauThuGhiBanEntity = new CauThuGhiBanEntity();
+                    cauThuGhiBanEntity.setCauThuGhiBanKey(cauThuGhiBanKey);
                     cauThuGhiBanEntity.setCauThu(cauThuEntity);
                     cauThuGhiBanEntity.setDoiBong(doiGhiBan);
                     cauThuGhiBanEntity.setMuaGiai(muaGiaiEntity);
                     cauThuGhiBanEntity.setSoBanThang(1);
                 }else{
+                    cauThuGhiBanEntity = cauThuGhiBanRepository.findCauThuGhiBanEntityByCauThuAndDoiBongAndAndMuaGiai(cauThuEntity,doiGhiBan,muaGiaiEntity);
                     cauThuGhiBanEntity.setSoBanThang(cauThuGhiBanEntity.getSoBanThang()+1);
                 }
 
@@ -187,7 +198,8 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
                 listTranDau_LoaiBanThang.add(ghiNhanThangEntity);
                 loaiBanThangEntity.setDSKetQuaTranDau_LoaiBanThang(listTranDau_LoaiBanThang);
                 loaiBanThangEntity = loaiBanThangRepository.save(loaiBanThangEntity);
-//                muaGiaiRepository.save(muaGiaiEntity);
+//                muaGiaiEntity.setCacCauThuGhiBan();
+                muaGiaiEntity = muaGiaiRepository.save(muaGiaiEntity);
                 KetQuaTranDauDTO ketQuaTranDauDTO = convertToKetQuaTranDau(ketQuaTranDauEntity);
                 dsKetQuaTranDauDTO.add(ketQuaTranDauDTO);
             }
