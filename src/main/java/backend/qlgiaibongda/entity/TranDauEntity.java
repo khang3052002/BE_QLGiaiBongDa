@@ -14,6 +14,8 @@ import java.sql.Timestamp;
 @Table(name = "trandau")
 public class TranDauEntity extends BaseEntity {
     private Timestamp ThoiGian;
+    @Column(name = "thoigiannhanstart")
+    private Timestamp thoiGianNhanStart;
     @ManyToOne
     @JoinColumn(name = "id_doinha")
     private DoiBongEntity DoiNha;
@@ -32,6 +34,14 @@ public class TranDauEntity extends BaseEntity {
     //Relation ship KQTranDau - Tran Dau
     @OneToOne(mappedBy = "tranDau")
     private KetQuaTranDauEntity KetQuaTranDau;
+
+    public Timestamp getThoiGianNhanStart() {
+        return thoiGianNhanStart;
+    }
+
+    public void setThoiGianNhanStart(Timestamp thoiGianNhanStart) {
+        this.thoiGianNhanStart = thoiGianNhanStart;
+    }
 
     public void setThoiGian(Timestamp thoiGian) {
         ThoiGian = thoiGian;

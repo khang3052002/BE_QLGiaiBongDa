@@ -244,7 +244,7 @@ public class TranDauService implements ITranDauService {
             tranDauDTO.setDoiKhach(doiKhach);
             tranDauDTO.setThoiGian(tranDau.getThoiGian());
 
-
+            tranDauDTO.setThoiGianNhanStart(tranDau.getThoiGianNhanStart());
 
             KetQuaTranDauDTO ketQuaTranDauDTO = GenericConverter.convert(tranDau.getKetQuaTranDau(), KetQuaTranDauDTO.class);
             ketQuaTranDauDTO.setIdDoiNha(doiNha.getId());

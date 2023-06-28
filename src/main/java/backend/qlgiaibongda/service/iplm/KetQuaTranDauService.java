@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -232,14 +233,20 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
 
         List<KetQuaTranDauDTO> dsKetQuaTranDauDTO = new ArrayList<>();
         for(Long id: listIdMatchResult.getDsIDKetQuaTranDau()){
-
-            KetQuaTranDauEntity ketQuaTranDauEntity = ketQuaTranDauRepository.findById(id).orElse(null);
+            TranDauEntity tranDauEntity = tranDauRepository.findById(id).orElse(null);
+            KetQuaTranDauEntity ketQuaTranDauEntity = tranDauEntity.getKetQuaTranDau();
+//            KetQuaTranDauEntity ketQuaTranDauEntity = ketQuaTranDauRepository.findById(id).orElse(null);
             if(ketQuaTranDauEntity == null){
                 return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "MatchResult "+id+ " not found", "");
             }
+            tranDauEntity.setThoiGianNhanStart(new Timestamp(System.currentTimeMillis()));
+
+
             ketQuaTranDauEntity.setTrangThai("Đang thi đấu");
             ketQuaTranDauEntity.setSbtDoiNha(0);
             ketQuaTranDauEntity.setSbtDoiKhach(0);
+
+            tranDauRepository.save(tranDauEntity);
             ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
 
             dsKetQuaTranDauDTO.add(convertToKetQuaTranDau(ketQuaTranDauEntity));
@@ -254,8 +261,9 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
 
         List<KetQuaTranDauDTO> dsKetQuaTranDauDTO = new ArrayList<>();
         for(Long id: listIdMatchResult.getDsIDKetQuaTranDau()) {
-
-            KetQuaTranDauEntity ketQuaTranDauEntity = ketQuaTranDauRepository.findById(id).orElse(null);
+            TranDauEntity tranDauEntity = tranDauRepository.findById(id).orElse(null);
+            KetQuaTranDauEntity ketQuaTranDauEntity = tranDauEntity.getKetQuaTranDau();
+//            KetQuaTranDauEntity ketQuaTranDauEntity = ketQuaTranDauRepository.findById(id).orElse(null);
             if(ketQuaTranDauEntity == null){
                 return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "MatchResult "+id+" not found", "");
             }

@@ -14,6 +14,8 @@ public class TranĐauDTO {
     private Long id;
     private Timestamp ThoiGian;
 
+    private String thoiGianNhanStart;
+
     private String thoiGianVietNam;
     private TeamDTO DoiNha;
     private TeamDTO DoiKhach;
@@ -21,6 +23,17 @@ public class TranĐauDTO {
     private String tenVong;
     private Long idLichThiDau;
     private KetQuaTranDauDTO ketQuaTranDau;
+
+    public String getThoiGianNhanStart() {
+        return thoiGianNhanStart;
+    }
+
+    public void setThoiGianNhanStart(Timestamp timestamp) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedTime = sdf.format(timestamp);
+
+        this.thoiGianNhanStart = formattedTime;
+    }
 
     public String getThoiGianVietNam() {
         return thoiGianVietNam;
