@@ -195,6 +195,8 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
                 listGhiNhanBanThang.add(ghiNhanThangEntity);
                 ketQuaTranDauEntity.setDsBanThang(listGhiNhanBanThang);
 
+                // cập nhật trạng thái kqtđ: "Đã cập nhật kết quả"
+                ketQuaTranDauEntity.setTrangThai("Đã cập nhật kết quả");
                 ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
                 ghiNhanThangEntity.setKetQuaTranDau(ketQuaTranDauEntity);
                 ghiNhanThangEntity = ghiNhanThangRepository.save(ghiNhanThangEntity);

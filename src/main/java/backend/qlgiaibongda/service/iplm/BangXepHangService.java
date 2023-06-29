@@ -89,7 +89,7 @@ public class BangXepHangService implements IBangXepHangService {
         if(tranDauEntity!=null)
         {
             KetQuaTranDauEntity ketQuaTranDauEntity = tranDauEntity.getKetQuaTranDau();
-            if(!ketQuaTranDauEntity.getTrangThai().equals("Đã kết thúc"))
+            if(!ketQuaTranDauEntity.getTrangThai().equals("Đã cập nhật kết quả"))
             {
                 return false;
             }
