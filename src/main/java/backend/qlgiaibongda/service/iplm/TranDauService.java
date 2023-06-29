@@ -47,7 +47,7 @@ public class TranDauService implements ITranDauService {
         if(tranDauEntity == null){
             return  GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Match not found", "");
         }
-        TranĐauDTO tranDauDTO = convertToTranDauDTO(tranDauEntity);
+        TranĐauDTO tranDauDTO = convertToTranDauDTO(tranDauEntity, true);
         return GenResponse.gen(HttpStatus.OK, "OK", "Get match succeed!", tranDauDTO);
     }
 
@@ -72,7 +72,7 @@ public class TranDauService implements ITranDauService {
         List<TranĐauDTO> dsTranDauTranĐauDTO = new ArrayList<>();
         for (TranDauEntity tranDau: dsTranDau){
             tranDauRepository.save(tranDau);
-            dsTranDauTranĐauDTO.add(convertToTranDauDTO(tranDau));
+            dsTranDauTranĐauDTO.add(convertToTranDauDTO(tranDau, true));
         }
 
 
@@ -134,7 +134,7 @@ public class TranDauService implements ITranDauService {
         for(TranDauEntity tranDau: listTranDauEntity){
             if(tranDau.getDoiNha().getId() == idDoiBong || tranDau.getDoiKhach().getId() == idDoiBong ){
                 if(tranDau.getKetQuaTranDau().getTrangThai().equals(currStatus)){
-                    danhSachTranDauTraVe.add(convertToTranDauDTO(tranDau));
+                    danhSachTranDauTraVe.add(convertToTranDauDTO(tranDau, false));
                 }
             }
         }
@@ -146,7 +146,7 @@ public class TranDauService implements ITranDauService {
     }
 
 
-    public TranĐauDTO convertToTranDauDTO (TranDauEntity tranDau){
+    public TranĐauDTO convertToTranDauDTO (TranDauEntity tranDau, Boolean needPlayerInfo){
         TranĐauDTO tranDauDTO = new TranĐauDTO();
         tranDauDTO.setId(tranDau.getId());
         Long idMuaGiai = tranDau.getLichThiDau().getMuaGiai().getId();
@@ -158,38 +158,41 @@ public class TranDauService implements ITranDauService {
             doiNha.setQuanLy(qlDoiNha);
             doiNha.setSanNha(sanNha);
 
-            //cauthu doi nha se thi dau:
-            for(HoSoDangKyEntity hosoEntity: doiNhaEntt.getCacHoSoDangKy()){
-                if(hosoEntity.getMuaGiai().getId() == idMuaGiai && hosoEntity.getTrangThai().equals("Đã duyệt")){
-                    if(hosoEntity.getCacCauThu() != null) {
-                        List<CauThuDTO> cauThuDTOList = new ArrayList<>();
-                        for (CauThuEntity cauThuEntity : hosoEntity.getCacCauThu()) {
+            if(needPlayerInfo){
 
-                            CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauThuEntity,doiNhaEntt);
+                //cauthu doi nha se thi dau:
+                for(HoSoDangKyEntity hosoEntity: doiNhaEntt.getCacHoSoDangKy()){
+                    if(hosoEntity.getMuaGiai().getId() == idMuaGiai && hosoEntity.getTrangThai().equals("Đã duyệt")){
+                        if(hosoEntity.getCacCauThu() != null) {
+                            List<CauThuDTO> cauThuDTOList = new ArrayList<>();
+                            for (CauThuEntity cauThuEntity : hosoEntity.getCacCauThu()) {
 
-
-                            Integer isInTeam = cauThuDoiBongEntity.isInTeam();
-                            if(isInTeam == 1)
-                            {
-                                CauThuDTO cauThuDTO = GenericConverter.convert(cauThuEntity, CauThuDTO.class);
+                                CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauThuEntity,doiNhaEntt);
 
 
-                                List<ViTriEntity> listVitriEntity =  cauThuEntity.getCacViTri();
-                                List<String> listVitri = new ArrayList<>();
-                                listVitriEntity.forEach(viTriEntity -> {
-                                    listVitri.add(viTriEntity.getCode());
-                                });
-                                cauThuDTO.setViTri(listVitri.toArray(new String[0]));
-                                cauThuDTO.setSoAo(cauThuDoiBongEntity.getSoAo());
-                                int age = cauThuEntity.calculateAge();
-                                cauThuDTO.setAge(age);
+                                Integer isInTeam = cauThuDoiBongEntity.isInTeam();
+                                if(isInTeam == 1)
+                                {
+                                    CauThuDTO cauThuDTO = GenericConverter.convert(cauThuEntity, CauThuDTO.class);
 
-                                cauThuDTOList.add(cauThuDTO);
+
+                                    List<ViTriEntity> listVitriEntity =  cauThuEntity.getCacViTri();
+                                    List<String> listVitri = new ArrayList<>();
+                                    listVitriEntity.forEach(viTriEntity -> {
+                                        listVitri.add(viTriEntity.getCode());
+                                    });
+                                    cauThuDTO.setViTri(listVitri.toArray(new String[0]));
+                                    cauThuDTO.setSoAo(cauThuDoiBongEntity.getSoAo());
+                                    int age = cauThuEntity.calculateAge();
+                                    cauThuDTO.setAge(age);
+
+                                    cauThuDTOList.add(cauThuDTO);
+                                }
+
                             }
-
+                            doiNha.setDanhSachCauThuDangThiDau(cauThuDTOList);
+                            break;
                         }
-                        doiNha.setDanhSachCauThuDangThiDau(cauThuDTOList);
-                        break;
                     }
                 }
             }
@@ -202,43 +205,47 @@ public class TranDauService implements ITranDauService {
             doiKhach.setQuanLy(qlDoiKhach);
             doiKhach.setSanNha(sanKhach);
 
+            if(needPlayerInfo){
 
-            //cauthu doi khach se thi dau:
-            for(HoSoDangKyEntity hosoEntity: doiKhachEntt.getCacHoSoDangKy()){
-                if(hosoEntity.getMuaGiai().getId() == idMuaGiai && hosoEntity.getTrangThai().equals("Đã duyệt")){
-                    if(hosoEntity.getCacCauThu() != null){
-                        List<CauThuDTO> cauThuDTOList = new ArrayList<>();
-                        for(CauThuEntity cauThuEntity: hosoEntity.getCacCauThu()){
+                //cauthu doi khach se thi dau:
+
+                for(HoSoDangKyEntity hosoEntity: doiKhachEntt.getCacHoSoDangKy()){
+                    if(hosoEntity.getMuaGiai().getId() == idMuaGiai && hosoEntity.getTrangThai().equals("Đã duyệt")){
+                        if(hosoEntity.getCacCauThu() != null){
+                            List<CauThuDTO> cauThuDTOList = new ArrayList<>();
+                            for(CauThuEntity cauThuEntity: hosoEntity.getCacCauThu()){
 
 //                            CauThuDoiBongEntity doiBongEntity =  cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndInTeam(cauThuEntity,1);
-                            CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauThuEntity,doiKhachEntt);
+                                CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.findCauThuDoiBongEntityByCauThuDBAndDoiBongCT(cauThuEntity,doiKhachEntt);
 
 
-                            Integer isInTeam = cauThuDoiBongEntity.isInTeam();
-                            if(isInTeam == 1)
-                            {
-                                CauThuDTO cauThuDTO = GenericConverter.convert(cauThuEntity, CauThuDTO.class);
+                                Integer isInTeam = cauThuDoiBongEntity.isInTeam();
+                                if(isInTeam == 1)
+                                {
+                                    CauThuDTO cauThuDTO = GenericConverter.convert(cauThuEntity, CauThuDTO.class);
 
 
-                                List<ViTriEntity> listVitriEntity =  cauThuEntity.getCacViTri();
-                                List<String> listVitri = new ArrayList<>();
-                                listVitriEntity.forEach(viTriEntity -> {
-                                    listVitri.add(viTriEntity.getCode());
-                                });
-                                cauThuDTO.setViTri(listVitri.toArray(new String[0]));
-                                cauThuDTO.setSoAo(cauThuDoiBongEntity.getSoAo());
-                                int age = cauThuEntity.calculateAge();
-                                cauThuDTO.setAge(age);
+                                    List<ViTriEntity> listVitriEntity =  cauThuEntity.getCacViTri();
+                                    List<String> listVitri = new ArrayList<>();
+                                    listVitriEntity.forEach(viTriEntity -> {
+                                        listVitri.add(viTriEntity.getCode());
+                                    });
+                                    cauThuDTO.setViTri(listVitri.toArray(new String[0]));
+                                    cauThuDTO.setSoAo(cauThuDoiBongEntity.getSoAo());
+                                    int age = cauThuEntity.calculateAge();
+                                    cauThuDTO.setAge(age);
 
-                                cauThuDTOList.add(cauThuDTO);
+                                    cauThuDTOList.add(cauThuDTO);
+                                }
+
                             }
-
+                            doiKhach.setDanhSachCauThuDangThiDau(cauThuDTOList);
+                            break;
                         }
-                        doiKhach.setDanhSachCauThuDangThiDau(cauThuDTOList);
-                        break;
                     }
                 }
             }
+
 
             tranDauDTO.setDoiNha(doiNha);
             tranDauDTO.setDoiKhach(doiKhach);
