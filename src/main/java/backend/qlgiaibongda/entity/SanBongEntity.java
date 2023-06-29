@@ -15,11 +15,22 @@ import jakarta.persistence.Table;
 public class SanBongEntity extends BaseEntity {
     @Column(name = "tensan", columnDefinition = "nvarchar(255)")
     private String tenSan;
+
+    @Column(name = "hinhanh")
+    private String hinhAnh;
     @Column(name = "diadiem", columnDefinition = "nvarchar(255)")
     private String diaDiem;
     @OneToOne(mappedBy = "sanBong")
     private DoiBongEntity doiBong;
 
+
+    public String getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
+    }
 
     public String getTenSan() {
         return tenSan;

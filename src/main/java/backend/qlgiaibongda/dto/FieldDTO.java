@@ -7,6 +7,17 @@ public class FieldDTO {
     private String tenSan;
     private String diaDiem;
 
+    private String hinhAnh;
+
+
+    public String getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
+    }
+
     public Long getId() {
         return id;
     }
