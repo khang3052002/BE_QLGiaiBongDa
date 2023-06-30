@@ -242,7 +242,9 @@ public class ScheduleService implements IScheduleService {
 
     @Override
     public ResponseEntity<ResponeObject> getSchedule(Long id) {
-        LichThiDauEntity lichThiDauEntity = lichThiDauRepository.findById(id).orElse(null);
+        MuaGiaiEntity muaGiaiEntity =  muaGiaiRepository.findById(id).orElse(null);
+        
+        LichThiDauEntity lichThiDauEntity = muaGiaiEntity.getLichThiDau();
         if(lichThiDauEntity == null){
             return  GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL","Schedule not found","");
         }
