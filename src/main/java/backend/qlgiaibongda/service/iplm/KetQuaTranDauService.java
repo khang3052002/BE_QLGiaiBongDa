@@ -59,6 +59,7 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
         if(flagHoa0_0==0)
         {
             List<KetQuaTranDauDTO> dsKetQuaTranDauDTO = new ArrayList<>();
+            KetQuaTranDauEntity ketQuaTranDauEntity = null;
             for(MatchResultInput matchResultInput : listMatchResultInput.getDsBanThang()){
 
                 Long idTranDau = matchResultInput.getIdTranDau();
@@ -67,7 +68,6 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
                 Long thoiDiemGhiBan = matchResultInput.getThoiDiemGhiBan();
                 Long idLoaiBanThanGhiBan = matchResultInput.getIdLoaiBanThang();
 
-                KetQuaTranDauEntity ketQuaTranDauEntity;
                 TranDauEntity tranDauEntity = tranDauRepository.findById(idTranDau).orElse(null);
                 if (tranDauEntity == null) {
                     return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Match"+ idTranDau+ " not found!", "");
@@ -82,18 +82,37 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
                     }
                 }
 
+                LoaiBanThangEntity loaiBanThangEntity = loaiBanThangRepository.findById(idLoaiBanThanGhiBan).orElse(null);
+                if(loaiBanThangEntity == null){
+                    return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Match"+idTranDau+": Type of goal not found", "");
+                }
+
                 DoiBongEntity doiGhiBan = null;
 
                 if (ketQuaTranDauEntity.getDoiNha().getId() == idDoiGhiBan) {
                     doiGhiBan = ketQuaTranDauEntity.getDoiNha();
-                    Integer sbtDoiNha = ketQuaTranDauEntity.getSbtDoiNha();
-                    ketQuaTranDauEntity.setSbtDoiNha(sbtDoiNha + 1);
+                    if(loaiBanThangEntity.getTen().equals("Phản lưới"))
+                    {
+                        Integer sbtDoiKhach = ketQuaTranDauEntity.getSbtDoiKhach();
+                        ketQuaTranDauEntity.setSbtDoiKhach(sbtDoiKhach+1);
+                    }
+                    else{
+                        Integer sbtDoiNha = ketQuaTranDauEntity.getSbtDoiNha();
+                        ketQuaTranDauEntity.setSbtDoiNha(sbtDoiNha + 1);
+                    }
                 }
 
                 if (ketQuaTranDauEntity.getDoiKhach().getId() == idDoiGhiBan) {
                     doiGhiBan = ketQuaTranDauEntity.getDoiKhach();
-                    Integer sbtDoiKhach = ketQuaTranDauEntity.getSbtDoiKhach();
-                    ketQuaTranDauEntity.setSbtDoiKhach(sbtDoiKhach + 1);
+                    if(loaiBanThangEntity.getTen().equals("Phản lưới"))
+                    {
+                        Integer sbtDoiNha = ketQuaTranDauEntity.getSbtDoiNha();
+                        ketQuaTranDauEntity.setSbtDoiNha(sbtDoiNha + 1);
+                    }
+                    else {
+                        Integer sbtDoiKhach = ketQuaTranDauEntity.getSbtDoiKhach();
+                        ketQuaTranDauEntity.setSbtDoiKhach(sbtDoiKhach + 1);
+                    }
                 }
 
                 CauThuEntity cauThuEntity = null;
@@ -137,47 +156,35 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
                     }
                 }
 
-                LoaiBanThangEntity loaiBanThangEntity = loaiBanThangRepository.findById(idLoaiBanThanGhiBan).orElse(null);
-                if(loaiBanThangEntity == null){
-                    return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "Match"+idTranDau+": Type of goal not found", "");
-                }
+
 
                 //add to cauthughibanmuagiai:
-                CauThuGhiBanEntity cauThuGhiBanEntity = null;
-                boolean checkCauThuDaGhiBan  = cauThuGhiBanRepository.existsByCauThuAndDoiBongAndMuaGiai(cauThuEntity,doiGhiBan,muaGiaiEntity);
+                if(!loaiBanThangEntity.getTen().equals("Phản lưới"))
+                {
+                    CauThuGhiBanEntity cauThuGhiBanEntity = null;
+                    boolean checkCauThuDaGhiBan  = cauThuGhiBanRepository.existsByCauThuAndDoiBongAndMuaGiai(cauThuEntity,doiGhiBan,muaGiaiEntity);
 
-
-
-//                List<CauThuGhiBanEntity> listCauThuGhiBan = muaGiaiEntity.getCacCauThuGhiBan();
-//                for(CauThuGhiBanEntity cauThuGhiBan:listCauThuGhiBan){
-//                    if(cauThuGhiBan.getCauThu().getId() == cauThuEntity.getId()){
-//                        checkCauThuDaGhiBan = true;
-//                        cauThuGhiBanEntity = cauThuGhiBan;
-//                        break;
-//                    }
-//                }
-
-                if(!checkCauThuDaGhiBan){
-
-                    CauThuGhiBanKey cauThuGhiBanKey = new CauThuGhiBanKey();
-                    cauThuGhiBanKey.setIdDoibong(doiGhiBan.getId());
-                    cauThuGhiBanKey.setIdCauthu(cauThuEntity.getId());
-                    cauThuGhiBanEntity = new CauThuGhiBanEntity();
-                    cauThuGhiBanEntity.setCauThuGhiBanKey(cauThuGhiBanKey);
-                    cauThuGhiBanEntity.setCauThu(cauThuEntity);
-                    cauThuGhiBanEntity.setDoiBong(doiGhiBan);
-                    cauThuGhiBanEntity.setMuaGiai(muaGiaiEntity);
-                    cauThuGhiBanEntity.setSoBanThang(1);
-                }else{
-                    cauThuGhiBanEntity = cauThuGhiBanRepository.findCauThuGhiBanEntityByCauThuAndDoiBongAndAndMuaGiai(cauThuEntity,doiGhiBan,muaGiaiEntity);
-                    cauThuGhiBanEntity.setSoBanThang(cauThuGhiBanEntity.getSoBanThang()+1);
+                    if(!checkCauThuDaGhiBan){
+                        CauThuGhiBanKey cauThuGhiBanKey = new CauThuGhiBanKey();
+                        cauThuGhiBanKey.setIdDoibong(doiGhiBan.getId());
+                        cauThuGhiBanKey.setIdCauthu(cauThuEntity.getId());
+                        cauThuGhiBanEntity = new CauThuGhiBanEntity();
+                        cauThuGhiBanEntity.setCauThuGhiBanKey(cauThuGhiBanKey);
+                        cauThuGhiBanEntity.setCauThu(cauThuEntity);
+                        cauThuGhiBanEntity.setDoiBong(doiGhiBan);
+                        cauThuGhiBanEntity.setMuaGiai(muaGiaiEntity);
+                        cauThuGhiBanEntity.setSoBanThang(1);
+                    }else{
+                        cauThuGhiBanEntity = cauThuGhiBanRepository.findCauThuGhiBanEntityByCauThuAndDoiBongAndAndMuaGiai(cauThuEntity,doiGhiBan,muaGiaiEntity);
+                        cauThuGhiBanEntity.setSoBanThang(cauThuGhiBanEntity.getSoBanThang()+1);
+                    }
+                    cauThuGhiBanEntity = cauThuGhiBanRepository.save(cauThuGhiBanEntity);
                 }
 
                 // cập nhật tổng số bàn thắng của CauThu_DoiBong
 
 //                CauThuDoiBongEntity cauThuDoiBongEntity = cauThuDoiBongRepository.
 //
-//                cauThuGhiBanEntity = cauThuGhiBanRepository.save(cauThuGhiBanEntity);
 
 
 
@@ -195,8 +202,7 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
                 listGhiNhanBanThang.add(ghiNhanThangEntity);
                 ketQuaTranDauEntity.setDsBanThang(listGhiNhanBanThang);
 
-                // cập nhật trạng thái kqtđ: "Đã cập nhật kết quả"
-                ketQuaTranDauEntity.setTrangThai("Đã cập nhật kết quả");
+
                 ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
                 ghiNhanThangEntity.setKetQuaTranDau(ketQuaTranDauEntity);
                 ghiNhanThangEntity = ghiNhanThangRepository.save(ghiNhanThangEntity);
@@ -213,6 +219,9 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
                 KetQuaTranDauDTO ketQuaTranDauDTO = convertToKetQuaTranDau(ketQuaTranDauEntity);
                 dsKetQuaTranDauDTO.add(ketQuaTranDauDTO);
             }
+            // cập nhật trạng thái kqtđ: "Đã cập nhật kết quả"
+            ketQuaTranDauEntity.setTrangThai("Đã cập nhật kết quả");
+            ketQuaTranDauRepository.save(ketQuaTranDauEntity);
             return GenResponse.gen(HttpStatus.OK, "OK", "Update MatchResults succeed!", dsKetQuaTranDauDTO);
 
         }
