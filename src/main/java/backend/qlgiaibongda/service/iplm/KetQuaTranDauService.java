@@ -244,26 +244,40 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
 
         List<KetQuaTranDauDTO> dsKetQuaTranDauDTO = new ArrayList<>();
         for(Long id: listIdMatchResult.getDsIDKetQuaTranDau()){
+
             TranDauEntity tranDauEntity = tranDauRepository.findById(id).orElse(null);
-            KetQuaTranDauEntity ketQuaTranDauEntity = tranDauEntity.getKetQuaTranDau();
+            MuaGiaiEntity muaGiaiEntity = tranDauEntity.getLichThiDau().getMuaGiai();
+            if(muaGiaiEntity.getTrangThai() == 1) // // đang diễn ra thì mới được phép kết thúc or bắt đầu
+            {
+
+                KetQuaTranDauEntity ketQuaTranDauEntity = tranDauEntity.getKetQuaTranDau();
+
 //            KetQuaTranDauEntity ketQuaTranDauEntity = ketQuaTranDauRepository.findById(id).orElse(null);
-            if(ketQuaTranDauEntity == null){
-                return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "MatchResult "+id+ " not found", "");
+                if(ketQuaTranDauEntity == null){
+                    return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "MatchResult "+id+ " not found", "");
+                }
+                tranDauEntity.setThoiGianNhanStart(new Timestamp(System.currentTimeMillis()));
+
+
+                ketQuaTranDauEntity.setTrangThai("Đang thi đấu");
+                ketQuaTranDauEntity.setSbtDoiNha(0);
+                ketQuaTranDauEntity.setSbtDoiKhach(0);
+
+                tranDauRepository.save(tranDauEntity);
+                ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
+
+                dsKetQuaTranDauDTO.add(convertToKetQuaTranDau(ketQuaTranDauEntity));
+                return GenResponse.gen(HttpStatus.OK, "OK", "Start MatchResults succeed!",dsKetQuaTranDauDTO );
+
             }
-            tranDauEntity.setThoiGianNhanStart(new Timestamp(System.currentTimeMillis()));
+            else {
+                return GenResponse.gen(HttpStatus.NOT_FOUND, "Fail", "Mùa giải chưa bắt đầu!", dsKetQuaTranDauDTO);
 
+            }
 
-            ketQuaTranDauEntity.setTrangThai("Đang thi đấu");
-            ketQuaTranDauEntity.setSbtDoiNha(0);
-            ketQuaTranDauEntity.setSbtDoiKhach(0);
-
-            tranDauRepository.save(tranDauEntity);
-            ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
-
-            dsKetQuaTranDauDTO.add(convertToKetQuaTranDau(ketQuaTranDauEntity));
         }
+        return GenResponse.gen(HttpStatus.NOT_FOUND, "Fail", "Có lỗi gì đó !", dsKetQuaTranDauDTO);
 
-        return GenResponse.gen(HttpStatus.OK, "OK", "Start MatchResults succeed!",dsKetQuaTranDauDTO );
 
     }
 
@@ -273,17 +287,27 @@ public class KetQuaTranDauService implements IKetQuaTranDauService {
         List<KetQuaTranDauDTO> dsKetQuaTranDauDTO = new ArrayList<>();
         for(Long id: listIdMatchResult.getDsIDKetQuaTranDau()) {
             TranDauEntity tranDauEntity = tranDauRepository.findById(id).orElse(null);
-            KetQuaTranDauEntity ketQuaTranDauEntity = tranDauEntity.getKetQuaTranDau();
+            MuaGiaiEntity muaGiaiEntity = tranDauEntity.getLichThiDau().getMuaGiai();
+            if(muaGiaiEntity.getTrangThai() == 1) // đang diễn ra thì mới được phép kết thúc or bắt đầu
+            {
+                KetQuaTranDauEntity ketQuaTranDauEntity = tranDauEntity.getKetQuaTranDau();
 //            KetQuaTranDauEntity ketQuaTranDauEntity = ketQuaTranDauRepository.findById(id).orElse(null);
-            if(ketQuaTranDauEntity == null){
-                return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "MatchResult "+id+" not found", "");
+                if(ketQuaTranDauEntity == null){
+                    return GenResponse.gen(HttpStatus.NOT_FOUND, "FAIL", "MatchResult "+id+" not found", "");
+                }
+                ketQuaTranDauEntity.setTrangThai("Đã kết thúc");
+                ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
+                dsKetQuaTranDauDTO.add(convertToKetQuaTranDau(ketQuaTranDauEntity));
+                return GenResponse.gen(HttpStatus.OK, "OK", "End MatchResult succeed!", dsKetQuaTranDauDTO);
             }
-            ketQuaTranDauEntity.setTrangThai("Đã kết thúc");
-            ketQuaTranDauEntity = ketQuaTranDauRepository.save(ketQuaTranDauEntity);
-            dsKetQuaTranDauDTO.add(convertToKetQuaTranDau(ketQuaTranDauEntity));
-        }
+            else{
+                return GenResponse.gen(HttpStatus.NOT_FOUND, "Fail", "Mùa giải chưa bắt đầu!", dsKetQuaTranDauDTO);
 
-        return GenResponse.gen(HttpStatus.OK, "OK", "End MatchResult succeed!", dsKetQuaTranDauDTO);
+            }
+
+        }
+        return GenResponse.gen(HttpStatus.NOT_FOUND, "Fail", "Có lỗi gì đó !", dsKetQuaTranDauDTO);
+
     }
 
 
